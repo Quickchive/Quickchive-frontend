@@ -8,6 +8,10 @@ const routes = [
 		path: '/test',
 		component: () => import('@/components/HelloWorld.vue'),
 	},
+	{
+		path: '/register',
+		component: () => import('@/components/auth/RegisterForm.vue'),
+	},
 
 ];
 
