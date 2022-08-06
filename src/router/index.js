@@ -12,6 +12,10 @@ const routes = [
 		path: '/register',
 		component: () => import('@/components/auth/RegisterForm.vue'),
 	},
+	{
+		path: '/verify',
+		component: () => import('@/components/auth/VerifyComponent.vue'),
+	},
 
 ];
 
