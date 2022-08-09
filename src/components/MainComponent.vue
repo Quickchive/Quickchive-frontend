@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     async fetchName() {
-      if(this.isUserLogin == true) {
         try {
         const response = await fetchProfile();
         console.log(response.data);
@@ -36,7 +35,6 @@ export default {
         } catch (error) {
           console.log(error);
         }
-      }
     },
     async userLogout() {
       try {
