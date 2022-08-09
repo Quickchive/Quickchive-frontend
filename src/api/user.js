@@ -1,4 +1,4 @@
-import { instance } from "./index";
+import { instance, authInstance } from "./index";
 
 // 프로필 수정 
 function editProfile(userData) {
@@ -12,7 +12,7 @@ function resetPw(password) {
 
 // 프로필 조회 
 function fetchProfile() {
-  return instance.get("users/me");
+  return authInstance.get("users/me");
 }
 
 // 자신의 아티클 조회 
