@@ -28,8 +28,10 @@ export default {
         }
         const response = await this.$store.dispatch("LOGIN", userData);
         console.log(response);
-        if (response.ok == true) {
+        if (response.statusCode == 201) {
           this.$router.push("/");
+        } else if (response.statusCode == 409) {
+          alert("회원정보를 확인해주세요.");
         }
       } catch (error) {
         console.log(error);

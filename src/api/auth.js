@@ -1,4 +1,4 @@
-import { instance } from "./index";
+import { instance, authInstance } from "./index";
 
 // 회원가입
 function registerUser(userData) {
@@ -12,7 +12,7 @@ function loginUser(userData) {
 
 // 로그아웃
 function logoutUser() {
-  return instance.get("auth/logout");
+  return authInstance.get("auth/logout");
 }
 
 // 회원탈퇴
