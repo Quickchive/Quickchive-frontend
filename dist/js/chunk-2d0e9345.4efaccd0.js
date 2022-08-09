@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0e9345"],{"8d14":function(s,e,t){"use strict";t.r(e);var n=function(){var s=this,e=s._self._c;return e("div",{staticClass:"hello"},[e("h1",[s._v("메인")]),s.isUserLogin?e("span",[s._v(s._s(s.$store.state.userEmail)+"님 환영합니다.")]):s._e()])},i=[],r={computed:{isUserLogin(){return this.$store.getters.isLogin}}},o=r,u=t("2877"),l=Object(u["a"])(o,n,i,!1,null,null,null);e["default"]=l.exports}}]);
-//# sourceMappingURL=chunk-2d0e9345.4efaccd0.js.map
