@@ -1,0 +1,27 @@
+@import '../mixin';
+
+input {
+  border: 1px solid $color-gray-input;
+  width: 339px;
+  height: 43px;
+  border-radius: 10px;
+  text-indent: 10px;
+}
+
+input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    appearance: none;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.login-form__checkbox {
+  border-radius: 50%;
+  width: 25px;
+  appearance: none;
+}
+
+
+

@@ -1,0 +1,16 @@
+@import '../mixin';
+
+form {
+  width: auto;
+}
+
+// 로그인 폼 
+.login-wrapper {
+  height: 104px;
+  @include layout (row, flex-start, center);
+  .login-form {
+    margin-right: 20px;
+    height: 100%;
+    @include layout (column, flex-end, space-between);
+  }
+}
