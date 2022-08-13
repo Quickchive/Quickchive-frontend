@@ -14,3 +14,39 @@ form {
     @include layout (column, flex-end, space-between);
   }
 }
+
+// 회원가입 폼
+.register-wrapper {
+  width: 500px;
+}
+
+// 회원가입 폼 - 이메일
+.register-form__email {
+  @include layout (row, flex-end, space-between);
+  .register-form__wrapper {
+    width: 220px;
+  }
+  button {
+    margin-bottom: 16px;
+  }
+  select {
+    margin-bottom: 16px;
+    width: 140px;
+  }
+  span {
+    margin-bottom: 28px;
+  }
+}
+
+// 회원가입 폼 - 라벨 + 인풋 
+.register-form__wrapper {
+  @include layout (column, flex-start, center);
+  width: auto;
+  margin-bottom: 16px;
+  input {
+    width: 100%;
+  }
+  button {
+    width: 100%;
+  }
+}
