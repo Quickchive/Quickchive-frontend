@@ -2,7 +2,13 @@
 
 button {
   border-style: none;
+  cursor: pointer;
 }
+
+.btn--transparent {
+  background: none;
+}
+
 
 // 로그인 버튼
 .btn__login {
@@ -22,14 +28,22 @@ button {
   @include font(15px, 400, $color-gray-6);
 }
 
-// 회원가입 버튼 - 비활성화
+// 회원가입 버튼 - 비활성화된 경우
 .btn__register {
   width: 500px;
   height: 63px;
   background: linear-gradient(180deg, #7E7E7E 0%, #686867 100%);
   @include font(18px, 400, $color-gray-1);
   border-radius: 10px;
+  cursor: auto;
 }
+
+// 버튼 - 활성화된 경우
+.btnValid {
+  background: linear-gradient(180deg, #FAE100 0%, #EAD303 100%);
+}
+
+
 
 // 회원가입 - 이메일 인증 버튼
 .btn__verify {
@@ -39,3 +53,12 @@ button {
   @include font(18px, 400, $color-gray-1);
   border-radius: 10px;
 }
+
+// 이용약관 버튼
+.btn__tos {
+  @include font(15px, 600, $color-gray-5);
+  text-decoration: underline;
+  background: none;
+  padding: 0;
+  margin-top: 3px;
+  }

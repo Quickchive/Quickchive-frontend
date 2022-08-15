@@ -27,14 +27,14 @@ form {
     width: 220px;
   }
   button {
-    margin-bottom: 16px;
+    margin-bottom: 4px;
   }
   select {
-    margin-bottom: 16px;
+    margin-bottom: 4px;
     width: 140px;
   }
   span {
-    margin-bottom: 28px;
+    margin-bottom: 16px;
   }
 }
 
@@ -42,11 +42,18 @@ form {
 .register-form__wrapper {
   @include layout (column, flex-start, center);
   width: auto;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
   input {
     width: 100%;
   }
   button {
     width: 100%;
   }
+}
+
+.register-form__agree {
+    @include layout (row, center, flex-start);
+    .register-form__wrapper {
+      width: 220px;
+    }
 }

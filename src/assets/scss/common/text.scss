@@ -11,6 +11,11 @@ h1 {
   margin-bottom: 35px;
 }
 
+// 유효성 검사 에러 메세지
+.error-msg {
+  @include font(15px, 400, $color-components-2);
+  margin-left: 10px;
+}
 
 
 
