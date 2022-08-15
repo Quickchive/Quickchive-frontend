@@ -1,10 +1,23 @@
+@import '../mixin';
+
 .header {
   background-color: $color-primary;
   height: 62px;
   box-sizing: border-box;
-  padding: 14px 177px;
-  nav {
-    @include layout(row, center, flex-start);
+  padding: 12px 177px;
 
+  nav {
+    height: 100%;
+    @include layout(row, center, space-between);
+    .nav__wrapper {
+    @include layout(row, center, flex-start);
+    position: relative;
+    .btn__search {
+      position: absolute;
+      z-index: 10;
+      right: 78px;
+      background-color: transparent;
+    }
+    }
   }
 }

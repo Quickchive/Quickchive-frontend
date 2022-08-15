@@ -20,6 +20,10 @@ const routes = [
 		path: '/login',
 		component: () => import('@/components/auth/LoginForm.vue'),
 	},
+	{
+		path: '/mypage',
+		component: () => import('@/components/MypageComponent.vue'),
+	},
 ];
 
 const router = new VueRouter({

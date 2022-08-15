@@ -6,7 +6,10 @@ button {
 }
 
 .btn--transparent {
-  background: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  @include layout(column, center, center);
 }
 
 
@@ -62,3 +65,4 @@ button {
   padding: 0;
   margin-top: 3px;
   }
+
