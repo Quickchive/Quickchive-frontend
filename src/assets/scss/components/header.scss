@@ -1,4 +1,10 @@
 .header {
   background-color: $color-primary;
   height: 62px;
+  box-sizing: border-box;
+  padding: 14px 177px;
+  nav {
+    @include layout(row, center, flex-start);
+
+  }
 }
