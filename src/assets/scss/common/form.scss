@@ -1,0 +1,59 @@
+@import '../mixin';
+
+form {
+  width: auto;
+}
+
+// 로그인 폼 
+.login-wrapper {
+  height: 104px;
+  @include layout (row, flex-start, center);
+  .login-form {
+    margin-right: 20px;
+    height: 100%;
+    @include layout (column, flex-end, space-between);
+  }
+}
+
+// 회원가입 폼
+.register-wrapper {
+  width: 500px;
+}
+
+// 회원가입 폼 - 이메일
+.register-form__email {
+  @include layout (row, flex-end, space-between);
+  .register-form__wrapper {
+    width: 220px;
+  }
+  button {
+    margin-bottom: 4px;
+  }
+  select {
+    margin-bottom: 4px;
+    width: 140px;
+  }
+  span {
+    margin-bottom: 16px;
+  }
+}
+
+// 회원가입 폼 - 라벨 + 인풋 
+.register-form__wrapper {
+  @include layout (column, flex-start, center);
+  width: auto;
+  margin-bottom: 4px;
+  input {
+    width: 100%;
+  }
+  button {
+    width: 100%;
+  }
+}
+
+.register-form__agree {
+    @include layout (row, center, flex-start);
+    .register-form__wrapper {
+      width: 220px;
+    }
+}
