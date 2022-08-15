@@ -60,4 +60,19 @@ input[id="checkbox"]:checked + label::after{
   outline: none;
 }
 
-
+// 검색 인풋
+.input__search {
+  background-color: $color-gray-2;
+  border-radius: 20px;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.13);
+  // transform: matrix(1, 0, 0, -1, 0, 0);
+  width: 531px;
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 45px 0 0;
+  margin-right: 28px;
+  text-indent: 15px;
+  &::placeholder {
+    @include font(16px, 400, $color-gray-4);
+  }
+}
