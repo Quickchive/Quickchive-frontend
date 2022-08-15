@@ -10,7 +10,7 @@ const routes = [
 	},
 	{
 		path: '/register',
-		component: () => import('@/components/auth/RegisterForm.vue'),
+		component: () => import('@/views/RegisterView.vue'),
 	},
 	{
 		path: '/verify',
