@@ -1,0 +1,32 @@
+@import '../mixin';
+
+// 로그인 폼 라벨
+.login-form__label {
+  @include font(18px, 400, $color-primary);
+  margin-right: 6px;
+}
+
+
+// 로그인 폼 라벨 - 체크박스
+.login-form__checkbox-label {
+  @include font(18px, 400, $color-gray-5);
+  @include layout (row, center, center);
+  margin-top: 16px;
+}
+
+
+// 회원가입 폼 라벨
+.register-form__label {
+  @include font(18px, 400, $color-gray-5);
+  margin: 17px 0 4px 0;
+}
+
+// 회원가입 폼 라벨 설명 - 동의
+.register-form__checkbox-agree {
+  margin: 0;
+  appearance: none;
+  @include font(15px, 400, $color-gray-5);
+  @include layout (row, center, center);
+}
+
+

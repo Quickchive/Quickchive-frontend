@@ -1,0 +1,17 @@
+@import "../mixin";
+h1 {
+  margin: 0;
+}
+
+// 페이지 제목용 텍스트 h1
+.page-header {
+  @include font(22px, 600, $color-gray-5);
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+// 유효성 검사 에러 메세지
+.error-msg {
+  @include font(15px, 400, $color-components-2);
+  margin-left: 10px;
+}

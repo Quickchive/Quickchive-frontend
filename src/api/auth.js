@@ -35,5 +35,10 @@ function verifyEmail(code) {
   return instance.get(`auth/verify-email?code=${code}`);
 }
 
+// 새 유저 인증을 위한 메일 전송
+function sendEmail(email) {
+  return instance.get(`auth/send-verify-email/${email}`);
+}
 
-export { registerUser, loginUser, logoutUser, deleteUser, reissueToken, resetPw, verifyEmail };
+
+export { registerUser, loginUser, logoutUser, deleteUser, reissueToken, resetPw, verifyEmail, sendEmail };

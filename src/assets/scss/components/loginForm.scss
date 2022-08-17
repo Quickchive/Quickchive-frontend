@@ -1,0 +1,25 @@
+@import '../mixin';
+
+.login-form__or {
+  @include font(16px, 400, $color-gray-7);
+  margin-top: 16px;
+  &::before {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+  }
+  &::after {
+    content: "";
+    flex-grow: 1;
+    background-color: aqua;
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+  }
+}
+
