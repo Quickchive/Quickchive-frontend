@@ -1,5 +1,7 @@
 <template>
-  <login-form></login-form>
+  <div class="register-view">
+    <login-form></login-form>
+  </div>
 </template>
 
 <script>
