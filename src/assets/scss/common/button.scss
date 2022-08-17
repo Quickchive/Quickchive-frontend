@@ -3,6 +3,9 @@
 button {
   border-style: none;
   cursor: pointer;
+  &:disabled {
+    cursor: auto;
+  }
 }
 
 .btn--transparent {
@@ -41,21 +44,29 @@ button {
   cursor: auto;
 }
 
+// sm버튼 - ex: 인증 메일 전송 버튼
+.btn--sm {
+  width: 100px;
+  height: 43px;
+  @include font(18px, 400, $color-gray-1);
+  border-radius: 10px;
+}
+
+// 버튼 - 비활성화 색상
+.btnGray {
+  background: linear-gradient(180deg, #7E7E7E 0%, #686867 100%);
+}
+
+// 버튼 - 활성화 색상: blue
+.btnPrimary {
+  background: linear-gradient(180deg, #AFBED3 0%, #A2B5CD 100%);
+}
+
 // 버튼 - 활성화된 경우
 .btnValid {
   background: linear-gradient(180deg, #FAE100 0%, #EAD303 100%);
 }
 
-
-
-// 회원가입 - 이메일 인증 버튼
-.btn__verify {
-  width: 100px;
-  height: 43px;
-  background: linear-gradient(180deg, #7E7E7E 0%, #686867 100%);
-  @include font(18px, 400, $color-gray-1);
-  border-radius: 10px;
-}
 
 // 이용약관 버튼
 .btn__tos {

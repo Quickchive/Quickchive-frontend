@@ -20,75 +20,25 @@
 
 .modal-card {
   position: relative;
-  width: 80%;
-  max-width: 550px;
+  width: 787px;
+  max-width: 787px;
   margin: auto;
   top: 30%;
-  padding: 20px;
+  padding: 31px 31px 31px 36px;
   background-color: $color-gray-1;
   border-radius: 10px;
   height: auto;
   z-index: 10;
   opacity: 1;
   z-index: 20;
-}
-
-// 모달 내용
-.content {
-  .btn__close {
-    width: auto;
-    @include layout(row, center, flex-end);
-  }
-  h1 {
-    font-size: 20px;
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 30px;
-  }
-  .btn__wrapper {
-    @include layout(row, center, space-between);
-    button {
-      width: 49%;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 20px 0px;
+  .modal-card__header {
+    @include layout(row, flex-start, space-between);
+    padding-bottom: 14px;
+    border-bottom: 1px solid $color-gray-4;
+    h1 {
+      font-size: 25px;
+      text-align: left;
+      font-weight: 700;
     }
   }
 }
-
-// 마이페이지 모달
-.content-mypage {
-  @extend .content;
-
-  .content__wrapper {
-    @include layout(column, center, center);
-    gap: 12px;
-    .content__wrapper--text {
-      @include layout(column, center, center);
-      gap: 8px;
-      // .card__title {
-      //   @include font(12px, 700, $color-black-100);
-      // }
-      // .card__text--benefit {
-      //   @include font(12px, 400, $color-black-100);
-      // }
-      // .card__text--expire {
-      //   @include font(10px, 200, $color-black-60);
-      }
-    }
-
-    input {
-      width: 80%;
-      // background-color: $color-secondary-25;
-      // border-radius: 5px;
-      // border: 1px solid $color-primary-dark;
-      padding: 12px 0px;
-      text-indent: 10px;
-    }
-    button {
-      width: 80%;
-      padding: 12px;
-      border-radius: 30px;
-    }
-  }
-
