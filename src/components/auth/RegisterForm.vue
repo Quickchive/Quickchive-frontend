@@ -114,12 +114,8 @@ export default {
       pw: "",
       pwCheck: "",
       agree: false,
-      error: {
-        message: "8자 이상의 영어, 숫자를 사용해주세요",
-      },
-      message: {
-        btn: "인증",
-      },
+      email: "",
+      emailStatus: 0,
       // 모달
       isPolicyModalActive: false,
       isTosModalActive: false,
@@ -196,19 +192,19 @@ export default {
       try {
         const code = this.$route.query.code;
         const response = await verifyEmail(code);
+        this.email = response.data.email;
+        this.emailStatus = response.data.statusCode;
         console.log(response);
       } catch (error) {
         console.log(error);
-        alert(
-          "인증되지 않은 이메일 입니다. <br/> 이메일 인증을 다시 시도해주세요."
-        );
+        alert("인증되지 않은 이메일 입니다. 이메일 인증을 다시 시도해주세요.");
         this.$router.push("/register/email");
       }
     },
     async submitForm() {
       try {
         const userData = {
-          email: "aurora2337@naver.com",
+          email: this.email,
           name: this.nickname,
           password: this.pw,
         };
@@ -218,7 +214,7 @@ export default {
         this.$router.push("/login");
       } catch (error) {
         console.log(error);
-        alert("회원가입에 실패햐였습니다.");
+        alert("회원가입에 실패하였습니다.");
       }
     },
   },
