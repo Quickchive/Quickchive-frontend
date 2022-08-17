@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0bfed4"],{4035:function(n,t,u){"use strict";u.r(t);var e=function(){var n=this;n._self._c;return n._m(0)},c=[function(){var n=this,t=n._self._c;return t("div",[t("h1",[n._v("마이 페이지")])])}],r={},s=r,i=u("2877"),l=Object(i["a"])(s,e,c,!1,null,null,null);t["default"]=l.exports}}]);
+//# sourceMappingURL=chunk-2d0bfed4.7c4454bf.js.map

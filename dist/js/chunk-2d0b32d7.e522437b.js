@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0b32d7"],{"26eb":function(e,t,n){"use strict";n.r(t);var c=function(){var e=this;e._self._c;return e._m(0)},o=[function(){var e=this,t=e._self._c;return t("div",[t("h1",[e._v("이메일 인증")])])}],s=n("3786"),i={created(){this.verifyEmail()},methods:{async verifyEmail(){try{const e=this.$route.query.code,t=await Object(s["e"])(e);console.log(t)}catch(e){console.log(e)}}}},r=i,l=n("2877"),a=Object(l["a"])(r,c,o,!1,null,null,null);t["default"]=a.exports}}]);
-//# sourceMappingURL=chunk-2d0b32d7.e522437b.js.map
