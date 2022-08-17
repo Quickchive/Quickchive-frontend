@@ -33,7 +33,14 @@ const routes = [
   // 테스트용 (변경하기) verify
   {
     path: "/verify",
-    component: () => import("@/components/auth/RegisterForm.vue"),
+    component: () => import("@/views/RegisterView.vue"),
+    children: [
+      // step2: 회원정보 입력
+      {
+        path: "/verify",
+        component: () => import("@/components/auth/RegisterForm.vue"),
+      },
+    ],
   },
   {
     path: "/mypage",
