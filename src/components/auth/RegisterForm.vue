@@ -127,9 +127,9 @@ export default {
       policyModalTitle: "개인정보 처리 방침",
     };
   },
-  // created() {
-  //   this.verifyEmail();
-  // },
+  created() {
+    this.verifyEmail();
+  },
   computed: {
     // 닉네임 유효성 검사: 2~8자
     validateNickname() {
