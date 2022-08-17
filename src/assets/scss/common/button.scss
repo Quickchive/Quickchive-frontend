@@ -1,4 +1,4 @@
-@import '../mixin';
+@import "../mixin";
 
 button {
   border-style: none;
@@ -15,16 +15,14 @@ button {
   @include layout(column, center, center);
 }
 
-
 // 로그인 버튼
 .btn__login {
   width: 122px;
   height: 104px;
-  background: linear-gradient(180deg, #AEBED3 0%, #909EB1 100%);
+  background: linear-gradient(180deg, #aebed3 0%, #909eb1 100%);
   border-radius: 10px;
   @include font(20px, 400, $color-gray-1);
 }
-
 
 // 로그인 폼 - 회원가입 버튼
 .login-form__link-register {
@@ -38,10 +36,9 @@ button {
 .btn__register {
   width: 500px;
   height: 63px;
-  background: linear-gradient(180deg, #7E7E7E 0%, #686867 100%);
+  background: linear-gradient(180deg, #7e7e7e 0%, #686867 100%);
   @include font(18px, 400, $color-gray-1);
   border-radius: 10px;
-  cursor: auto;
 }
 
 // sm버튼 - ex: 인증 메일 전송 버튼
@@ -54,19 +51,18 @@ button {
 
 // 버튼 - 비활성화 색상
 .btnGray {
-  background: linear-gradient(180deg, #7E7E7E 0%, #686867 100%);
+  background: linear-gradient(180deg, #7e7e7e 0%, #686867 100%);
 }
 
 // 버튼 - 활성화 색상: blue
 .btnPrimary {
-  background: linear-gradient(180deg, #AFBED3 0%, #A2B5CD 100%);
+  background: linear-gradient(180deg, #afbed3 0%, #a2b5cd 100%);
 }
 
 // 버튼 - 활성화된 경우
 .btnValid {
-  background: linear-gradient(180deg, #FAE100 0%, #EAD303 100%);
+  background: linear-gradient(180deg, #fae100 0%, #ead303 100%);
 }
-
 
 // 이용약관 버튼
 .btn__tos {
@@ -75,5 +71,4 @@ button {
   background: none;
   padding: 0;
   margin-top: 3px;
-  }
-
+}
