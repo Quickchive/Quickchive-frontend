@@ -27,15 +27,24 @@
       >회원가입 하기</router-link
     >
     <span class="login-form__or">OR</span>
+    <div class="oauth-btn__wrapper">
+      <img :src="kakaoBtn" />
+      <img :src="googleBtn" />
+    </div>
   </div>
 </template>
 
 <script>
+import kakaoBtn from "@/assets/img/kakaoBtn.png";
+import googleBtn from "@/assets/img/googleBtn.svg";
+
 export default {
   data() {
     return {
       email: "",
       pw: "",
+      kakaoBtn,
+      googleBtn,
     };
   },
   methods: {
