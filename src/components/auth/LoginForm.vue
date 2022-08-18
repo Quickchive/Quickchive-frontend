@@ -28,7 +28,9 @@
     >
     <span class="login-form__or">OR</span>
     <div class="oauth-btn__wrapper">
-      <img :src="kakaoBtn" />
+      <a href="https://api.hou27.shop/api/oauth/kakao-auth" target="_blank">
+        <img :src="kakaoBtn"
+      /></a>
       <img :src="googleBtn" />
     </div>
   </div>
@@ -37,6 +39,7 @@
 <script>
 import kakaoBtn from "@/assets/img/kakaoBtn.png";
 import googleBtn from "@/assets/img/googleBtn.svg";
+import { kakaoAuth } from "@/api/oauth";
 
 export default {
   data() {
@@ -61,6 +64,15 @@ export default {
         } else if (response.statusCode == 409) {
           alert("회원정보를 확인해주세요.");
         }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 카카오 로그인 요청
+    async getKakaoAuth() {
+      try {
+        await kakaoAuth();
+        console.log("카카오 로그인 요청");
       } catch (error) {
         console.log(error);
       }
