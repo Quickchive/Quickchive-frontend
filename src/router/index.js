@@ -13,6 +13,11 @@ const routes = [
     path: "/login",
     component: () => import("@/views/LoginView.vue"),
   },
+  // 메인
+  {
+    path: "/main",
+    component: () => import("@/views/MainView.vue"),
+  },
   // 회원가입
   {
     path: "/register",
@@ -30,25 +35,9 @@ const routes = [
       },
     ],
   },
-  // 테스트용 (변경하기) verify
-  {
-    path: "/verify",
-    component: () => import("@/views/RegisterView.vue"),
-    children: [
-      // step2: 회원정보 입력
-      {
-        path: "/verify",
-        component: () => import("@/components/auth/RegisterForm.vue"),
-      },
-    ],
-  },
   {
     path: "/mypage",
     component: () => import("@/components/MypageComponent.vue"),
-  },
-  {
-    path: "/timer",
-    component: () => import("@/components/common/TimerComponent.vue"),
   },
 ];
 
