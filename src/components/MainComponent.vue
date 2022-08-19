@@ -12,11 +12,18 @@
 import { fetchProfile } from "@/api/user";
 import { logoutUser } from "@/api/auth";
 import { deleteCookie } from "@/utils/cookies";
-import { kakaoLogin } from "@/api/oauth";
+import { kakaoLogin, googleLogin } from "@/api/oauth";
 import { saveAuthToCookie } from "@/utils/cookies";
 export default {
   created() {
-    // this.fetchName();
+    const path = this.$route.path;
+    const loginInfo = path.slice(6);
+    console.log("소셜 로그인 정보", loginInfo);
+    if (loginInfo == "google") {
+      this.getGoogleLogin();
+    } else if (loginInfo == "kakao") {
+      this.getKakaoLogin();
+    }
   },
   computed: {
     isUserLogin() {
@@ -58,6 +65,21 @@ export default {
         console.log(response);
         if (response.data.statusCode == 200) {
           console.log("카카오 로그인 성공");
+          localStorage.setItem("refreshToken", response.data.refresh_token);
+          saveAuthToCookie(response.data.access_token);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 구글 로그인 요청
+    async getGoogleLogin() {
+      try {
+        const code = this.$route.query.code;
+        const response = await googleLogin(code);
+        console.log(response);
+        if (response.data.statusCode == 200) {
+          console.log("구글 로그인 성공");
           localStorage.setItem("refreshToken", response.data.refresh_token);
           saveAuthToCookie(response.data.access_token);
         }

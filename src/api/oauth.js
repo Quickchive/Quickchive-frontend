@@ -16,8 +16,8 @@ function googleAuth() {
 }
 
 // 구글 로그인: 회원가입 안되어 있으면 회원가입 처리 후 로그인 처리
-function googleLogin() {
-  return instance.get("oauth/google-login");
+function googleLogin(code) {
+  return instance.get(`oauth/google-login?code=${code}`);
 }
 
 export { kakaoAuth, kakaoLogin, googleAuth, googleLogin };

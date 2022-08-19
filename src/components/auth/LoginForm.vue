@@ -31,7 +31,9 @@
       <a href="https://api.hou27.shop/api/oauth/kakao-auth" target="_blank">
         <img :src="kakaoBtn"
       /></a>
-      <img :src="googleBtn" />
+      <a href="https://api.hou27.shop/api/oauth/google-auth" target="_blank">
+        <img :src="googleBtn" />
+      </a>
     </div>
   </div>
 </template>
@@ -50,6 +52,7 @@ export default {
       googleBtn,
     };
   },
+
   methods: {
     async submitForm() {
       try {
