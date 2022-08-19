@@ -1,10 +1,15 @@
 <template>
-  <div class="hello">
-    <h1>메인</h1>
+  <div>
+    <favorite-contents></favorite-contents>
+    <div class="contents__wrapper">
+      <all-contents></all-contents>
+      <unclassified-contents></unclassified-contents>
+    </div>
+    <!-- <h1>메인</h1>
     <span v-if="isUserLogin"
       >{{ this.$store.state.userName }}님 환영합니다.</span
-    >
-    <button v-if="isUserLogin" @click="userLogout()">로그아웃</button>
+    > -->
+    <!-- <button v-if="isUserLogin" @click="userLogout()">로그아웃</button> -->
   </div>
 </template>
 
@@ -14,7 +19,11 @@ import { logoutUser } from "@/api/auth";
 import { deleteCookie } from "@/utils/cookies";
 import { kakaoLogin, googleLogin } from "@/api/oauth";
 import { saveAuthToCookie } from "@/utils/cookies";
+import FavoriteContents from "@/components/contents/FavoriteContents.vue";
+import AllContents from "@/components/contents/AllContents.vue";
+import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
 export default {
+  components: { FavoriteContents, AllContents, UnclassifiedContents },
   created() {
     const path = this.$route.path;
     const loginInfo = path.slice(6);

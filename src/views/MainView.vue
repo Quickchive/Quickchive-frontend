@@ -1,22 +1,14 @@
 <template>
   <div class="main">
-    <favorite-contents></favorite-contents>
-    <div class="contents__wrapper">
-      <all-contents></all-contents>
-      <unclassified-contents></unclassified-contents>
-    </div>
+    <main-component></main-component>
   </div>
 </template>
 <script>
-import FavoriteContents from '../components/contents/FavoriteContents.vue'
-import AllContents from '../components/contents/AllContents.vue'
-import UnclassifiedContents from '../components/contents/UnclassifiedContents.vue'
+import MainComponent from "../components/MainComponent.vue";
 
 export default {
-  components: { FavoriteContents, AllContents, UnclassifiedContents },
-  }
+  components: { MainComponent },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
