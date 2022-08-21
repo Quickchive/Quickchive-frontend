@@ -28,9 +28,9 @@ export default {
     const path = this.$route.path;
     const loginInfo = path.slice(6);
     console.log("소셜 로그인 정보", loginInfo);
-    if (loginInfo == "google") {
+    if (loginInfo == "google/redirect") {
       this.getGoogleLogin();
-    } else if (loginInfo == "kakao") {
+    } else if (loginInfo == "kakao/redirect") {
       this.getKakaoLogin();
     }
   },
