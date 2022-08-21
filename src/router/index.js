@@ -17,6 +17,18 @@ const routes = [
   {
     path: "/main",
     component: () => import("@/views/MainView.vue"),
+    children: [
+      // 카카오
+      {
+        path: "/main/kakao",
+        component: () => import("@/views/MainView.vue"),
+      },
+      // 구글
+      {
+        path: "/main/google",
+        component: () => import("@/views/MainView.vue"),
+      },
+    ],
   },
   // 회원가입
   {
