@@ -20,12 +20,12 @@ const routes = [
     children: [
       // 카카오
       {
-        path: "/main/kakao",
+        path: "/main/kakao/redirect",
         component: () => import("@/views/MainView.vue"),
       },
       // 구글
       {
-        path: "/main/google",
+        path: "/main/google/redirect",
         component: () => import("@/views/MainView.vue"),
       },
     ],
