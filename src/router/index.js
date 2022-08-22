@@ -50,6 +50,18 @@ const routes = [
   {
     path: "/mypage",
     component: () => import("@/views/MypageView.vue"),
+    children: [
+      // 기본 회원가입
+      {
+        path: "/mypage",
+        component: () => import("@/components/auth/MypageForm.vue"),
+      },
+      // 소셜 회원가입
+      {
+        path: "/mypage/sns",
+        component: () => import("@/components/auth/MypageSnsForm.vue"),
+      },
+    ],
   },
 ];
 
