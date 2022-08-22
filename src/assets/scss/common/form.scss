@@ -1,17 +1,17 @@
-@import '../mixin';
+@import "../mixin";
 
 form {
   width: auto;
 }
 
-// 로그인 폼 
+// 로그인 폼
 .login-wrapper {
   height: 104px;
-  @include layout (row, flex-start, center);
+  @include layout(row, flex-start, center);
   .login-form {
     margin-right: 20px;
     height: 100%;
-    @include layout (column, flex-end, space-between);
+    @include layout(column, flex-end, space-between);
   }
 }
 
@@ -22,7 +22,7 @@ form {
 
 // 회원가입 폼 - 이메일
 .register-form__email {
-  @include layout (row, flex-end, space-between);
+  @include layout(row, flex-end, space-between);
   .register-form__wrapper {
     width: 220px;
   }
@@ -38,9 +38,9 @@ form {
   }
 }
 
-// 회원가입 폼 - 라벨 + 인풋 
+// 회원가입 폼 - 라벨 + 인풋
 .register-form__wrapper {
-  @include layout (column, flex-start, center);
+  @include layout(column, flex-start, center);
   width: auto;
   margin-bottom: 4px;
   input {
@@ -52,8 +52,13 @@ form {
 }
 
 .register-form__agree {
-    @include layout (row, center, flex-start);
-    .register-form__wrapper {
-      width: 220px;
-    }
+  @include layout(row, center, flex-start);
+  .register-form__wrapper {
+    width: 220px;
+  }
+}
+
+.mypage__email {
+  @include font(15px, 400, $color-gray-5);
+  margin: 10px 0 0 10px;
 }

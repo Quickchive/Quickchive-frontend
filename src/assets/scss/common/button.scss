@@ -72,3 +72,13 @@ button {
   padding: 0;
   margin-top: 3px;
 }
+
+// 회원 탈퇴 버튼
+.btn__deleteuser {
+  @include font(15px, 400, $color-gray-6);
+  margin-top: 10px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid $color-gray-4;
+  background-color: transparent;
+  margin-left: 10px;
+}
