@@ -4,10 +4,10 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-  // 메인 페이지 -> 로그인 페이지
+  // 온보딩 페이지
   {
     path: "/",
-    redirect: "/login",
+    component: () => import("@/views/OnBoardingView.vue"),
   },
   {
     path: "/login",
