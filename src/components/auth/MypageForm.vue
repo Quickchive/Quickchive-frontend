@@ -124,7 +124,7 @@ export default {
   },
   created() {
     // 프로필 조회
-    // this.getProfile();
+    this.getProfile();
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
