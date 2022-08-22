@@ -49,7 +49,7 @@ const routes = [
   },
   {
     path: "/mypage",
-    component: () => import("@/components/MypageComponent.vue"),
+    component: () => import("@/views/MypageView.vue"),
   },
 ];
 
