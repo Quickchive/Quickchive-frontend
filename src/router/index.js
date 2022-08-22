@@ -4,10 +4,10 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-  // 메인 페이지 -> 로그인 페이지
+  // 온보딩 페이지
   {
     path: "/",
-    redirect: "/login",
+    component: () => import("@/views/OnBoardingView.vue"),
   },
   {
     path: "/login",
@@ -49,7 +49,28 @@ const routes = [
   },
   {
     path: "/mypage",
-    component: () => import("@/components/MypageComponent.vue"),
+    component: () => import("@/views/MypageView.vue"),
+    children: [
+      // 기본 회원가입
+      {
+        path: "/mypage",
+        component: () => import("@/components/auth/MypageForm.vue"),
+      },
+      // 소셜 회원가입
+      {
+        path: "/mypage/sns",
+        component: () => import("@/components/auth/MypageSnsForm.vue"),
+      },
+    ],
+  },
+  // 404 에러 페이지
+  {
+    path: "*",
+    redirect: "/404",
+  },
+  {
+    path: "/404",
+    component: () => import("@/views/404View.vue"),
   },
 ];
 

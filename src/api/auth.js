@@ -17,7 +17,7 @@ function logoutUser() {
 
 // 회원탈퇴
 function deleteUser() {
-  return instance.delete("auth/delete");
+  return authInstance.delete("auth/delete");
 }
 
 // 토큰 재발행
@@ -40,5 +40,13 @@ function sendEmail(email) {
   return instance.get(`auth/send-verify-email/${email}`);
 }
 
-
-export { registerUser, loginUser, logoutUser, deleteUser, reissueToken, resetPw, verifyEmail, sendEmail };
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  deleteUser,
+  reissueToken,
+  resetPw,
+  verifyEmail,
+  sendEmail,
+};
