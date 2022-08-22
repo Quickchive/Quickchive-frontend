@@ -63,6 +63,15 @@ const routes = [
       },
     ],
   },
+  // 404 에러 페이지
+  {
+    path: "*",
+    redirect: "/404",
+  },
+  {
+    path: "/404",
+    component: () => import("@/views/404View.vue"),
+  },
 ];
 
 const router = new VueRouter({
