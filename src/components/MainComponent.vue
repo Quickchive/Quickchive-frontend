@@ -5,6 +5,16 @@
       <all-contents></all-contents>
       <unclassified-contents></unclassified-contents>
     </div>
+    <div class="main-btn__wrapper">
+      <button @click="openCategoryModal" class="btn__addCategory">
+        + Add category
+      </button>
+    </div>
+    <category-modal-component
+      v-show="isCategoryModalActive"
+      @close-modal="isCategoryModalActive = false"
+    ></category-modal-component>
+
     <!-- <h1>메인</h1>
     <span v-if="isUserLogin"
       >{{ this.$store.state.userName }}님 환영합니다.</span
@@ -22,8 +32,19 @@ import { saveAuthToCookie } from "@/utils/cookies";
 import FavoriteContents from "@/components/contents/FavoriteContents.vue";
 import AllContents from "@/components/contents/AllContents.vue";
 import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
+import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
 export default {
-  components: { FavoriteContents, AllContents, UnclassifiedContents },
+  components: {
+    FavoriteContents,
+    AllContents,
+    UnclassifiedContents,
+    CategoryModalComponent,
+  },
+  data() {
+    return {
+      isCategoryModalActive: false,
+    };
+  },
   created() {
     const path = this.$route.path;
     const loginInfo = path.slice(6);
@@ -95,6 +116,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    openCategoryModal() {
+      this.isCategoryModalActive = true;
     },
   },
 };
