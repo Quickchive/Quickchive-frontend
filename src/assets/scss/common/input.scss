@@ -1,4 +1,4 @@
-@import '../mixin';
+@import "../mixin";
 
 input {
   border: 1px solid $color-gray-input;
@@ -8,7 +8,7 @@ input {
   text-indent: 10px;
   box-sizing: border-box;
   &::placeholder {
-    @include font(15px, 400, $color-gray-4)
+    @include font(15px, 400, $color-gray-4);
   }
 }
 
@@ -17,14 +17,13 @@ select {
   border-radius: 10px;
   height: 43px;
   text-indent: 10px;
-  @include font(18px, 400, $color-gray-6)
+  @include font(18px, 400, $color-gray-6);
 }
 
-
-input[type="checkbox"]{
+input[type="checkbox"] {
   display: none;
 }
-input[type="checkbox"] + label{
+input[type="checkbox"] + label {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -32,17 +31,17 @@ input[type="checkbox"] + label{
   border-radius: 50px;
   position: relative;
   cursor: pointer;
-  margin: 16px 10px 16px 0; 
+  margin: 16px 10px 16px 0;
 }
-input[id="checkbox"]:checked + label::after{
-  content: url('/src/assets/icon/check.svg');
+input[id="checkbox"]:checked + label::after {
+  content: url("/src/assets/icon/check.svg");
   width: 20px;
   height: 20px;
   text-align: center;
   position: absolute;
   border-radius: 50px;
   left: 0;
-  top:0;
+  top: 0;
   background-color: $color-primary;
 }
 
@@ -52,7 +51,7 @@ input[id="checkbox"]:checked + label::after{
   appearance: none;
 }
 
-// 인증번호 입력 인풋 
+// 인증번호 입력 인풋
 .input__code {
   border-style: none;
   border-radius: 0;
