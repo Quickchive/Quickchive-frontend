@@ -6,4 +6,10 @@
   .main-btn__wrapper {
     @include layout(row, center, flex-end);
   }
+  .main-btn__wrapper-col {
+    @include layout(column, flex-end, center);
+    .btn__top {
+      margin: 20px;
+    }
+  }
 }

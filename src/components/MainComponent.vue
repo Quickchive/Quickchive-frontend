@@ -16,8 +16,10 @@
       @close-modal="isCategoryModalActive = false"
     ></category-modal-component>
 
-
-    <div class="main-btn__wrapper">
+    <div class="main-btn__wrapper-col">
+      <button @click="backToTop()" class="btn--transparent btn__top">
+        <img :src="topBtn" />
+      </button>
       <button @click="isModalActive = true" class="btn__addContents">
         <img :src="plusBtn" />
       </button>
@@ -46,6 +48,7 @@ import AllContents from "@/components/contents/AllContents.vue";
 import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
 import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
 import plusBtn from "@/assets/icon/plusBtn.svg";
+import topBtn from "@/assets/icon/topBtn.svg";
 import ContentsModalComponent from "./modal/ContentsModalComponent.vue";
 export default {
   components: {
@@ -60,6 +63,7 @@ export default {
       isCategoryModalActive: false,
       plusBtn,
       isModalActive: false,
+      topBtn,
     };
   },
   created() {
@@ -136,9 +140,14 @@ export default {
     },
     openCategoryModal() {
       this.isCategoryModalActive = true;
+    },
     // 콘텐츠 추가 모달 열기
     addContents() {
       this.isModalActive = true;
+    },
+    // 탑 버튼
+    backToTop() {
+      window.scrollTo(0, 0);
     },
   },
 };

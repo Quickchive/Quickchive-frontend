@@ -91,7 +91,6 @@ button {
   margin-left: 10px;
 }
 
-
 // 카테고리 추가 버튼
 .btn__addCategory {
   border: 1px dashed #aec0d3;
@@ -100,6 +99,7 @@ button {
   height: 66px;
   @include font(22px, 400, $color-primary);
   background-color: transparent;
+}
 
 // 콘텐츠 추가 버튼
 .btn__addContents {
@@ -107,7 +107,6 @@ button {
   height: 93px;
   background: linear-gradient(180deg, #aec0d3 0%, #a0b3cc 100%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  z-index: 10px;
   position: relative;
   bottom: 0px;
   border-radius: 50px;
