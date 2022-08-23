@@ -5,6 +5,30 @@
       <all-contents></all-contents>
       <unclassified-contents></unclassified-contents>
     </div>
+
+    <div class="main-btn__wrapper">
+      <button @click="openCategoryModal" class="btn__addCategory">
+        + Add category
+      </button>
+    </div>
+    <category-modal-component
+      v-show="isCategoryModalActive"
+      @close-modal="isCategoryModalActive = false"
+    ></category-modal-component>
+
+    <div class="main-btn__wrapper-col">
+      <button @click="backToTop()" class="btn--transparent btn__top">
+        <img :src="topBtn" />
+      </button>
+      <button @click="isModalActive = true" class="btn__addContents">
+        <img :src="plusBtn" />
+      </button>
+    </div>
+    <contents-modal-component
+      v-if="isModalActive"
+      @close-modal="isModalActive = false"
+    ></contents-modal-component>
+
     <!-- <h1>메인</h1>
     <span v-if="isUserLogin"
       >{{ this.$store.state.userName }}님 환영합니다.</span
@@ -22,8 +46,26 @@ import { saveAuthToCookie } from "@/utils/cookies";
 import FavoriteContents from "@/components/contents/FavoriteContents.vue";
 import AllContents from "@/components/contents/AllContents.vue";
 import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
+import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
+import plusBtn from "@/assets/icon/plusBtn.svg";
+import topBtn from "@/assets/icon/topBtn.svg";
+import ContentsModalComponent from "./modal/ContentsModalComponent.vue";
 export default {
-  components: { FavoriteContents, AllContents, UnclassifiedContents },
+  components: {
+    FavoriteContents,
+    AllContents,
+    ContentsModalComponent,
+    UnclassifiedContents,
+    CategoryModalComponent,
+  },
+  data() {
+    return {
+      isCategoryModalActive: false,
+      plusBtn,
+      isModalActive: false,
+      topBtn,
+    };
+  },
   created() {
     const path = this.$route.path;
     const loginInfo = path.slice(6);
@@ -95,6 +137,17 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    openCategoryModal() {
+      this.isCategoryModalActive = true;
+    },
+    // 콘텐츠 추가 모달 열기
+    addContents() {
+      this.isModalActive = true;
+    },
+    // 탑 버튼
+    backToTop() {
+      window.scrollTo(0, 0);
     },
   },
 };

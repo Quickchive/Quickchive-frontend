@@ -1,4 +1,15 @@
+@import "./mixin";
+
 .main {
   box-sizing: border-box;
   padding: 57px 177px;
+  .main-btn__wrapper {
+    @include layout(row, center, flex-end);
+  }
+  .main-btn__wrapper-col {
+    @include layout(column, flex-end, center);
+    .btn__top {
+      margin: 20px;
+    }
+  }
 }

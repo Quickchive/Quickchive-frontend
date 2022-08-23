@@ -62,3 +62,7 @@ form {
   @include font(15px, 400, $color-gray-5);
   margin: 10px 0 0 10px;
 }
+
+.modal-form__wrapper {
+  width: 100%;
+}

@@ -49,6 +49,14 @@ button {
   border-radius: 10px;
 }
 
+// md 버튼
+.btn--md {
+  width: 166px;
+  height: 50px;
+  @include font(20px, 400, $color-gray-1);
+  border-radius: 10px;
+}
+
 // 버튼 - 비활성화 색상
 .btnGray {
   background: linear-gradient(180deg, #7e7e7e 0%, #686867 100%);
@@ -81,4 +89,41 @@ button {
   border-bottom: 1px solid $color-gray-4;
   background-color: transparent;
   margin-left: 10px;
+}
+
+// 카테고리 추가 버튼
+.btn__addCategory {
+  border: 1px dashed #aec0d3;
+  border-radius: 10px;
+  width: 49%;
+  height: 66px;
+  @include font(22px, 400, $color-primary);
+  background-color: transparent;
+}
+
+// 콘텐츠 추가 버튼
+.btn__addContents {
+  width: 93px;
+  height: 93px;
+  background: linear-gradient(180deg, #aec0d3 0%, #a0b3cc 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  position: relative;
+  bottom: 0px;
+  border-radius: 50px;
+}
+
+// 즐겨찾기 별 버튼
+.btn__favorites {
+  width: auto !important;
+  margin: 0 10px;
+  color: rgba(0, 0, 0, 0.25);
+  img {
+    width: 31px;
+  }
+}
+
+// 콜렉션으로 저장하기 버튼
+.btn__collection {
+  @include font(15px, 400, $color-gray-6);
+  border-bottom: 1px solid $color-gray-6;
 }
