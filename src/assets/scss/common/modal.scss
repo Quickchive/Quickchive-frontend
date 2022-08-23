@@ -45,6 +45,38 @@
   }
 }
 
+.contents-modal-card {
+  @extend .modal-card;
+  top: 10%;
+  .modal-form__wrapper {
+    .register-form__wrapper {
+      .contents-modal__select {
+        width: 200px;
+        margin-right: 10px;
+        @include font(15px, 400, $color-gray-8);
+      }
+    }
+    .contents-modal__date-description {
+      @include font(13px, 400, $color-gray-8);
+      width: 260px;
+      margin-left: 10px;
+    }
+  }
+  .modal-card__collection__wrapper {
+    @include layout(column, flex-end, center);
+    margin: 20px 0;
+
+    .modal-card__text {
+      @include font(15px, 400, $color-gray-8);
+      @include layout(row, center, center);
+      margin-bottom: 10px;
+      img {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
 .sm-modal-card {
   position: relative;
   width: 385px;
