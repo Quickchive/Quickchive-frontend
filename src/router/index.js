@@ -63,6 +63,10 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/category",
+    component: () => import("@/views/CategoryView.vue"),
+  },
   // 404 에러 페이지
   {
     path: "*",
