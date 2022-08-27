@@ -24,6 +24,7 @@
         <img :src="plusBtn" />
       </button>
     </div>
+    <!-- 콘텐츠 추가 모달 컴포넌트 -->
     <contents-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
@@ -94,6 +95,7 @@ export default {
         console.log(error);
       }
     },
+    // 로그아웃
     async userLogout() {
       try {
         const response = await logoutUser();
@@ -105,6 +107,7 @@ export default {
         console.log(error);
       }
     },
+    // 카카오 로그인 요청
     async getKakaoLogin() {
       try {
         const code = this.$route.query.code;
@@ -134,9 +137,11 @@ export default {
         console.log(error);
       }
     },
+    // 카테고리 추가 모달 열기
     openCategoryModal() {
       this.isCategoryModalActive = true;
     },
+
     // 콘텐츠 추가 모달 열기
     addContents() {
       this.isModalActive = true;
