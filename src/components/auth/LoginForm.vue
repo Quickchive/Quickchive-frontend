@@ -62,9 +62,9 @@ export default {
         };
         const response = await this.$store.dispatch("LOGIN", userData);
         console.log(response);
-        if (response.statusCode == 201) {
-          this.$router.push("/");
-        } else if (response.statusCode == 409) {
+        if (response.data.statusCode == 201) {
+          this.$router.push("/main");
+        } else if (response.data.statusCode == 409) {
           alert("회원정보를 확인해주세요.");
         }
       } catch (error) {
