@@ -22,7 +22,7 @@ function fetchMyArticle(categoryId) {
 
 // 자신의 카테고리 목록 조회
 function fetchMyCategory() {
-  return instance.get("users/load-categories");
+  return authInstance.get("users/load-categories");
 }
 
 export { editProfile, resetPw, fetchProfile, fetchMyArticle, fetchMyCategory };
