@@ -28,12 +28,6 @@
       v-if="isModalActive"
       @close-modal="isModalActive = false"
     ></contents-modal-component>
-
-    <!-- <h1>메인</h1>
-    <span v-if="isUserLogin"
-      >{{ this.$store.state.userName }}님 환영합니다.</span
-    > -->
-    <!-- <button v-if="isUserLogin" @click="userLogout()">로그아웃</button> -->
   </div>
 </template>
 
@@ -72,8 +66,10 @@ export default {
     console.log("소셜 로그인 정보", loginInfo);
     if (loginInfo == "google/redirect") {
       this.getGoogleLogin();
+      localStorage.setItem("oauthInfo", "google");
     } else if (loginInfo == "kakao/redirect") {
       this.getKakaoLogin();
+      localStorage.setItem("oauthInfo", "kakao");
     }
   },
   computed: {

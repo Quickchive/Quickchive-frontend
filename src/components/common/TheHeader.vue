@@ -56,7 +56,11 @@ export default {
   },
   methods: {
     toMypage() {
-      this.$router.push("/mypage");
+      if (this.$store.getters.isLogin && !this.$store.getters.isOauthLogin) {
+        this.$router.push("/mypage");
+      } else if (this.$store.getters.isOauthLogin) {
+        this.$router.push("/mypage/sns");
+      }
     },
     searchContent() {
       console.log("검색");

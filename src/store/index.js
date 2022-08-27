@@ -11,11 +11,16 @@ export default new Vuex.Store({
     nickname: "",
     accessToken: getAuthFromCookie(),
     refreshToken: localStorage.getItem("refreshToken"),
+    oauthInfo: localStorage.getItem("oauthInfo"),
   },
   getters: {
     isLogin(state) {
       // 토큰 여부로 수정하기
       return state.nickname !== "";
+    },
+    // 소셜 로그인 여부
+    isOauthLogin(state) {
+      return state.oauthInfo !== "";
     },
   },
   mutations: {
