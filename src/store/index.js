@@ -1,22 +1,21 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {
-  getAuthFromCookie,
-  saveAuthToCookie,
-} from "@/utils/cookies";
+import { getAuthFromCookie, saveAuthToCookie } from "@/utils/cookies";
 import { loginUser } from "@/api/auth";
+import { fetchProfile } from "@/api/user";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-      userName: "",
-      accessToken: getAuthFromCookie(),
-      refreshToken: localStorage.getItem("refreshToken")
+    nickname: "",
+    accessToken: getAuthFromCookie(),
+    refreshToken: localStorage.getItem("refreshToken"),
   },
   getters: {
     isLogin(state) {
-      return state.userName !== "";
+      // 토큰 여부로 수정하기
+      return state.nickname !== "";
     },
   },
   mutations: {
@@ -26,21 +25,22 @@ export default new Vuex.Store({
     setRefreshToken(state, token) {
       state.refreshToken = token;
     },
-    setUserName(state, userName) {
-      state.userName = userName;
+    setNickname(state, nickname) {
+      state.nickname = nickname;
     },
     logoutUser(state) {
-      state.userName = "";
-    }
+      state.nickname = "";
+    },
   },
   actions: {
     async LOGIN({ commit }, userData) {
       const { data } = await loginUser(userData);
-      console.log(`${userData.email}님 로그인 완료`);
       commit("setRefreshToken", data.refresh_token);
       saveAuthToCookie(data.access_token);
       localStorage.setItem("refreshToken", data.refresh_token);
+      const response = await fetchProfile();
+      commit("setNickname", response.data.name);
       return data;
     },
-  }
+  },
 });
