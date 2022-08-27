@@ -1,7 +1,9 @@
 <template>
   <div>
-    {{ minutes }} :
-    {{ seconds }}
+    <div class="error-msg__wrapper">
+      <div class="error-msg">{{ message }}</div>
+      <div class="error-msg">({{ minutes }} : {{ seconds }})</div>
+    </div>
   </div>
 </template>
 
@@ -10,8 +12,9 @@ export default {
   data() {
     return {
       timer: null,
-      totalTime: (5 * 60),
-    }
+      totalTime: 5 * 60,
+      message: "인증메일을 확인해주세요.",
+    };
   },
   mounted() {
     this.startTimer();
@@ -19,19 +22,25 @@ export default {
   methods: {
     startTimer() {
       this.timer = setInterval(() => this.countdown(), 1000);
-      this.resetButton = true;
+      this.message = "인증메일을 확인해주세요.";
+    },
+    resetTimer() {
+      this.totalTime = 5 * 60;
+      clearInterval(this.timer);
+      this.timer = null;
+      this.startTimer();
     },
     padTime(time) {
-      return (time < 10 ? '0' : '') + time;
+      return (time < 10 ? "0" : "") + time;
     },
     countdown() {
-      if(this.totalTime >= 1) {
+      if (this.totalTime >= 1) {
         this.totalTime--;
       } else {
         this.totalTime = 0;
-        this.resetTimer;
+        this.message = "인증시간이 만료되었습니다.";
       }
-    }
+    },
   },
   computed: {
     minutes() {
@@ -39,13 +48,11 @@ export default {
       return this.padTime(minutes);
     },
     seconds() {
-      const seconds = this.totalTime - (this.minutes * 60);
+      const seconds = this.totalTime - this.minutes * 60;
       return this.padTime(seconds);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

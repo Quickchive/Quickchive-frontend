@@ -24,16 +24,11 @@
         <img :src="plusBtn" />
       </button>
     </div>
+    <!-- 콘텐츠 추가 모달 컴포넌트 -->
     <contents-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
     ></contents-modal-component>
-
-    <!-- <h1>메인</h1>
-    <span v-if="isUserLogin"
-      >{{ this.$store.state.userName }}님 환영합니다.</span
-    > -->
-    <!-- <button v-if="isUserLogin" @click="userLogout()">로그아웃</button> -->
   </div>
 </template>
 
@@ -72,8 +67,10 @@ export default {
     console.log("소셜 로그인 정보", loginInfo);
     if (loginInfo == "google/redirect") {
       this.getGoogleLogin();
+      localStorage.setItem("oauthInfo", "google");
     } else if (loginInfo == "kakao/redirect") {
       this.getKakaoLogin();
+      localStorage.setItem("oauthInfo", "kakao");
     }
   },
   computed: {
@@ -98,6 +95,7 @@ export default {
         console.log(error);
       }
     },
+    // 로그아웃
     async userLogout() {
       try {
         const response = await logoutUser();
@@ -109,6 +107,7 @@ export default {
         console.log(error);
       }
     },
+    // 카카오 로그인 요청
     async getKakaoLogin() {
       try {
         const code = this.$route.query.code;
@@ -138,9 +137,11 @@ export default {
         console.log(error);
       }
     },
+    // 카테고리 추가 모달 열기
     openCategoryModal() {
       this.isCategoryModalActive = true;
     },
+
     // 콘텐츠 추가 모달 열기
     addContents() {
       this.isModalActive = true;

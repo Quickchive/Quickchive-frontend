@@ -19,7 +19,7 @@
       </div>
     </nav>
     <div class="burger-menu__nav" v-show="menuActive">
-      <span v-if="isUserLogin">{{ this.$store.state.userName }}님 </span>
+      <span v-if="isUserLogin">{{ this.$store.state.nickname }}님 </span>
       <ul>
         <li id="burger-menu__nav-category">
           <router-link to="/"><img :src="category" />카테고리</router-link>
@@ -56,7 +56,11 @@ export default {
   },
   methods: {
     toMypage() {
-      this.$router.push("/mypage");
+      if (this.$store.getters.isLogin && !this.$store.getters.isOauthLogin) {
+        this.$router.push("/mypage");
+      } else if (this.$store.getters.isOauthLogin) {
+        this.$router.push("/mypage/sns");
+      }
     },
     searchContent() {
       console.log("검색");

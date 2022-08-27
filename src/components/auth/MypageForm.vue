@@ -209,7 +209,7 @@ export default {
         const response = await editProfile(userData);
         console.log(response);
         alert("회원정보 수정에 성공하였습니다.");
-        this.$router.push("/login");
+        this.$router.push("/main");
       } catch (error) {
         console.log(error);
         alert("회원정보 수정에 실패하였습니다.");
@@ -221,7 +221,7 @@ export default {
         this.isModalActive = false;
         const response = await deleteUser();
         console.log(response);
-        this.$router.push("/main");
+        this.$router.push("/");
       } catch (error) {
         console.log(error);
       }

@@ -2,7 +2,7 @@
   <div class="flex-container-col">
     <h1 class="page-header">로그인</h1>
     <div class="login-wrapper">
-      <form @submit.prevent="submitForm" class="login-form">
+      <form class="login-form">
         <div>
           <label id="email" class="login-form__label">이메일</label>
           <input type="text" v-model="email" id="email" />
@@ -12,7 +12,12 @@
           <input type="password" v-model="pw" id="pw" />
         </div>
       </form>
-      <button :disabled="!email || !pw" type="submit" class="btn__login">
+      <button
+        :disabled="!email || !pw"
+        type="button"
+        @click="submitForm()"
+        class="btn__login"
+      >
         로그인
       </button>
     </div>
@@ -63,7 +68,7 @@ export default {
         const response = await this.$store.dispatch("LOGIN", userData);
         console.log(response);
         if (response.statusCode == 201) {
-          this.$router.push("/");
+          this.$router.push("/main");
         } else if (response.statusCode == 409) {
           alert("회원정보를 확인해주세요.");
         }
