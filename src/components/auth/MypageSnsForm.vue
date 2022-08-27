@@ -8,7 +8,9 @@
           <!-- 0. 간편 로그인 -->
           <div class="register-form__wrapper">
             <label for="sns" class="register-form__label">간편로그인</label>
-            <span id="sns" class="mypage__email">{{ snsInfo }}</span>
+            <span id="sns" class="mypage__email">{{
+              this.$store.state.oauthInfo
+            }}</span>
           </div>
 
           <!-- 1.1 닉네임 인풋 -->
