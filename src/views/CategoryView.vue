@@ -2,6 +2,13 @@
   <div class="category-view">
     <h1 class="page-header">{{ category.name }}<img :src="setting" /></h1>
     <div>
+      <div class="category__select-wrapper">
+        <select v-model="categoryFilter">
+          <option value="latest">최신순</option>
+          <option value="favoirtes">즐겨찾기순</option>
+          <option value="expiry">읽을기한순</option>
+        </select>
+      </div>
       <contents-component :contentsData="contentsData"></contents-component>
       <collection-component
         :collectionData="collectionData"
@@ -19,6 +26,7 @@ export default {
   components: { ContentsComponent, CollectionComponent },
   data() {
     return {
+      categoryFilter: "latest",
       setting,
       // 더미 데이터
       category: {

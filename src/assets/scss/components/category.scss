@@ -10,6 +10,19 @@
       margin-left: 5.7px;
     }
   }
+  // 카테고리 필터
+  .category__select-wrapper {
+    width: 100%;
+    @include layout(row, center, flex-end);
+    margin-bottom: 13px;
+    box-sizing: border-box;
+    padding-right: 25px;
+    select {
+      width: 108px;
+      height: 31px;
+      @include font(13px, 400, $color-primary);
+    }
+  }
 }
 
 // 콘텐츠 컴포넌트
