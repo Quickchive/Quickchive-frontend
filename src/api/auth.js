@@ -12,7 +12,7 @@ function loginUser(userData) {
 
 // 로그아웃
 function logoutUser(refreshToken) {
-  return authInstance.get("auth/logout", refreshToken);
+  return authInstance.post("auth/logout", refreshToken);
 }
 
 // 회원탈퇴
