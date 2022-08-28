@@ -3,8 +3,6 @@ import axios from "axios";
 import { reissueToken } from "@/api/auth";
 import { getAuthFromCookie, saveAuthToCookie } from "@/utils/cookies.js";
 
-
-
 export function setInterceptors(instance) {
   // Add a request interceptor
   instance.interceptors.request.use(
@@ -32,18 +30,23 @@ export function setInterceptors(instance) {
       // Do something with response error
       console.log("에러일 경우", error);
       const errorAPI = error.config;
-    if(error.response.status == 401){
-      errorAPI.retry = true;
-      console.log("access 토큰이 만료됨 -> 토큰 재발급 요청");
-      const tokenData = {
-        refreshToken: store.state.refreshToken
-      };
-      const response = await reissueToken(tokenData);
-      console.log("토큰 재발급 결과", response);
-      saveAuthToCookie(response.access_token); 
-      localStorage.setItem("refreshToken", response.refresh_token);
-      return await axios(errorAPI);
-    }
+      if (error.response.status == 401) {
+        errorAPI.retry = true;
+        console.log("access 토큰이 만료됨 -> 토큰 재발급 요청");
+        const tokenData = {
+          refreshToken: store.state.refreshToken,
+        };
+        try {
+          const data = await reissueToken(tokenData);
+          console.log("토큰 재발급 결과", data);
+          saveAuthToCookie(data.access_token);
+          localStorage.setItem("refreshToken", data.refresh_token);
+        } catch (error) {
+          console.log("토큰 재발급 에러", error);
+        }
+
+        return await axios(errorAPI);
+      }
 
       return Promise.reject(error);
     }

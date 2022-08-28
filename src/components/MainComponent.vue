@@ -100,7 +100,7 @@ export default {
       try {
         const response = await logoutUser();
         console.log("로그아웃", response);
-        deleteCookie("bookmark_auth");
+        deleteCookie("accessToken");
         localStorage.removeItem("refreshToken");
         this.$store.commit("logoutUser");
       } catch (error) {
