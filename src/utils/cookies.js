@@ -1,14 +1,16 @@
+// accessToken
 function saveAuthToCookie(value) {
-  document.cookie = `bookmark_auth=${value}`;
+  document.cookie = `accessToken=${value}`;
 }
 
 function saveUserToCookie(value) {
   document.cookie = `bookmark_user=${value}`;
 }
 
+// accessToken
 function getAuthFromCookie() {
   return document.cookie.replace(
-    /(?:(?:^|.*;\s*)bookmark_auth\s*=\s*([^;]*).*$)|^.*$/,
+    /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
     "$1"
   );
 }

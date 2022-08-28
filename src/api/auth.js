@@ -11,8 +11,8 @@ function loginUser(userData) {
 }
 
 // 로그아웃
-function logoutUser() {
-  return authInstance.get("auth/logout");
+function logoutUser(refreshToken) {
+  return authInstance.get("auth/logout", refreshToken);
 }
 
 // 회원탈퇴
@@ -22,7 +22,7 @@ function deleteUser() {
 
 // 토큰 재발행
 function reissueToken(refreshToken) {
-  return instance.post("auth/reissue", refreshToken);
+  return authInstance.post("auth/reissue", refreshToken);
 }
 
 // 비밀번호 재설정을 위한 메일 전송
