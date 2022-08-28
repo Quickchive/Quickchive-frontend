@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="overlay"></div>
-    <div class="sm-modal-card">
+    <div class="confirm-modal-card">
       <div class="modal-card__header">
         <p>{{ modalContent }}</p>
       </div>
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "SmModalComponent",
+  name: "ConfirmModalComponent",
   props: {
     modalContent: String,
     leftBtnMessage: String,

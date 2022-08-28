@@ -47,24 +47,24 @@
         </button>
       </div>
     </div>
-    <sm-modal-component
+    <confirm-modal-component
       v-if="isModalActive == true"
       @rightBtn="isModalActive = false"
       @leftBtn="deleteMembership()"
       :modalContent="modalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
-    ></sm-modal-component>
+    ></confirm-modal-component>
   </div>
 </template>
 
 <script>
 import { editProfile, fetchProfile } from "@/api/user";
 import { deleteUser } from "@/api/auth";
-import SmModalComponent from "@/components/modal/SmModalComponent.vue";
+import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 
 export default {
-  components: { SmModalComponent },
+  components: { ConfirmModalComponent },
   data() {
     return {
       nickname: "",
