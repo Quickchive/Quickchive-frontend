@@ -51,8 +51,6 @@
 
 <script>
 import { fetchProfile } from "@/api/user";
-import { logoutUser } from "@/api/auth";
-import { deleteCookie } from "@/utils/cookies";
 import { kakaoLogin, googleLogin } from "@/api/oauth";
 import { saveAuthToCookie } from "@/utils/cookies";
 import FavoriteContents from "@/components/contents/FavoriteContents.vue";
@@ -126,18 +124,6 @@ export default {
         console.log(error);
       }
     },
-    // 로그아웃
-    async userLogout() {
-      try {
-        const response = await logoutUser();
-        console.log("로그아웃", response);
-        deleteCookie("bookmark_auth");
-        localStorage.removeItem("refreshToken");
-        this.$store.commit("logoutUser");
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 카카오 로그인 요청
     async getKakaoLogin() {
       try {
@@ -172,7 +158,6 @@ export default {
     openCategoryModal() {
       this.isCategoryModalActive = true;
     },
-
     // 콘텐츠 추가 모달 열기
     addContents() {
       this.isModalActive = true;
