@@ -8,7 +8,9 @@
           <!-- 0. 이메일 -->
           <div class="register-form__wrapper">
             <label for="email" class="register-form__label">이메일</label>
-            <span id="email" class="mypage__email">{{ email }}</span>
+            <span id="email" class="mypage__email">{{
+              this.$store.state.email
+            }}</span>
           </div>
 
           <!-- 1.1 닉네임 인풋 -->
@@ -106,7 +108,7 @@
 
 <script>
 import { validatePw } from "@/utils/validation";
-import { editProfile, fetchProfile } from "@/api/user";
+import { editProfile } from "@/api/user";
 import { deleteUser } from "@/api/auth";
 import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 
@@ -114,11 +116,10 @@ export default {
   components: { ConfirmModalComponent },
   data() {
     return {
-      nickname: "",
+      nickname: this.$store.state.nickname,
       oldPw: "",
       pw: "",
       pwCheck: "",
-      email: "",
       isModalActive: false,
       modalContent:
         "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
@@ -128,7 +129,7 @@ export default {
   },
   created() {
     // 프로필 조회
-    this.getProfile();
+    this.$store.dispatch("FETCH_PROFILE");
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
@@ -193,16 +194,7 @@ export default {
       this.oldPw = "";
       this.pwCheck = "";
     },
-    // 프로필 조회
-    async getProfile() {
-      try {
-        const response = await fetchProfile();
-        this.email = response.data.email;
-        this.nickname = response.data.name;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // 회원정보 수정
     async submitForm() {
       try {
         const userData = {
