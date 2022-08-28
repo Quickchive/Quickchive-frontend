@@ -95,9 +95,11 @@
     </div>
     <sm-modal-component
       v-if="isModalActive == true"
-      @close-modal="isModalActive = false"
-      @confirm="deleteMembership()"
+      @rightBtn="isModalActive = false"
+      @leftBtn="deleteMembership()"
       :modalContent="modalContent"
+      :leftBtnMessage="leftBtnMessage"
+      :rightBtnMessage="rightBtnMessage"
     ></sm-modal-component>
   </div>
 </template>
@@ -120,6 +122,8 @@ export default {
       isModalActive: false,
       modalContent:
         "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
+      leftBtnMessage: "네",
+      rightBtnMessage: "아니오",
     };
   },
   created() {

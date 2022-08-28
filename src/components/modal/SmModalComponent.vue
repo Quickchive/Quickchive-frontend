@@ -6,8 +6,10 @@
         <p>{{ modalContent }}</p>
       </div>
       <div class="modal-card__button-wrapper">
-        <button @click="$emit('confirm')" id="btn__confirm">네</button>
-        <button @click="$emit('close-modal')">아니요</button>
+        <button @click="$emit('leftBtn')" id="btn__confirm">
+          {{ leftBtnMessage }}
+        </button>
+        <button @click="$emit('rightBtn')">{{ rightBtnMessage }}</button>
       </div>
     </div>
   </div>
@@ -18,6 +20,8 @@ export default {
   name: "SmModalComponent",
   props: {
     modalContent: String,
+    leftBtnMessage: String,
+    rightBtnMessage: String,
   },
 };
 </script>
