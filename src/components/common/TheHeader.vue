@@ -3,6 +3,7 @@
     <nav>
       <div class="nav__wrapper">
         <burger-menu
+          v-if="isUserLogin"
           @toggle-menu="menuActive = !menuActive"
           :active="menuActive"
         ></burger-menu>
@@ -17,7 +18,7 @@
           <img :src="profile" />
         </button>
       </div>
-      <button @click="logoutUser()">로그아웃</button>
+      <button v-if="isUserLogin" @click="logoutUser()">로그아웃</button>
     </nav>
     <div class="burger-menu__nav" v-show="menuActive">
       <span v-if="isUserLogin">{{ this.$store.state.nickname }}님 </span>
