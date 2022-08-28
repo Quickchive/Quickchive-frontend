@@ -29,6 +29,23 @@
       v-if="isModalActive"
       @close-modal="isModalActive = false"
     ></contents-modal-component>
+    <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
+    <confirm-modal-component
+      v-if="isConfirmModalActive"
+      @rightBtn="isConfirmModalActive = false"
+      @leftBtn="isConfirmModalActive = false"
+      :confirmModalContent="confirmModalContent"
+      :leftBtnMessage="leftBtnMessage"
+      :rightBtnMessage="rightBtnMessage"
+    ></confirm-modal-component>
+    <!-- 중복 링크일 경우 모달 컴포넌트 -->
+    <alert-modal-component
+      v-if="isAlertModalActive"
+      @confirmBtn="isAlertModalActive = false"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+    >
+    </alert-modal-component>
   </div>
 </template>
 
@@ -45,6 +62,9 @@ import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
 import plusBtn from "@/assets/icon/plusBtn.svg";
 import topBtn from "@/assets/icon/topBtn.svg";
 import ContentsModalComponent from "./modal/ContentsModalComponent.vue";
+import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
+import AlertModalComponent from "./modal/AlertModalComponent.vue";
+
 export default {
   components: {
     FavoriteContents,
@@ -52,13 +72,24 @@ export default {
     ContentsModalComponent,
     UnclassifiedContents,
     CategoryModalComponent,
+    ConfirmModalComponent,
+    AlertModalComponent,
   },
   data() {
     return {
       isCategoryModalActive: false,
       plusBtn,
       isModalActive: false,
+      isConfirmModalActive: false,
+      isAlertModalActive: false,
       topBtn,
+      // confirm 모달 메시지
+      confirmModalContent: "URL이 2개 이상이네요! \n 저장방식을 선택해주세요",
+      leftBtnMessage: "콜렉션으로 저장",
+      rightBtnMessage: "각각 콘텐츠로 저장",
+      // alert 모달 메시지
+      alertModalContent: "같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.",
+      btnMessage: "네",
     };
   },
   created() {

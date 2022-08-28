@@ -1,15 +1,15 @@
 <template>
   <div class="modal">
     <div class="overlay"></div>
-    <div class="confirm-modal-card">
+    <div class="alert-modal-card">
       <div class="modal-card__header">
-        <p v-html="handleNewLine(this.confirmModalContent)"></p>
+        <p v-html="handleNewLine(this.alertModalContent)"></p>
       </div>
       <div class="modal-card__button-wrapper">
-        <button @click="$emit('leftBtn')" id="btn__confirm">
-          {{ leftBtnMessage }}
+        <button @click="$emit('confirmBtn')">
+          <p v-html="handleNewLine(this.btnMessage)"></p>
+          <!-- {{ btnMessage }} -->
         </button>
-        <button @click="$emit('rightBtn')">{{ rightBtnMessage }}</button>
       </div>
     </div>
   </div>
@@ -17,11 +17,10 @@
 
 <script>
 export default {
-  name: "ConfirmModalComponent",
+  name: "AlertModalComponent",
   props: {
-    confirmModalContent: String,
-    leftBtnMessage: String,
-    rightBtnMessage: String,
+    alertModalContent: String,
+    btnMessage: String,
   },
   // 개행
   methods: {
