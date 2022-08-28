@@ -80,7 +80,11 @@ export default {
       isCategoryModalActive: false,
       plusBtn,
       isModalActive: false,
+<<<<<<< HEAD
       isConfirmModalActive: false,
+=======
+      isConfirmModalActive: true,
+>>>>>>> bbd96e898922bbfb6698f47eba23ade3f0bdf4a6
       isAlertModalActive: false,
       topBtn,
       // confirm 모달 메시지
