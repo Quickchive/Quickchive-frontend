@@ -22,7 +22,7 @@ function deleteUser() {
 
 // 토큰 재발행
 function reissueToken(refreshToken) {
-  return authInstance.post("auth/reissue", refreshToken);
+  return instance.post("auth/reissue", refreshToken);
 }
 
 // 비밀번호 재설정을 위한 메일 전송
