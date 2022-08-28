@@ -47,28 +47,32 @@
         </button>
       </div>
     </div>
-    <sm-modal-component
+    <confirm-modal-component
       v-if="isModalActive == true"
-      @close-modal="isModalActive = false"
-      @confirm="deleteMembership()"
+      @rightBtn="isModalActive = false"
+      @leftBtn="deleteMembership()"
       :modalContent="modalContent"
-    ></sm-modal-component>
+      :leftBtnMessage="leftBtnMessage"
+      :rightBtnMessage="rightBtnMessage"
+    ></confirm-modal-component>
   </div>
 </template>
 
 <script>
 import { editProfile, fetchProfile } from "@/api/user";
 import { deleteUser } from "@/api/auth";
-import SmModalComponent from "@/components/modal/SmModalComponent.vue";
+import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 
 export default {
-  components: { SmModalComponent },
+  components: { ConfirmModalComponent },
   data() {
     return {
       nickname: "",
       isModalActive: false,
       modalContent:
         "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
+      leftBtnMessage: "네",
+      rightBtnMessage: "아니오",
     };
   },
   created() {
