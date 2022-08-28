@@ -8,7 +8,7 @@
         ></burger-menu>
         <router-link to="/">로고</router-link>
       </div>
-      <div class="nav__wrapper">
+      <div v-if="isUserLogin" class="nav__wrapper">
         <input placeholder="제목, 메모 검색" class="input__search" />
         <button class="btn__search" @click="searchContent">
           <img :src="search" />
@@ -17,6 +17,7 @@
           <img :src="profile" />
         </button>
       </div>
+      <button @click="logoutUser()">로그아웃</button>
     </nav>
     <div class="burger-menu__nav" v-show="menuActive">
       <span v-if="isUserLogin">{{ this.$store.state.nickname }}님 </span>
@@ -41,6 +42,10 @@ export default {
   components: {
     "burger-menu": Burger,
   },
+  created() {
+    // 닉네임 조회
+    this.$store.dispatch("FETCH_PROFILE");
+  },
   data() {
     return {
       menuActive: false,
@@ -50,11 +55,13 @@ export default {
     };
   },
   computed: {
+    // 로그인 여부 조회
     isUserLogin() {
       return this.$store.getters.isLogin;
     },
   },
   methods: {
+    // 마이페이지로 이동
     toMypage() {
       if (this.$store.getters.isLogin && !this.$store.getters.isOauthLogin) {
         this.$router.push("/mypage");
@@ -64,6 +71,10 @@ export default {
     },
     searchContent() {
       console.log("검색");
+    },
+    // 로그아웃
+    logoutUser() {
+      this.$store.dispatch("LOGOUT");
     },
   },
 };

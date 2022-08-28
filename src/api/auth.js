@@ -11,8 +11,8 @@ function loginUser(userData) {
 }
 
 // 로그아웃
-function logoutUser() {
-  return authInstance.get("auth/logout");
+function logoutUser(refreshToken) {
+  return authInstance.get("auth/logout", refreshToken);
 }
 
 // 회원탈퇴
