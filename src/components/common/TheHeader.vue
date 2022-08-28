@@ -45,7 +45,9 @@ export default {
   },
   created() {
     // 닉네임 조회
+    // if (this.isUserLogin == true) {
     this.$store.dispatch("FETCH_PROFILE");
+    // }
   },
   data() {
     return {
@@ -64,9 +66,13 @@ export default {
   methods: {
     // 마이페이지로 이동
     toMypage() {
-      if (this.$store.getters.isLogin && !this.$store.getters.isOauthLogin) {
+      if (
+        this.$store.getters.isLogin &&
+        (this.$store.state.oauthInfo == "" ||
+          this.$store.state.oauthInfo == null)
+      ) {
         this.$router.push("/mypage");
-      } else if (this.$store.getters.isOauthLogin) {
+      } else if (this.$store.state.oauthInfo != null || "") {
         this.$router.push("/mypage/sns");
       }
     },
