@@ -65,13 +65,8 @@ export default {
           email: this.email,
           password: this.pw,
         };
-        const response = await this.$store.dispatch("LOGIN", userData);
-        console.log(response);
-        if (response.statusCode == 201) {
-          this.$router.push("/main");
-        } else if (response.statusCode == 409) {
-          alert("회원정보를 확인해주세요.");
-        }
+        await this.$store.dispatch("LOGIN", userData);
+        this.$router.push("/main");
       } catch (error) {
         console.log(error);
       }

@@ -47,6 +47,23 @@ const routes = [
       },
     ],
   },
+  // 비밀번호 재설정
+  {
+    path: "/resetpw",
+    component: () => import("@/views/RegisterView.vue"),
+    children: [
+      // step1: 이메일 인증
+      {
+        path: "/reset/pw",
+        component: () => import("@/components/auth/ResetPwEmailForm.vue"),
+      },
+      // step2: 비밀번호 재설정
+      {
+        path: "/register/pw",
+        component: () => import("@/components/auth/ResetPwForm.vue"),
+      },
+    ],
+  },
   {
     path: "/mypage",
     component: () => import("@/views/MypageView.vue"),
