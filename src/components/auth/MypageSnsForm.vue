@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { editProfile, fetchProfile } from "@/api/user";
+import { editProfile } from "@/api/user";
 import { deleteUser } from "@/api/auth";
 import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 
@@ -77,7 +77,8 @@ export default {
   },
   created() {
     // 프로필 조회
-    this.getProfile();
+    this.$store.dispatch("FETCH_PROFILE");
+    this.nickname = this.$store.state.nickname;
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
@@ -108,16 +109,6 @@ export default {
       this.pw = "";
       this.oldPw = "";
       this.pwCheck = "";
-    },
-    // 프로필 조회
-    async getProfile() {
-      try {
-        const response = await fetchProfile();
-        this.email = response.data.email;
-        this.nickname = response.data.name;
-      } catch (error) {
-        console.log(error);
-      }
     },
     async submitForm() {
       try {

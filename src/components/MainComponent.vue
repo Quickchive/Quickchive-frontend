@@ -52,10 +52,6 @@
 </template>
 
 <script>
-import { fetchProfile } from "@/api/user";
-import { kakaoLogin, googleLogin } from "@/api/oauth";
-import { saveAuthToCookie } from "@/utils/cookies";
-import { addMultipleContents } from "@/api/contents";
 import FavoriteContents from "@/components/contents/FavoriteContents.vue";
 import AllContents from "@/components/contents/AllContents.vue";
 import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
@@ -96,7 +92,6 @@ export default {
   created() {
     const path = this.$route.path;
     const loginInfo = path.slice(6);
-    console.log("소셜 로그인 정보", loginInfo);
     if (loginInfo == "google/redirect") {
       this.getGoogleLogin();
       localStorage.setItem("oauthInfo", "google");
@@ -111,33 +106,11 @@ export default {
     },
   },
   methods: {
-    async fetchName() {
-      try {
-        const response = await fetchProfile();
-        console.log(response.data);
-        if (response.data.statusCode == 401) {
-          console.log("에러", response);
-          alert("로그인이 필요합니다.");
-          this.$router.push("/login");
-        } else if (response.data.statusCode == 200) {
-          console.log(response.data.name);
-          this.$store.commit("setUserName", response.data.name);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 카카오 로그인 요청
     async getKakaoLogin() {
       try {
         const code = this.$route.query.code;
-        const response = await kakaoLogin(code);
-        console.log(response);
-        if (response.data.statusCode == 200) {
-          console.log("카카오 로그인 성공");
-          localStorage.setItem("refreshToken", response.data.refresh_token);
-          saveAuthToCookie(response.data.access_token);
-        }
+        await this.$store.dispatch("KAKAO_LOGIN", code);
       } catch (error) {
         console.log(error);
       }
@@ -146,13 +119,7 @@ export default {
     async getGoogleLogin() {
       try {
         const code = this.$route.query.code;
-        const response = await googleLogin(code);
-        console.log(response);
-        if (response.data.statusCode == 200) {
-          console.log("구글 로그인 성공");
-          localStorage.setItem("refreshToken", response.data.refresh_token);
-          saveAuthToCookie(response.data.access_token);
-        }
+        await this.$store.dispatch("GOOGLE_LOGIN", code);
       } catch (error) {
         console.log(error);
       }
