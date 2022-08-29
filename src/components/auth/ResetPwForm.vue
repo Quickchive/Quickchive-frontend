@@ -50,11 +50,86 @@
         </form>
       </div>
     </div>
+    <!-- 경고 모달 -->
+    <alert-modal-component
+      v-if="isAlertModalActive"
+      @confirmBtn="isAlertModalActive = false"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+    ></alert-modal-component>
   </div>
 </template>
 
 <script>
-export default {};
+import { validatePw } from "@/utils/validation";
+import AlertModalComponent from "../modal/AlertModalComponent.vue";
+
+import { resetPw } from "@/api/user";
+
+export default {
+  components: { AlertModalComponent },
+  data() {
+    return {
+      pw: "",
+      pwCheck: "",
+      // alert 모달 메시지
+      alertModalContent: "",
+      btnMessage: "확인",
+      isAlertModalActive: false,
+    };
+  },
+  computed: {
+    // 비밀번호 유효성 검사
+    validatePw() {
+      if (this.pw != "") {
+        return validatePw(this.pw);
+      } else {
+        return null;
+      }
+    },
+    // 비밀번호 일치 확인
+    checkPw() {
+      if (this.pwCheck == "") {
+        return null;
+      } else {
+        if (this.pw != this.pwCheck) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    },
+    // 버튼 활성화
+    isValid() {
+      if (this.validatePw == true && this.checkPw == true) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  methods: {
+    // 비밀번호 재설정
+    async submitForm() {
+      try {
+        const code = this.$route.query.code;
+        const pwData = {
+          password: this.pw,
+          code: code,
+        };
+        const response = await resetPw(pwData);
+        console.log(response);
+        this.alertModalContent = "비밀번호 재설정에 성공하였습니다.";
+        this.isAlertModalActive = true;
+        this.$router.push("/login");
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
+      }
+    },
+  },
+};
 </script>
 
 <style></style>

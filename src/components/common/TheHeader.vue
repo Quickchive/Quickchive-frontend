@@ -7,18 +7,31 @@
           @toggle-menu="menuActive = !menuActive"
           :active="menuActive"
         ></burger-menu>
-        <router-link to="/">로고</router-link>
+        <button @click="clickLogo()" class="btn--transparent">로고</button>
       </div>
-      <div v-if="isUserLogin" class="nav__wrapper">
-        <input placeholder="제목, 메모 검색" class="input__search" />
-        <button class="btn__search" @click="searchContent">
-          <img :src="search" />
-        </button>
-        <button class="btn--transparent" @click="toMypage">
+      <div class="nav__wrapper">
+        <div v-if="isUserLogin" class="input__search__wrapper">
+          <input placeholder="제목, 메모 검색" class="input__search" />
+          <button class="btn__search" @click="searchContent">
+            <img :src="search" />
+          </button>
+        </div>
+        <button v-if="isUserLogin" class="btn--transparent" @click="toMypage">
           <img :src="profile" />
         </button>
+        <div>
+          <button v-if="!isUserLogin" class="btn__login--sm">
+            <router-link to="/login">로그인</router-link>
+          </button>
+          <button
+            v-if="isUserLogin"
+            @click="logoutUser()"
+            class="btn__logout--sm"
+          >
+            로그아웃
+          </button>
+        </div>
       </div>
-      <button v-if="isUserLogin" @click="logoutUser()">로그아웃</button>
     </nav>
     <div class="burger-menu__nav" v-show="menuActive">
       <span v-if="isUserLogin">{{ this.$store.state.nickname }}님 </span>
@@ -87,6 +100,17 @@ export default {
     logoutUser() {
       this.$store.dispatch("LOGOUT");
       this.$router.push("/");
+    },
+    // 로고 클릭 시 로그인 상태면 main으로, 로그인 전이면 온보딩으로
+    clickLogo() {
+      if (this.$store.getters.isLogin || this.$store.getters.isOauthLogin) {
+        this.$router.push("/main");
+      } else if (
+        !this.$store.getters.isLogin ||
+        !this.$store.getters.isOauthLogin
+      ) {
+        this.$router.push("/");
+      }
     },
   },
 };

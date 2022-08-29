@@ -24,6 +24,27 @@ button {
   @include font(20px, 400, $color-gray-1);
 }
 
+// 로그인 sm 버튼
+.btn__login--sm {
+  width: 102px;
+  height: 34px;
+  background: $color-gray-1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.13);
+  border-radius: 10px;
+  @include font(17px, 400, $color-gray-5);
+  margin-left: 28px;
+
+  a {
+    @include font(17px, 400, $color-gray-5);
+  }
+}
+
+// 로그아웃 sm 버튼
+.btn__logout--sm {
+  @extend .btn__login--sm;
+  width: 130px;
+}
+
 // 로그인 폼 - 회원가입 버튼
 .login-form__link-register {
   border-bottom: 1px solid;

@@ -6,8 +6,8 @@ function editProfile(userData) {
 }
 
 // 비밀번호 재설정
-function resetPw(password) {
-  return instance.post("users/reset-password", password);
+function resetPw(pwData) {
+  return instance.post("users/reset-password", pwData);
 }
 
 // 프로필 조회
