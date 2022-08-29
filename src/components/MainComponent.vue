@@ -28,6 +28,7 @@
     <contents-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
+      @isLinkNotSingle="isLinkNotSingle()"
     ></contents-modal-component>
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
     <confirm-modal-component
@@ -46,6 +47,7 @@
       :btnMessage="btnMessage"
     >
     </alert-modal-component>
+    <!-- 콜렉션으로 저장 모달 -->
   </div>
 </template>
 
@@ -53,6 +55,7 @@
 import { fetchProfile } from "@/api/user";
 import { kakaoLogin, googleLogin } from "@/api/oauth";
 import { saveAuthToCookie } from "@/utils/cookies";
+import { addMultipleContents } from "@/api/contents";
 import FavoriteContents from "@/components/contents/FavoriteContents.vue";
 import AllContents from "@/components/contents/AllContents.vue";
 import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
@@ -165,6 +168,23 @@ export default {
     // 탑 버튼
     backToTop() {
       window.scrollTo(0, 0);
+    },
+    isLinkNotSingle() {
+      this.isModalActive = false;
+      this.isConfirmModalActive = true;
+    },
+    // 다수의 콘텐츠 추가 메소드
+    async addMultipleContents() {
+      // 예시임 -> 수정
+      const contentsData = {
+        contentLinks: "https//www.naver.com/ https://google.com",
+      };
+      try {
+        const { response } = await addMultipleContents(contentsData);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
