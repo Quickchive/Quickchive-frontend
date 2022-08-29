@@ -50,16 +50,16 @@ const routes = [
   // 비밀번호 재설정
   {
     path: "/resetpw",
-    component: () => import("@/views/RegisterView.vue"),
+    component: () => import("@/views/ResetPwView.vue"),
     children: [
       // step1: 이메일 인증
       {
-        path: "/reset/pw",
+        path: "/resetpw/email",
         component: () => import("@/components/auth/ResetPwEmailForm.vue"),
       },
       // step2: 비밀번호 재설정
       {
-        path: "/register/pw",
+        path: "/resetpw",
         component: () => import("@/components/auth/ResetPwForm.vue"),
       },
     ],

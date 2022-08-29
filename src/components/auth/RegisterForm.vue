@@ -111,10 +111,11 @@
 <script>
 import { validatePw } from "@/utils/validation";
 import ModalComponent from "@/components/modal/ModalComponent.vue";
+import AlertModalComponent from "../modal/AlertModalComponent.vue";
 import { verifyEmail, registerUser } from "@/api/auth";
 
 export default {
-  components: { ModalComponent },
+  components: { ModalComponent, AlertModalComponent },
   data() {
     return {
       nickname: "",

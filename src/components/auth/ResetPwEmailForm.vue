@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import { sendEmail } from "@/api/auth";
-import TimerComponent from "../common/TimerComponent.vue";
+import { resetPw } from "@/api/auth";
+import TimerComponent from "@/components/common/TimerComponent.vue";
 export default {
   component: { TimerComponent },
   data() {
@@ -75,30 +75,14 @@ export default {
         return false;
       }
     },
-    // 버튼 활성화
-    isValid() {
-      if (
-        this.email &&
-        this.nickname &&
-        this.checkPw == true &&
-        this.agree == true
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
   },
   methods: {
-    // 타이머 재시작
-    // restartTimer() {},
     // 이메일 전송
     async sendEmail() {
       try {
-        // this.restartTimer();
         this.isTimerActive = true;
         if (this.emailDomain != "etc") {
-          const response = await sendEmail(`${this.email}@${this.emailDomain}`);
+          const response = await resetPw(`${this.email}@${this.emailDomain}`);
           console.log("응답", response);
           if (response.data.statusCode == 200) {
             this.codeInputActive = true;
@@ -106,7 +90,7 @@ export default {
             this.$refs.timerComponent.resetTimer();
           }
         } else if (this.emailDomain == "etc") {
-          const response = await sendEmail(
+          const response = await resetPw(
             `${this.email}@${this.emailSelfInput}`
           );
           console.log("응답", response);

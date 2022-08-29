@@ -21,17 +21,27 @@
         로그인
       </button>
     </div>
-    <label for="checkbox" class="login-form__checkbox-label"
-      ><input
+    <div class="register-form__agree">
+      <input
         type="checkbox"
+        v-model="agree"
         id="checkbox"
         class="login-form__checkbox"
-      />로그인 상태 유지</label
-    >
-    <router-link to="/register/email" class="login-form__link-register"
-      >회원가입 하기</router-link
-    >
+      />
+      <label for="checkbox" class="register-form__checkbox-label"></label>
+      <p class="login-form__checkbox-label">로그인 상태 유지</p>
+    </div>
+    <div>
+      <router-link to="/register/email" class="login-form__link-register"
+        >회원가입 하기</router-link
+      >&nbsp;&nbsp;
+      <router-link to="/register/email" class="login-form__link-register"
+        >비밀번호 재설정</router-link
+      >
+    </div>
+
     <span class="login-form__or">OR</span>
+
     <div class="oauth-btn__wrapper">
       <a href="https://api.hou27.shop/api/oauth/kakao-auth" target="_blank">
         <img :src="kakaoBtn"
@@ -66,6 +76,7 @@ export default {
       alertModalContent: "",
       btnMessage: "확인",
       isAlertModalActive: false,
+      stayLogin: false,
     };
   },
 
