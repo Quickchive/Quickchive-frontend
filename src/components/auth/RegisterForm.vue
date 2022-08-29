@@ -5,6 +5,11 @@
     <div class="flex-container-col">
       <div class="register-wrapper">
         <form @submit.prevent="submitForm">
+          <!-- 0. 이메일 -->
+          <div class="register-form__wrapper">
+            <label for="email" class="register-form__label">이메일</label>
+            <span id="email" class="mypage__email">{{ this.email }}</span>
+          </div>
           <!-- 1.1 닉네임 인풋 -->
           <div class="register-form__wrapper">
             <label for="nickname" class="register-form__label">닉네임</label>

@@ -24,7 +24,7 @@
     <div class="register-form__agree">
       <input
         type="checkbox"
-        v-model="agree"
+        v-model="stayLogin"
         id="checkbox"
         class="login-form__checkbox"
       />
