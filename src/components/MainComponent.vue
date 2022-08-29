@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import { fetchProfile } from "@/api/user";
 import { logoutUser } from "@/api/auth";
 import { deleteCookie } from "@/utils/cookies";
 import { kakaoLogin, googleLogin } from "@/api/oauth";
@@ -110,22 +109,6 @@ export default {
     },
   },
   methods: {
-    async fetchName() {
-      try {
-        const response = await fetchProfile();
-        console.log(response.data);
-        if (response.data.statusCode == 401) {
-          console.log("에러", response);
-          alert("로그인이 필요합니다.");
-          this.$router.push("/login");
-        } else if (response.data.statusCode == 200) {
-          console.log(response.data.name);
-          this.$store.commit("setUserName", response.data.name);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 로그아웃
     async userLogout() {
       try {
