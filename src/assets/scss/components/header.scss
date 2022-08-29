@@ -11,12 +11,17 @@
     @include layout(row, center, space-between);
     .nav__wrapper {
       @include layout(row, center, flex-start);
-      position: relative;
-      .btn__search {
-        position: absolute;
-        z-index: 10;
-        right: 78px;
-        background-color: transparent;
+      .input__search__wrapper {
+        position: relative;
+        width: 531px;
+        margin-right: 28px;
+        .btn__search {
+          position: absolute;
+          z-index: 10;
+          right: 21px;
+          top: 5px;
+          background-color: transparent;
+        }
       }
     }
   }

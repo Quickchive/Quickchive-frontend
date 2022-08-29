@@ -99,7 +99,7 @@
       v-if="isModalActive == true"
       @rightBtn="isModalActive = false"
       @leftBtn="deleteMembership()"
-      :modalContent="modalContent"
+      :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
     ></confirm-modal-component>
@@ -121,7 +121,7 @@ export default {
       pw: "",
       pwCheck: "",
       isModalActive: false,
-      modalContent:
+      confirmModalContent:
         "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
       leftBtnMessage: "네",
       rightBtnMessage: "아니오",
@@ -218,6 +218,7 @@ export default {
         this.isModalActive = false;
         const response = await deleteUser();
         console.log(response);
+        this.$store.commit("logoutUser");
         this.$router.push("/");
       } catch (error) {
         console.log(error);
