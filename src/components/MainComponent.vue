@@ -61,6 +61,7 @@ import topBtn from "@/assets/icon/topBtn.svg";
 import ContentsModalComponent from "./modal/ContentsModalComponent.vue";
 import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 import AlertModalComponent from "./modal/AlertModalComponent.vue";
+import { addMultipleContents } from "@/api/contents";
 
 export default {
   components: {
