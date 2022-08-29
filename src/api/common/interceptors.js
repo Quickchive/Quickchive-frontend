@@ -34,7 +34,7 @@ export function setInterceptors(instance) {
         errorAPI.retry = true;
         console.log("access 토큰이 만료됨 -> 토큰 재발급 요청");
         const tokenData = {
-          refreshToken: store.state.refreshToken,
+          refresh_token: store.state.refreshToken,
         };
         try {
           const data = await reissueToken(tokenData);

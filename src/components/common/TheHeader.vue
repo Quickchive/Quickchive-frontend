@@ -82,6 +82,7 @@ export default {
     // 로그아웃
     logoutUser() {
       this.$store.dispatch("LOGOUT");
+      this.$router.push("/");
     },
   },
 };

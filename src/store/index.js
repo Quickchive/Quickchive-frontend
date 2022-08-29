@@ -7,7 +7,7 @@ import {
 } from "@/utils/cookies";
 import { loginUser } from "@/api/auth";
 import { fetchProfile } from "@/api/user";
-import { logoutUser } from "../api/auth";
+import { logoutUser } from "@/api/auth";
 
 Vue.use(Vuex);
 
@@ -23,7 +23,7 @@ export default new Vuex.Store({
   getters: {
     // 로그인 여부 확인
     isLogin(state) {
-      return state.loginState == true;
+      return state.loginState;
     },
     // // 소셜 로그인 여부
     // isOauthLogin(state) {
@@ -46,10 +46,12 @@ export default new Vuex.Store({
     // 로그아웃 (닉네임, 토큰 삭제)
     logoutUser(state) {
       state.nickname = "";
+      state.email = "";
       state.accessToken = "";
       state.refreshToken = "";
       deleteCookie("accessToken");
       localStorage.removeItem("refreshToken");
+      state.loginState = false;
     },
     setLoginState(state, loginState) {
       state.loginState = loginState;
@@ -89,9 +91,12 @@ export default new Vuex.Store({
       }
     },
     // 로그아웃
-    async LOGOUT(commit) {
+    async LOGOUT({ commit }) {
       try {
-        const { response } = await logoutUser(this.state.refreshToken);
+        const refreshToken = {
+          refresh_token: this.state.refreshToken,
+        };
+        const { response } = await logoutUser(refreshToken);
         console.log("로그아웃", response);
         commit("logoutUser");
       } catch (error) {
