@@ -98,6 +98,13 @@
       @close-modal="isPolicyModalActive = false"
       :modalTitle="policyModalTitle"
     ></modal-component>
+    <!-- 경고 모달 -->
+    <alert-modal-component
+      v-if="isAlertModalActive"
+      @confirmBtn="isAlertModalActive = false"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+    ></alert-modal-component>
   </div>
 </template>
 
@@ -121,6 +128,10 @@ export default {
       isTosModalActive: false,
       tosModalTitle: "이용 약관",
       policyModalTitle: "개인정보 처리 방침",
+      // alert 모달 메시지
+      alertModalContent: "",
+      btnMessage: "확인",
+      isAlertModalActive: false,
     };
   },
   created() {
@@ -201,6 +212,7 @@ export default {
         this.$router.push("/register/email");
       }
     },
+    // 회원가입
     async submitForm() {
       try {
         const userData = {
@@ -210,11 +222,13 @@ export default {
         };
         const response = await registerUser(userData);
         console.log(response);
-        alert("회원가입에 성공하였습니다.");
+        this.alertModalContent = "회원가입에 성공하였습니다.";
+        this.isAlertModalActive = true;
         this.$router.push("/login");
       } catch (error) {
         console.log(error);
-        alert("회원가입에 실패하였습니다.");
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
   },

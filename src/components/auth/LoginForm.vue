@@ -40,25 +40,37 @@
         <img :src="googleBtn" />
       </a>
     </div>
+    <alert-modal-component
+      v-if="isAlertModalActive"
+      @confirmBtn="isAlertModalActive = false"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+    ></alert-modal-component>
   </div>
 </template>
 
 <script>
 import kakaoBtn from "@/assets/img/kakaoBtn.png";
 import googleBtn from "@/assets/img/googleBtn.svg";
-import { kakaoAuth } from "@/api/oauth";
+import AlertModalComponent from "../modal/AlertModalComponent.vue";
 
 export default {
+  components: { AlertModalComponent },
   data() {
     return {
       email: "",
       pw: "",
       kakaoBtn,
       googleBtn,
+      // alert 모달 메시지
+      alertModalContent: "",
+      btnMessage: "확인",
+      isAlertModalActive: false,
     };
   },
 
   methods: {
+    // 로그인 요청
     async submitForm() {
       try {
         const userData = {
@@ -69,15 +81,8 @@ export default {
         this.$router.push("/main");
       } catch (error) {
         console.log(error);
-      }
-    },
-    // 카카오 로그인 요청
-    async getKakaoAuth() {
-      try {
-        await kakaoAuth();
-        console.log("카카오 로그인 요청");
-      } catch (error) {
-        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
   },

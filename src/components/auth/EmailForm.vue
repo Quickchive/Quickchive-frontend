@@ -30,7 +30,7 @@
           </button>
         </div>
         <!-- 유효성 검사 -->
-        <span v-if="errorEvent" class="error-msg">"{{ errorMessage }}</span>
+        <span v-if="errorEvent" class="error-msg">{{ errorMessage }}</span>
         <!-- 인증메일 전송 안내 & 타이머 -->
         <TimerComponent
           v-if="isTimerActive"
@@ -90,13 +90,11 @@ export default {
     },
   },
   methods: {
-    // 타이머 재시작
-    // restartTimer() {},
     // 이메일 전송
     async sendEmail() {
       try {
-        // this.restartTimer();
         this.isTimerActive = true;
+        this.errorEvent = false;
         if (this.emailDomain != "etc") {
           const response = await sendEmail(`${this.email}@${this.emailDomain}`);
           console.log("응답", response);
@@ -121,6 +119,7 @@ export default {
         // 이미 사용중인 이메일 주소일 경우 or 이미 인증된 메일
         if (error.response.data.statusCode == 409) {
           this.errorMessage = error.response.data.message;
+          this.isTimerActive = false;
           this.errorEvent = true;
         }
       }
