@@ -103,6 +103,7 @@ import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import { addContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
+import { validateLink, linkCounter } from "@/utils/validation";
 
 export default {
   name: "ModalComponent",
@@ -127,6 +128,24 @@ export default {
   mounted() {
     this.getMyCategory();
   },
+  computed: {
+    // 링크 여부 확인
+    isTextLink() {
+      if (this.link != "") {
+        return validateLink(this.link);
+      } else {
+        return null;
+      }
+    },
+    // 링크 개수 확인
+    countLink() {
+      if (this.link != "") {
+        return linkCounter(this.link);
+      } else {
+        return null;
+      }
+    },
+  },
   methods: {
     setDetail() {
       this.isDetailSettingActive = true;
@@ -144,22 +163,28 @@ export default {
         console.log(error);
       }
     },
-    // 콘텐츠 추가 요청(우선 단일)
+    // 콘텐츠 추가 요청
     async createContent() {
-      this.$emit("close-modal");
-      try {
-        this.$emit("close-modal");
-        const contentsData = {
-          link: this.link,
-          title: this.title,
-          deadline: this.deadline,
-          comment: this.comment,
-          categoryName: this.categoryName,
-        };
-        const response = await addContents(contentsData);
-        console.log(response);
-      } catch (error) {
-        console.log(error);
+      // 링크가 1개인 경우
+      if (this.countLink == 1) {
+        try {
+          this.$emit("close-modal");
+          const contentsData = {
+            link: this.link,
+            title: this.title,
+            deadline: this.deadline,
+            comment: this.comment,
+            categoryName: this.categoryName,
+          };
+          const response = await addContents(contentsData);
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      // 링크가 2개 이상인 경우
+      else if (this.countLink >= 2) {
+        this.$emit("isLinkNotSingle");
       }
     },
   },
