@@ -45,9 +45,7 @@ export default {
   },
   created() {
     // 닉네임 조회
-    // if (this.isUserLogin == true) {
     this.$store.dispatch("FETCH_PROFILE");
-    // }
   },
   data() {
     return {
@@ -60,7 +58,17 @@ export default {
   computed: {
     // 로그인 여부 조회
     isUserLogin() {
-      return this.$store.getters.isLogin;
+      if (this.$store.getters.isLogin == true) {
+        this.$store.dispatch("FETCH_PROFILE");
+
+        return true;
+      } else if (this.$store.getters.isOauthLogin == true) {
+        this.$store.dispatch("FETCH_PROFILE");
+
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   methods: {
