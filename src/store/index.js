@@ -75,6 +75,7 @@ export default new Vuex.Store({
       commit("setNickname", response.data.name);
       commit("setEmail", response.data.email);
       commit("setLoginState", true);
+      commit("setOauthLoginState", false);
       return data;
     },
     // 프로필 조회이자 로그인 여부 확인
@@ -120,10 +121,11 @@ export default new Vuex.Store({
         commit("setNickname", response.data.name);
         commit("setEmail", response.data.email);
         commit("setOauthLoginState", true);
+        commit("setLoginState", false);
       }
     },
     // 카카오 로그인 요청
-    async getKakaoLogin({ commit }, code) {
+    async KAKAO_LOGIN({ commit }, code) {
       try {
         const response = await kakaoLogin(code);
         console.log(response);
@@ -134,6 +136,7 @@ export default new Vuex.Store({
           commit("setNickname", response.data.name);
           commit("setEmail", response.data.email);
           commit("setOauthLoginState", true);
+          commit("setLoginState", false);
         }
       } catch (error) {
         console.log(error);

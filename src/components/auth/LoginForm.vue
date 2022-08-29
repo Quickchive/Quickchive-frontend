@@ -35,7 +35,7 @@
       <router-link to="/register/email" class="login-form__link-register"
         >회원가입 하기</router-link
       >&nbsp;&nbsp;
-      <router-link to="/register/email" class="login-form__link-register"
+      <router-link to="/resetpw/email" class="login-form__link-register"
         >비밀번호 재설정</router-link
       >
     </div>
