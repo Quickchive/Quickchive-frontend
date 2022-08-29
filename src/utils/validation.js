@@ -6,4 +6,25 @@ function validatePw(pw) {
   return re.test(String(pw.toLowerCase()));
 }
 
-export { validatePw };
+// 링크 정규식
+// http, https
+
+function validateLink(link) {
+  const re =
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+  return re.test(String(link));
+}
+
+// 링크 개수 확인
+function linkCounter(text) {
+  let url = "http";
+  let pos = text.indexOf(url);
+  let count = 0;
+  while (pos !== -1) {
+    count++;
+    pos = text.indexOf(url, pos + 1);
+  }
+  return count;
+}
+
+export { validatePw, validateLink, linkCounter };
