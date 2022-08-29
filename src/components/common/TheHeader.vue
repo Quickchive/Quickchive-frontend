@@ -74,13 +74,9 @@ export default {
   methods: {
     // 마이페이지로 이동
     toMypage() {
-      if (
-        this.$store.getters.isLogin &&
-        (this.$store.state.oauthInfo == "" ||
-          this.$store.state.oauthInfo == null)
-      ) {
+      if (this.$store.getters.isLogin) {
         this.$router.push("/mypage");
-      } else if (this.$store.state.oauthInfo != null || "") {
+      } else if (this.$store.getters.isOauthLogin) {
         this.$router.push("/mypage/sns");
       }
     },
