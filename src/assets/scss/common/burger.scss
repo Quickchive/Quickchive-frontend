@@ -1,0 +1,93 @@
+@import "../_mixin.scss";
+
+
+$burger-color: #ffffff;
+$primary: #2b2b68;
+
+.hidden {
+	visibility: hidden;
+}
+
+/* remove blue outline */
+button:focus {
+	outline: 0;
+}
+
+.burger__button {
+	position: relative;
+	height: 30px;
+	width: 40px;
+	display: block;
+	z-index: 99;
+	border: 0;
+	border-radius: 0;
+	background-color: transparent;
+	pointer-events: all;
+	transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+	padding-right: 40px;
+	margin-right: 20px;
+}
+
+
+.burgerbar {
+	background-color: $burger-color;
+	position: absolute;
+	top: 30%;
+	right: 6px;
+	left: 6px;
+	height: 3px;
+	width: auto;
+	margin-top: -1px;
+	transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1),
+		opacity 0.3s cubic-bezier(0.165, 0.84, 0.44, 1),
+		background-color 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.burgerbar--1 {
+	-webkit-transform: translateY(-6px);
+	transform: translateY(-6px);
+	top: 40%;
+}
+
+.burgerbar--2 {
+	transform-origin: 100% 50%;
+	transform: scaleX(1);	
+	top: 50%;
+}
+
+.burger__button:hover .burgerbar--2 {
+	transform: scaleX(1);
+}
+
+.no-touchevents .burgerbar--2:hover {
+	transform: scaleX(1);
+}
+
+.burgerbar--3 {
+	transform: translateY(6px);
+	top: 60%;
+}
+
+#burger.active .burger__button {
+	transform: rotate(-180deg);
+}
+
+#burger.active .burgerbar {
+	background-color: lighten($primary, 10);
+}
+
+#burger.active .burgerbar--1 {
+	transform: rotate(45deg);
+	top: 50%;
+}
+
+#burger.active .burgerbar--2 {
+	opacity: 0;
+}
+
+#burger.active .burgerbar--3 {
+	transform: rotate(-45deg);
+	top: 50%;
+}
+
+

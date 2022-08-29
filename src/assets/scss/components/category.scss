@@ -1,0 +1,163 @@
+@import "../mixin";
+
+.category-view {
+  box-sizing: border-box;
+  padding: 91px 0;
+  @include layout(column, center, flex-start);
+
+  .page-header {
+    img {
+      margin-left: 5.7px;
+    }
+  }
+  // 카테고리 필터
+  .category__select-wrapper {
+    width: 100%;
+    @include layout(row, center, flex-end);
+    margin-bottom: 13px;
+    box-sizing: border-box;
+    padding-right: 25px;
+    select {
+      width: 108px;
+      height: 31px;
+      @include font(13px, 400, $color-primary);
+    }
+  }
+}
+
+// 콘텐츠 컴포넌트
+.contents-component {
+  width: 590px;
+  // height: 120px;
+  border-bottom: 1px solid $color-gray-2;
+  @include layout(row, flex-start, space-between);
+  margin-bottom: 17px;
+  p {
+    margin: 0;
+  }
+
+  .contents__wrapper-col {
+    @include layout(column, flex-start, flex-start);
+    // 콘텐츠 - 제목
+    .contents__title {
+      @include font(18px, 400, $color-black-text);
+      margin-bottom: 6px;
+    }
+    // 콘텐츠 - 내용
+    .contents__contents {
+      @include font(14px, 400, $color-gray-10);
+      line-height: 19px;
+      margin-bottom: 30px;
+      margin-right: 19px;
+    }
+    .contents__inner {
+      @include layout(row, flex-end, space-between);
+      width: 100%;
+      margin-bottom: 11px;
+
+      // 콘텐츠 - 도메인, 날짜
+      .contents__domain {
+        @include font(12px, 400, $color-primary);
+      }
+      .contents__btn-wrapper {
+        @include layout(row, flex-end, space-between);
+        gap: 4px;
+        margin-right: 8.3px;
+        button {
+          img {
+            width: 16px;
+          }
+        }
+      }
+    }
+  }
+  .contents__wrapper {
+    // 콘텐츠 - 이미지
+    .contents__img {
+      width: 109px;
+      height: 113px;
+      background-color: $color-gray-2;
+      position: relative;
+      z-index: -100;
+      .contents__expiryDate {
+        height: 17px;
+        padding: 0 10px;
+        @include font(11px, 400, $color-gray-1);
+        position: absolute;
+        z-index: 120;
+        top: 0;
+        right: 0;
+        background-color: $color-components-2;
+      }
+    }
+  }
+}
+
+// 콜렉션 컴포넌트
+.collection-component {
+  @extend .contents-component;
+
+  .collection__wrapper-col {
+    @extend .contents__wrapper-col;
+    width: 100%;
+    // 콜렉션 - 태그
+    .collection-tag {
+      @include font(12px, 400, $color-primary);
+    }
+    // 콜렉션 제목
+    .collection__title {
+      @extend .contents__title;
+    }
+    .collection__lists-wrapper {
+      display: flex;
+      align-items: flex-end;
+      // 콜렉션 - 목록
+      .collection__lists {
+        @include font(14px, 400, $color-black-text);
+        margin: 0;
+        padding: 0;
+        list-style-position: inside;
+        display: flex;
+        line-height: 19px;
+      }
+      .collection__list-num {
+        @include font(14px, 400, $color-gray-4);
+      }
+    }
+    .collection__btn-wrapper {
+      @include layout(row, flex-end, flex-end);
+      gap: 4px;
+      box-sizing: border-box;
+      padding-right: 8.3px;
+      margin-bottom: 11px;
+      width: 100%;
+      button {
+        img {
+          width: 16px;
+        }
+      }
+    }
+  }
+  // 하단부
+  .collection__wrapper {
+    @extend .contents__wrapper;
+    // 콜렉션 - 이미지
+    .collection__img {
+      @extend .contents__img;
+      // 콜렉션 내 콘텐츠 갯수
+      .collection__num {
+        position: absolute;
+        z-index: 120;
+        top: -8px;
+        right: -8px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.13);
+        @include font(13px, 400, $color-black-text);
+        background-color: $color-components-1;
+        text-align: center;
+      }
+    }
+  }
+}

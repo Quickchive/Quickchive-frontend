@@ -1,0 +1,65 @@
+@import "../mixin";
+
+.header {
+  background-color: $color-primary;
+  height: 62px;
+  box-sizing: border-box;
+  padding: 12px 177px;
+
+  nav {
+    height: 100%;
+    @include layout(row, center, space-between);
+    .nav__wrapper {
+      @include layout(row, center, flex-start);
+      .input__search__wrapper {
+        position: relative;
+        width: 531px;
+        margin-right: 28px;
+        .btn__search {
+          position: absolute;
+          z-index: 10;
+          right: 21px;
+          top: 5px;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+  // 햄버거 메뉴 펼쳐졌을 때
+  .burger-menu__nav {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 230px;
+    background-color: $color-gray-1;
+    z-index: 50;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    padding: 60px 52px;
+    ul {
+      padding-top: 60px;
+      list-style: none;
+      margin: 0;
+      padding: 60px 0 0 0;
+      #burger-menu__nav-category {
+        margin-bottom: 20px;
+        margin-left: 0;
+        a {
+          @include layout(row, center, flex-start);
+          img {
+            margin-right: 8px;
+            width: 15px;
+          }
+        }
+      }
+      li {
+        margin-left: 20px;
+        line-height: 40px;
+        a {
+          @include font(20px, 400, $color-black-text);
+        }
+      }
+    }
+  }
+}

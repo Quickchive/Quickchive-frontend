@@ -1,0 +1,10 @@
+@import "../mixin";
+
+// column
+.flex-container-col {
+  @include layout(column, center, flex-start);
+}
+
+.flex-container {
+  @include layout(row, center, flex-start);
+}
