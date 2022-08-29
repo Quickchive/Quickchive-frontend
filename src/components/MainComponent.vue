@@ -95,9 +95,11 @@ export default {
     const loginInfo = path.slice(6);
     if (loginInfo == "google/redirect") {
       this.getGoogleLogin();
+      localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "google");
     } else if (loginInfo == "kakao/redirect") {
       this.getKakaoLogin();
+      localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "kakao");
     }
   },

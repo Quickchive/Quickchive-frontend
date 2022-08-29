@@ -53,6 +53,7 @@ export default new Vuex.Store({
       state.refreshToken = "";
       deleteCookie("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("oauthInfo");
       state.loginState = false;
     },
     setLoginState(state, loginState) {
