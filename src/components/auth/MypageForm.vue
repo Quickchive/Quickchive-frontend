@@ -130,6 +130,7 @@ export default {
   created() {
     // 프로필 조회
     this.$store.dispatch("FETCH_PROFILE");
+    this.nickname = this.$store.state.nickname;
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
