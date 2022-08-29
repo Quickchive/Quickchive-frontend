@@ -43,16 +43,16 @@
         <!-- 세부 설정 선택 시 나오는 인풋 -->
         <div v-show="isDetailSettingActive">
           <div class="register-form__wrapper">
-            <label class="register-form__label">이름<em>*</em></label>
+            <label class="register-form__label">이름</label>
             <input v-model="title" placeholder="30자 이하 권장" />
           </div>
           <div class="flex-container modal-form__wrapper">
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
               <select v-model="categoryName" class="contents-modal__select">
-                <option>미분류</option>
+                <option value="">미분류</option>
                 <div v-for="(category, index) in myCategories" :key="index">
-                  <option>{{ category.name }}</option>
+                  <option value="">{{ category.name }}</option>
                 </div>
               </select>
             </div>
@@ -85,7 +85,7 @@
       </div>
       <div class="flex-container-col">
         <button
-          :disabled="!link || !title"
+          :disabled="!link"
           @click="createContent()"
           class="btn--sm btnPrimary"
         >
@@ -184,7 +184,9 @@ export default {
       }
       // 링크가 2개 이상인 경우
       else if (this.countLink >= 2) {
-        this.$emit("isLinkNotSingle");
+        const contentsLinks = this.link.split(" ");
+        console.log("모달컴포먼트", contentsLinks);
+        this.$emit("isLinkNotSingle", contentsLinks);
       }
     },
   },
