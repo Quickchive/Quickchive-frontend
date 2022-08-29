@@ -28,12 +28,13 @@
     <contents-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
-      @isLinkNotSingle="isLinkNotSingle()"
+      @isLinkNotSingle="isLinkNotSingle"
+      :contentsLinks="contentsLinks"
     ></contents-modal-component>
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
     <confirm-modal-component
       v-if="isConfirmModalActive"
-      @rightBtn="isConfirmModalActive = false"
+      @rightBtn="addMultipleContents()"
       @leftBtn="isConfirmModalActive = false"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
@@ -88,6 +89,7 @@ export default {
       // alert 모달 메시지
       alertModalContent: "같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.",
       btnMessage: "네",
+      contentsLinks: [],
     };
   },
   created() {
@@ -139,18 +141,21 @@ export default {
     backToTop() {
       window.scrollTo(0, 0);
     },
-    isLinkNotSingle() {
+    isLinkNotSingle(contentsLinks) {
       this.isModalActive = false;
       this.isConfirmModalActive = true;
+      this.contentsLinks = contentsLinks;
+      console.log("메인컴포넌트", this.contentsLinks);
     },
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {
-      // 예시임 -> 수정
+      this.isConfirmModalActive = false;
+      // 예시임 -> 수정: 사용자 입력 어떻게 받을지 고민해야함
       const contentsData = {
-        contentLinks: "https//www.naver.com/ https://google.com",
+        contentLinks: this.contentsLinks,
       };
       try {
-        const { response } = await addMultipleContents(contentsData);
+        const response = await addMultipleContents(contentsData);
         console.log(response);
       } catch (error) {
         console.log(error);
