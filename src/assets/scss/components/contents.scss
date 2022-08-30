@@ -77,6 +77,11 @@
   @include layout(row, flex-start, space-between);
 }
 
+.contents__wrapper-wrap {
+  @include layout(row, flex-start, space-between);
+  flex-wrap: wrap;
+}
+
 // 전체 콘텐츠
 .all-content {
   @extend .content;

@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <div class="modal-card">
       <div class="modal-card__header">
-        <h1>카테고리 추가</h1>
+        <h1>{{ categoryModalTitle }}</h1>
         <button
           type="button"
           class="btn--transparent btn__close"
@@ -12,7 +12,35 @@
           <img :src="closeBtn" />
         </button>
       </div>
-      <p>카테고리 추가</p>
+      <div class="modal-card__wrapper">
+        <div class="register-form__wrapper">
+          <label class="register-form__label">이름<em>*</em></label>
+          <div class="flex-container modal-form__wrapper">
+            <input v-model="categoryName" placeholder="10자 이하 권장" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-card__category__wrapper">
+        <div class="flex-container-col">
+          <button
+            :disabled="!categoryName"
+            @click="categoryEvent()"
+            class="btn--sm btnPrimary"
+          >
+            저장
+          </button>
+        </div>
+      </div>
+      <div class="modal-card__category__wrapper">
+        <div class="flex-container">
+          <button
+            @click="$emit('deleteCategory')"
+            class="btn--transparent login-form__link-register"
+          >
+            {{ deleteBtn }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,11 +52,18 @@ export default {
   data() {
     return {
       closeBtn,
+      categoryName: "",
     };
   },
   props: {
-    modalTitle: String,
-    modalContent: String,
+    categoryModalTitle: String,
+    deleteBtn: String,
+  },
+  methods: {
+    categoryEvent() {
+      let categoryName = this.categoryName;
+      this.$emit("categoryEvent", categoryName);
+    },
   },
 };
 </script>

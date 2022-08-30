@@ -26,4 +26,14 @@ function linkCounter(text) {
   return count;
 }
 
-export { validatePw, validateLink, linkCounter };
+// 기한 계산
+function countDday(deadline) {
+  const today = new Date();
+  const expiryDate = new Date(deadline);
+
+  const diff = today.getTime() - expiryDate.getTime();
+  // 양수로 변환 후 밀리초로 나눔
+  return parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)));
+}
+
+export { validatePw, validateLink, linkCounter, countDday };
