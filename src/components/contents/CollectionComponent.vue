@@ -50,6 +50,7 @@ import memo from "@/assets/icon/memo.svg";
 import star from "@/assets/icon/star.svg";
 import star_border from "@/assets/icon/star_border.svg";
 import edit from "@/assets/icon/edit.svg";
+import category_line from "@/assets/icon/category_line.svg";
 export default {
   data() {
     return {
@@ -57,6 +58,7 @@ export default {
       star,
       edit,
       star_border,
+      category_line,
     };
   },
   props: {
