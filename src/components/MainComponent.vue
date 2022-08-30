@@ -11,9 +11,13 @@
         + Add category
       </button>
     </div>
+    <!-- 카테고리 추가 모달 컴포넌트 -->
     <category-modal-component
       v-show="isCategoryModalActive"
       @close-modal="isCategoryModalActive = false"
+      :categoryModalTitle="categoryModalTitle"
+      @categoryEvent="categoryEvent"
+      :categoryName="categoryName"
     ></category-modal-component>
 
     <div class="main-btn__wrapper-col">
@@ -63,6 +67,7 @@ import ContentsModalComponent from "./modal/ContentsModalComponent.vue";
 import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 import AlertModalComponent from "./modal/AlertModalComponent.vue";
 import { addMultipleContents } from "@/api/contents";
+import { addCategory } from "@/api/category";
 
 export default {
   components: {
@@ -90,6 +95,9 @@ export default {
       alertModalContent: "같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.",
       btnMessage: "네",
       contentsLinks: [],
+      // 카테고리 모달 제목
+      categoryModalTitle: "카테고리 추가",
+      categoryName: "",
     };
   },
   created() {
@@ -132,6 +140,20 @@ export default {
     // 카테고리 추가 모달 열기
     openCategoryModal() {
       this.isCategoryModalActive = true;
+    },
+    // 카테고리 추가 이벤트
+    async categoryEvent(categoryName) {
+      this.categoryName = categoryName;
+      this.isCategoryModalActive = false;
+      try {
+        const data = {
+          categoryName: this.categoryName,
+        };
+        const response = await addCategory(data);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 콘텐츠 추가 모달 열기
     addContents() {
