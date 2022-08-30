@@ -15,6 +15,12 @@ button {
   @include layout(column, center, center);
 }
 
+.btn--transparent--img {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
 // 로그인 버튼
 .btn__login {
   width: 122px;

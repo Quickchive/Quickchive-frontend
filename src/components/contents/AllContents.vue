@@ -1,7 +1,7 @@
 <template>
   <div class="all-content">
     <header>
-      <h3>전체</h3>
+      <h3>{{ categoryTitle }}</h3>
       <button @click="showContent()">
         <img v-if="!contentState" :src="plus" />
         <img v-if="contentState" :src="minus" />
@@ -73,6 +73,10 @@ export default {
       ],
     };
   },
+  props: {
+    categoryTitle: String,
+  },
+
   methods: {
     showContent() {
       this.contentState = !this.contentState;

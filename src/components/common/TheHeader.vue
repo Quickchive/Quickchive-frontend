@@ -33,15 +33,24 @@
         </div>
       </div>
     </nav>
+    <!-- 버거 메뉴 펼쳤을 때-->
     <div class="burger-menu__nav" v-show="menuActive">
       <span v-if="isUserLogin">{{ this.$store.state.nickname }}님 </span>
       <ul>
-        <li id="burger-menu__nav-category">
-          <router-link to="/"><img :src="category" />카테고리</router-link>
+        <li id="burger-menu__nav-category"><img :src="category" />카테고리</li>
+      </ul>
+      <ul>
+        <li @click="toAllCategoryPage()">전체</li>
+        <li
+          v-for="(category, index) in categories"
+          :key="index"
+          @click="toCategoryPage(index)"
+        >
+          {{ category.name }}
         </li>
-        <li><router-link to="/">전체</router-link></li>
-        <li><router-link to="/">기획</router-link></li>
-        <li><router-link to="/">미분류</router-link></li>
+        <li>
+          <router-link to="/category/null">미분류</router-link>
+        </li>
       </ul>
     </div>
   </header>
@@ -52,6 +61,7 @@ import Burger from "@/components/common/Burger.vue";
 import profile from "@/assets/icon/profile.svg";
 import search from "@/assets/icon/search.svg";
 import category from "@/assets/icon/category.svg";
+import { fetchMyCategory } from "@/api/user";
 export default {
   components: {
     "burger-menu": Burger,
@@ -59,6 +69,8 @@ export default {
   created() {
     // 닉네임 조회
     this.$store.dispatch("FETCH_PROFILE");
+    // 카테고리 조회
+    // this.fetchCategoryList();
   },
   data() {
     return {
@@ -66,6 +78,7 @@ export default {
       profile,
       search,
       category,
+      categories: [],
     };
   },
   computed: {
@@ -73,7 +86,8 @@ export default {
     isUserLogin() {
       if (this.$store.getters.isLogin == true) {
         this.$store.dispatch("FETCH_PROFILE");
-
+        // 카테고리 조회
+        this.fetchCategoryList();
         return true;
       } else if (this.$store.getters.isOauthLogin == true) {
         this.$store.dispatch("FETCH_PROFILE");
@@ -111,6 +125,26 @@ export default {
       ) {
         this.$router.push("/");
       }
+    },
+    // 카테고리 목록 조회
+    async fetchCategoryList() {
+      try {
+        const response = await fetchMyCategory();
+        this.categories = response.data.categories;
+        console.log(response.data.categories);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 카테고리 페이지로 이동
+    async toCategoryPage(index) {
+      this.menuActive = false;
+      console.log(this.categories[index].id, "로 이동");
+      this.$router.push(`/category/${this.categories[index].id}`);
+    },
+    toAllCategoryPage() {
+      this.menuActive = false;
+      this.$router.push("/category/all");
     },
   },
 };
