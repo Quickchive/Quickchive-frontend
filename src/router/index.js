@@ -83,6 +83,17 @@ const routes = [
   {
     path: "/category",
     component: () => import("@/views/CategoryView.vue"),
+    children: [
+      {
+        path: "/category/all",
+        component: () =>
+          import("@/components/category/AllCategoryComponent.vue"),
+      },
+      {
+        path: "/category/:id",
+        component: () => import("@/components/category/CategoryComponent.vue"),
+      },
+    ],
   },
   // 404 에러 페이지
   {

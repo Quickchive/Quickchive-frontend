@@ -1,16 +1,19 @@
 <template>
   <div>
     <favorite-contents></favorite-contents>
-    <div class="contents__wrapper">
-      <all-contents></all-contents>
+    <div class="contents__wrapper-wrap">
+      <all-contents :categoryTitle="categoryAll"></all-contents>
+      <all-contents
+        v-for="(category, index) in myCategories"
+        :key="index"
+        :categoryTitle="category.name"
+      ></all-contents>
       <unclassified-contents></unclassified-contents>
-    </div>
-
-    <div class="main-btn__wrapper">
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
     </div>
+
     <!-- 카테고리 추가 모달 컴포넌트 -->
     <category-modal-component
       v-show="isCategoryModalActive"
@@ -68,6 +71,7 @@ import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue"
 import AlertModalComponent from "./modal/AlertModalComponent.vue";
 import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
+import { fetchMyCategory } from "@/api/user";
 
 export default {
   components: {
@@ -98,6 +102,9 @@ export default {
       // 카테고리 모달 제목
       categoryModalTitle: "카테고리 추가",
       categoryName: "",
+      // 내 카테고리 목록
+      myCategories: {},
+      categoryAll: "전체",
     };
   },
   created() {
@@ -112,6 +119,8 @@ export default {
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "kakao");
     }
+    // 카테고리 조회
+    this.getMyCategory();
   },
   computed: {
     isUserLogin() {
@@ -179,6 +188,16 @@ export default {
       try {
         const response = await addMultipleContents(contentsData);
         console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 자신의 카테고리 조회
+    async getMyCategory() {
+      try {
+        const response = await fetchMyCategory();
+        console.log("카테고리 목록 조회", response.data.categories);
+        this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
       }

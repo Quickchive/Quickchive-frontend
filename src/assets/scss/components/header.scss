@@ -43,6 +43,8 @@
       margin: 0;
       padding: 60px 0 0 0;
       #burger-menu__nav-category {
+        cursor: auto;
+
         margin-bottom: 20px;
         margin-left: 0;
         a {
@@ -56,6 +58,9 @@
       li {
         margin-left: 20px;
         line-height: 40px;
+        @include font(20px, 400, $color-black-text);
+        @include layout(row, center, flex-start);
+        cursor: pointer;
         a {
           @include font(20px, 400, $color-black-text);
         }

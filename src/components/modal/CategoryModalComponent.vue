@@ -31,6 +31,16 @@
           </button>
         </div>
       </div>
+      <div class="modal-card__category__wrapper">
+        <div class="flex-container">
+          <button
+            @click="$emit('deleteCategory')"
+            class="btn--transparent login-form__link-register"
+          >
+            {{ deleteBtn }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -47,6 +57,7 @@ export default {
   },
   props: {
     categoryModalTitle: String,
+    deleteBtn: String,
   },
   methods: {
     categoryEvent() {

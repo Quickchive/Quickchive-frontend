@@ -50,10 +50,11 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
               <select v-model="categoryName" class="contents-modal__select">
-                <option value="">미분류</option>
-                <div v-for="(category, index) in myCategories" :key="index">
-                  <option value="">{{ category.name }}</option>
-                </div>
+                <!-- <option value="">미분류</option> -->
+                <option>미분류</option>
+                <option v-for="(category, index) in myCategories" :key="index">
+                  {{ category.name }}
+                </option>
               </select>
             </div>
             <div class="register-form__wrapper">
@@ -122,7 +123,7 @@ export default {
       title: "",
       deadline: "",
       comment: "",
-      categoryName: "",
+      categoryName: "미분류",
     };
   },
   mounted() {
@@ -157,8 +158,8 @@ export default {
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log(response);
-        this.myCategories = response.categories;
+        console.log("카테고리 목록 조회", response.data.categories);
+        this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
       }
