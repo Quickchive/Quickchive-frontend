@@ -142,5 +142,17 @@ export default new Vuex.Store({
         console.log(error);
       }
     },
+    // 액세스 토큰 갱신
+    RENEW_TOKEN({ commit }, accessToken) {
+      commit("setAccessToken", accessToken);
+      saveAuthToCookie(accessToken);
+      console.log("여긴 vuex, access 토큰값 갱신함");
+    },
+    // 리프레시 토큰 갱신
+    RENEW_REFRESH_TOKEN({ commit }, refreshToken) {
+      commit("setRefreshToken", refreshToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      console.log("여긴 vuex, refrest 토큰값 갱신함");
+    },
   },
 });

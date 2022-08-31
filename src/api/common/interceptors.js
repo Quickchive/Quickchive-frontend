@@ -1,7 +1,7 @@
-import store from "@/store/index";
 import axios from "axios";
+import store from "@/store/index.js";
 import { reissueToken } from "@/api/auth";
-import { getAuthFromCookie, saveAuthToCookie } from "@/utils/cookies.js";
+import { getAuthFromCookie } from "@/utils/cookies.js";
 
 export function setInterceptors(instance) {
   // Add a request interceptor
@@ -34,20 +34,22 @@ export function setInterceptors(instance) {
         errorAPI.retry = true;
         console.log("access 토큰이 만료됨 -> 토큰 재발급 요청");
         const tokenData = {
-          refresh_token: store.state.refreshToken,
+          refresh_token: localStorage.getItem("refreshToken"),
         };
         try {
-          const data = await reissueToken(tokenData);
-          console.log("토큰 재발급 결과", data);
-          saveAuthToCookie(data.access_token);
-          localStorage.setItem("refreshToken", data.refresh_token);
+          const response = await reissueToken(tokenData);
+          console.log("토큰 재발급 결과", response.data);
+          await store.dispatch("RENEW_TOKEN", response.data.access_token);
+          await store.dispatch(
+            "RENEW_REFRESH_TOKEN",
+            response.data.refresh_token
+          );
+          errorAPI.headers.Authorization = `Bearer ${response.data.access_token}`;
+          return await axios(errorAPI);
         } catch (error) {
           console.log("토큰 재발급 에러", error);
         }
-
-        return await axios(errorAPI);
       }
-
       return Promise.reject(error);
     }
   );
