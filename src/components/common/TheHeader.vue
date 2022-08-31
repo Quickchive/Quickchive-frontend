@@ -4,7 +4,7 @@
       <div class="nav__wrapper">
         <burger-menu
           v-if="isUserLogin"
-          @toggle-menu="menuActive = !menuActive"
+          @toggle-menu="openBurger()"
           :active="menuActive"
         ></burger-menu>
         <button @click="clickLogo()" class="btn--transparent">로고</button>
@@ -48,9 +48,7 @@
         >
           {{ category.name }}
         </li>
-        <li>
-          <router-link to="/category/null">미분류</router-link>
-        </li>
+        <li @click="toUnclassiCategoryPage()">미분류</li>
       </ul>
     </div>
   </header>
@@ -142,9 +140,24 @@ export default {
       console.log(this.categories[index].id, "로 이동");
       this.$router.push(`/category/${this.categories[index].id}`);
     },
+    // 전체 카테고리 페이지로 이동
     toAllCategoryPage() {
       this.menuActive = false;
       this.$router.push("/category/all");
+    },
+    // 미분류 카테고리 페이지로 이동
+    toUnclassiCategoryPage() {
+      this.menuActive = false;
+      this.$router.push("/category/null");
+    },
+    // 버거메뉴 오픈
+    async openBurger() {
+      this.menuActive = !this.menuActive;
+      try {
+        await this.fetchCategoryList();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
