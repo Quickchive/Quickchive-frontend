@@ -159,6 +159,7 @@ export default {
           categoryName: this.categoryName,
         };
         const response = await addCategory(data);
+        this.getMyCategory();
         console.log(response);
       } catch (error) {
         console.log(error);
