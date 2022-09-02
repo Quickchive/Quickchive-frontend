@@ -144,7 +144,7 @@ export default {
         const response = await deleteCategory(this.categoryId);
         console.log(response);
         this.isCategoryModalActive = false;
-        this.$route.push("/category/all");
+        this.$router.push("/category/all");
       } catch (error) {
         console.log(error);
       }
