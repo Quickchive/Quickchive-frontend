@@ -47,6 +47,18 @@ input[id="checkbox"]:checked + label::after {
   background-color: $color-primary;
 }
 
+textarea {
+  border: 1px solid $color-gray-input;
+  border-radius: 10px;
+  text-indent: 10px;
+  box-sizing: border-box;
+  @include font(15px, 400, $color-gray-6);
+
+  &::placeholder {
+    @include font(15px, 400, $color-gray-4);
+  }
+}
+
 .login-form__checkbox {
   border-radius: 50%;
   width: 25px;

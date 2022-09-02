@@ -2,23 +2,23 @@
   <div class="favorite-content">
     <header>
       <div class="favorite-content__header-wrapper">
-        <h3>즐겨찾기</h3>
-        <img :src="star"/>
+        <div class="content__header">
+          <h3>즐겨찾기</h3>
+        </div>
+        <img :src="star" />
       </div>
       <button @click="showContent()">
-        <img v-if="!contentState" :src="plus"/>
-        <img v-if="contentState" :src="minus"/>
+        <img v-if="!contentState" :src="plus" />
+        <img v-if="contentState" :src="minus" />
       </button>
     </header>
-    
   </div>
 </template>
 
 <script>
-import plus from '@/assets/icon/plus.svg';
-import minus from '@/assets/icon/minus.svg';
-import star from '@/assets/icon/star.svg';
-
+import plus from "@/assets/icon/plus.svg";
+import minus from "@/assets/icon/minus.svg";
+import star from "@/assets/icon/star.svg";
 
 export default {
   data() {
@@ -27,7 +27,7 @@ export default {
       minus,
       star,
       contentState: false,
-    }
+    };
   },
   methods: {
     showContent() {
@@ -35,13 +35,12 @@ export default {
     },
     // 즐겨찾기 생성
     createFavorites(index) {
-      console.log('인덱스', index);
-      this.contents[index].isFavoriteContent = !this.contents[index].isFavoriteContent
-    }
+      console.log("인덱스", index);
+      this.contents[index].isFavoriteContent =
+        !this.contents[index].isFavoriteContent;
+    },
   },
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
