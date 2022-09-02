@@ -89,7 +89,6 @@ export default {
         return true;
       } else if (this.$store.getters.isOauthLogin == true) {
         this.$store.dispatch("FETCH_PROFILE");
-
         return true;
       } else {
         return false;
@@ -148,7 +147,7 @@ export default {
     // 미분류 카테고리 페이지로 이동
     toUnclassiCategoryPage() {
       this.menuActive = false;
-      this.$router.push("/category/null");
+      this.$router.push("/category/-1");
     },
     // 버거메뉴 오픈
     async openBurger() {

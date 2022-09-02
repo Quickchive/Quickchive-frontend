@@ -20,6 +20,7 @@
         :contents="contents"
       ></contents-component>
       <collection-component
+        v-show="isCollectionActive"
         :collectionData="collectionData"
       ></collection-component>
     </div>
@@ -43,6 +44,8 @@ import CollectionComponent from "@/components/contents/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
+import { fetchMyCategory } from "@/api/user";
+
 export default {
   components: {
     ContentsComponent,
@@ -51,11 +54,12 @@ export default {
   },
   data() {
     return {
+      isCollectionActive: false,
       isCategoryModalActive: false,
       categoryModalTitle: "카테고리 수정",
       categoryFilter: "latest",
       setting,
-      categoryId: 0,
+      categoryId: "",
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
@@ -73,24 +77,28 @@ export default {
         ],
         favorites: true,
       },
+      path: this.$route.params.id,
     };
   },
-  created() {
+  async created() {
+    this.categoryId = this.$route.params.id;
     this.fetchContentsList();
+    this.fetchCategoryName();
+  },
+  watch: {
+    $route() {
+      this.fetchContentsList();
+      this.fetchCategoryName();
+      this.categoryId = this.$route.params.id;
+    },
   },
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
       const categoryId = this.$route.params.id;
-
       console.log("카테고리 id", categoryId);
-
       try {
         const response = await fetchMyContents(categoryId);
-        console.log("카테고리 이름 조회", response.data.contents);
-        // 카테고리 이름
-        this.categoryName = response.data.contents[0].category.name;
-
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.contents;
         console.log("콘텐츠 데이터", this.contentsData);
@@ -124,6 +132,8 @@ export default {
         };
         const response = await updateCategory(categoryData);
         console.log(response);
+        this.categoryName = this.newCategoryName;
+        this.isCategoryModalActive = false;
       } catch (error) {
         console.log(error);
       }
@@ -133,6 +143,27 @@ export default {
       try {
         const response = await deleteCategory(this.categoryId);
         console.log(response);
+        this.isCategoryModalActive = false;
+        this.$route.push("/category/all");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 카테고리 이름 조회
+    async fetchCategoryName() {
+      try {
+        const response = await fetchMyCategory();
+        const categoryId = this.$route.params.id;
+        const categories = response.data.categories;
+        if (categoryId == -1) {
+          this.categoryName = "미분류";
+        } else {
+          const categoryFilter = categories.filter(function (cate) {
+            return cate.id == categoryId;
+          });
+          console.log(categoryFilter);
+          this.categoryName = categoryFilter[0].name;
+        }
       } catch (error) {
         console.log(error);
       }
