@@ -2,13 +2,20 @@
   <div>
     <favorite-contents></favorite-contents>
     <div class="contents__wrapper-wrap">
-      <all-contents :categoryTitle="categoryAll"></all-contents>
+      <all-contents
+        @toCategoryPage="toCategoryPage()"
+        :categoryTitle="categoryAll"
+      ></all-contents>
       <all-contents
         v-for="(category, index) in myCategories"
         :key="index"
         :categoryTitle="category.name"
+        :categoryId="category.id"
+        @toCategoryPage="toCategoryPage(category.id)"
       ></all-contents>
-      <unclassified-contents></unclassified-contents>
+      <unclassified-contents
+        @toCategoryPage="toCategoryPage(-1)"
+      ></unclassified-contents>
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
@@ -202,6 +209,11 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    // 카테고리 상세 페이지로 이동
+    toCategoryPage(id) {
+      console.log("카테고리 id", id);
+      this.$router.push(`/category/${id}`);
     },
   },
 };
