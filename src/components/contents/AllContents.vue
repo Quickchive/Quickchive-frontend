@@ -10,24 +10,26 @@
       </button>
     </header>
     <!-- 콘텐츠 목록 -->
-    <div v-show="contentState" class="contents-lists">
+    <div v-if="contentState" class="contents-lists">
       <div
-        v-for="(content, index) in contents"
+        v-for="(content, index) in contentsList"
         :key="index"
         class="contents-list"
       >
         <div class="contents-list__wrapper">
-          <span class="contents-list__icon">
-            {{ content.icon }}
-          </span>
-          <span class="contents-list__title">
-            {{ content.title }}
-          </span>
+          <button class="btn--transparent--img" @click="toLink(content.link)">
+            <span class="contents-list__icon">웹</span>
+            <span class="contents-list__title">
+              {{ filterTitle(content.title) }}
+            </span>
+          </button>
         </div>
         <div class="contents-list__wrapper">
           <img :src="line" />
-          <span class="contents-list__expiry">{{ content.expiryDate }}</span>
-          <button class="btn--transparent" @click="openMemoModal()">
+          <span class="contents-list__expiry"
+            >D-{{ countDday(content.deadline) }}</span
+          >
+          <button class="btn--transparent" @click="openMemoModal(index)">
             <img :src="memo" />
           </button>
           <button class="btn--transparent" @click="createFavorites(index)">
@@ -40,6 +42,7 @@
     <memo-modal-component
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
+      :memoContents="memoContents"
     ></memo-modal-component>
   </div>
 </template>
@@ -53,6 +56,8 @@ import star from "@/assets/icon/star.svg";
 import star_gray from "@/assets/icon/star_gray.svg";
 import { fetchMyContents } from "@/api/user";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
+import { countDday } from "@/utils/validation";
+import { addFavorite } from "@/api/contents";
 
 export default {
   components: { MemoModalComponent },
@@ -67,89 +72,31 @@ export default {
       contentState: false,
       isMemoModalActive: false,
       // 더미 데이터
-      contents: [
-        {
-          icon: "링크",
-          title: "콘텐츠 제목1",
-          expiryDate: "D-2",
-          favorite: false,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          favorite: true,
-        },
-        {
-          icon: "웹",
-          title: "콘텐츠 제목2",
-          expiryDate: "D-3",
-          isFavoriteContent: true,
-        },
-      ],
+      contentsList: [],
     };
   },
   props: {
     categoryTitle: String,
+    categoryId: Number,
   },
-
+  created() {
+    this.fetchContentsList();
+  },
   methods: {
     showContent() {
       this.contentState = !this.contentState;
     },
     // 즐겨찾기 생성
-    createFavorites(index) {
+    async createFavorites(index) {
       console.log("인덱스", index);
-      this.contents[index].isFavoriteContent =
-        !this.contents[index].isFavoriteContent;
+      this.contentsList[index].favorite = !this.contentsList[index].favorite;
+      try {
+        const contentId = this.contentsList[index].id;
+        const response = await addFavorite(contentId);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
@@ -157,20 +104,34 @@ export default {
     },
     // 나의 콘텐츠 조회 (카테고리 아이디 받아서 조회하기)
     async fetchContentsList() {
-      const categoryId = this.$route.params.id;
-      console.log("카테고리 id", categoryId);
       try {
-        const response = await fetchMyContents(categoryId);
+        const response = await fetchMyContents(this.categoryId);
         // 콘텐츠 컴포넌트에 데이터 전달
-        this.contents = response.data.contents;
-        console.log("콘텐츠 데이터", this.contentsData);
+        this.contentsList = response.data.contents;
+        console.log("콘텐츠 데이터", this.contentsList);
       } catch (error) {
         console.log(error);
       }
     },
     // 메모 모달 열기
-    openMemoModal() {
+    openMemoModal(index) {
       this.isMemoModalActive = true;
+      this.memoContents = this.contentsList[index].comment;
+    },
+    // 제목 글자수 30자 이상
+    filterTitle(title) {
+      if (title.length >= 30) {
+        return title.substr(0, 30) + "...";
+      } else {
+        return title;
+      }
+    },
+    countDday(deadline) {
+      console.log(countDday(deadline));
+      return countDday(deadline);
+    },
+    toLink(link) {
+      window.open(link, "_blank");
     },
   },
 };

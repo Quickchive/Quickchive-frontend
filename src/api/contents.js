@@ -20,4 +20,15 @@ function deleteContents(contentId) {
   return authInstance.delete(`contents/delete/${contentId}`);
 }
 
-export { addContents, updateContents, deleteContents, addMultipleContents };
+// 즐겨찾기 등록 및 해제
+function addFavorite(contentId) {
+  return authInstance.patch(`contents/favorite/${contentId}`);
+}
+
+export {
+  addContents,
+  updateContents,
+  deleteContents,
+  addMultipleContents,
+  addFavorite,
+};

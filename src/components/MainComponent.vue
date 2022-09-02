@@ -10,6 +10,7 @@
         v-for="(category, index) in myCategories"
         :key="index"
         :categoryTitle="category.name"
+        :categoryId="category.id"
         @toCategoryPage="toCategoryPage(category.id)"
       ></all-contents>
       <unclassified-contents
