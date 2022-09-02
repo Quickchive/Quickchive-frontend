@@ -15,24 +15,24 @@
       <div class="modal-card__wrapper">
         <div class="flex-container modal-form__wrapper">
           <textarea
-            v-model="memo"
+            v-model="memoContents"
             placeholder=""
             class="modal-form__textarea"
             rows="5"
           />
         </div>
       </div>
-      <div class="modal-card__category__wrapper">
+      <!-- <div class="modal-card__category__wrapper">
         <div class="flex-container-col">
           <button
-            :disabled="!memo"
+            :disabled="!memoContents"
             @click="categoryEvent()"
             class="btn--sm btnPrimary"
           >
             저장
           </button>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -45,18 +45,19 @@ export default {
     return {
       closeBtn,
       categoryName: "",
-      memo: "",
     };
   },
   props: {
     categoryModalTitle: String,
     deleteBtn: String,
+    memoContents: String,
   },
   methods: {
     categoryEvent() {
       let categoryName = this.categoryName;
       this.$emit("categoryEvent", categoryName);
     },
+    // 메모 조회
   },
 };
 </script>

@@ -17,7 +17,7 @@
       <contents-component
         v-for="(contents, index) in contentsData"
         :key="index"
-        :contents="contents"
+        :contentsData="contents"
       ></contents-component>
       <collection-component
         v-show="isCollectionActive"
