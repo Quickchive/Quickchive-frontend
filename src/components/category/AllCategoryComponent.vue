@@ -17,11 +17,11 @@
       <contents-component
         v-for="(contents, index) in contentsData"
         :key="index"
-        :contents="contents"
+        :contentsData="contents"
       ></contents-component>
-      <collection-component
+      <!-- <collection-component
         :collectionData="collectionData"
-      ></collection-component>
+      ></collection-component> -->
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
     <category-modal-component
@@ -39,14 +39,14 @@
 <script>
 import setting from "@/assets/icon/settings.svg";
 import ContentsComponent from "@/components/contents/ContentsComponent.vue";
-import CollectionComponent from "@/components/contents/CollectionComponent.vue";
+// import CollectionComponent from "@/components/contents/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
 export default {
   components: {
     ContentsComponent,
-    CollectionComponent,
+    // CollectionComponent,
     CategoryModalComponent,
   },
   data() {

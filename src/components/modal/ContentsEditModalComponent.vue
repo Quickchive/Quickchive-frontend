@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <div class="contents-modal-card">
       <div class="modal-card__header">
-        <h1>콘텐츠 추가</h1>
+        <h1>콘텐츠 수정</h1>
         <button
           type="button"
           class="btn--transparent btn__close"
@@ -26,17 +26,7 @@
             </button>
           </div>
         </div>
-        <div class="flex-container-col">
-          <button
-            v-show="!isDetailSettingActive"
-            class="btn__deleteuser"
-            @click="setDetail"
-          >
-            세부 설정
-          </button>
-        </div>
-        <!-- 세부 설정 선택 시 나오는 인풋 -->
-        <div v-show="isDetailSettingActive">
+        <div>
           <div class="register-form__wrapper">
             <label class="register-form__label">이름</label>
             <input v-model="contentsData.title" placeholder="30자 이하 권장" />
@@ -88,7 +78,7 @@
       <div class="flex-container-col">
         <button
           :disabled="!contentsData.link"
-          @click="createContent()"
+          @click="editContent()"
           class="btn--sm btnPrimary"
         >
           저장
@@ -103,7 +93,7 @@ import closeBtn from "@/assets/icon/closeBtn.svg";
 import star_border from "@/assets/icon/star_border.svg";
 import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
-import { addContents } from "@/api/contents";
+import { updateContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter } from "@/utils/validation";
 
@@ -115,8 +105,6 @@ export default {
       star_border,
       star,
       alert_circle,
-      isDetailSettingActive: false,
-
       // 내 카테고리 목록
       myCategories: {},
       // 폼 항목
@@ -126,16 +114,19 @@ export default {
       comment: "",
       categoryName: -1,
       favorite: false,
-      contentsData: {
-        link: "",
-        title: "",
-        deadline: "",
-        comment: "",
-        categoryName: null,
-        favorite: false,
-      },
+      // contentsData: {
+      //   link: "",
+      //   title: "",
+      //   deadline: "",
+      //   comment: "",
+      //   categoryName: null,
+      //   favorite: false,
+      // },
       data: {},
     };
+  },
+  props: {
+    contentsData: Object,
   },
   mounted() {
     this.getMyCategory();
@@ -159,9 +150,6 @@ export default {
     },
   },
   methods: {
-    setDetail() {
-      this.isDetailSettingActive = true;
-    },
     addFavorites() {
       this.contentsData.favorite = !this.contentsData.favorite;
     },
@@ -175,34 +163,22 @@ export default {
         console.log(error);
       }
     },
-    // 콘텐츠 추가 요청
-    async createContent() {
-      // 링크가 1개인 경우
-      if (this.countLink == 1) {
-        if (
-          // 0. default: link, favorite
-          this.contentsData.title == "" &&
-          this.contentsData.deadline == "" &&
-          this.contentsData.categoryName == null
-        ) {
-          try {
-            const data = {
-              link: this.contentsData.link,
-              favorite: this.contentsData.favorite,
-              comment: this.contentsData.comment,
-            };
-            const response = await addContents(data);
-            console.log("0", response);
-          } catch (error) {
-            console.log(error);
-          }
+    // 콘텐츠 수정
+    async editContent() {
+      try {
+        if (this.countLink == 1) {
+          const data = {
+            id: this.contentsData.id,
+            link: this.contentsData.link,
+            favorite: this.contentsData.favorite,
+            comment: this.contentsData.comment,
+          };
+          const response = await updateContents(data);
+          console.log(response);
+          this.$emit("close-modal");
         }
-      }
-      // 링크가 2개 이상인 경우
-      else if (this.countLink >= 2) {
-        const contentsLinks = this.link.split(" ");
-        console.log("모달컴포먼트", contentsLinks);
-        this.$emit("isLinkNotSingle", contentsLinks);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
