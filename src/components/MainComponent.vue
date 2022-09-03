@@ -46,6 +46,8 @@
       @close-modal="isModalActive = false"
       @isLinkNotSingle="isLinkNotSingle"
       :contentsLinks="contentsLinks"
+      @openCollectionModal="openCollectionModal"
+      :linkList="linkList"
     ></contents-modal-component>
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
     <confirm-modal-component
@@ -68,6 +70,7 @@
     <collection-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
+      :linkList="linkList"
     ></collection-modal-component>
   </div>
 </template>
@@ -121,6 +124,7 @@ export default {
       // 내 카테고리 목록
       myCategories: {},
       categoryAll: "전체",
+      linkList: [],
     };
   },
   created() {
@@ -198,9 +202,8 @@ export default {
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {
       this.isConfirmModalActive = false;
-      // 예시임 -> 수정: 사용자 입력 어떻게 받을지 고민해야함
       const contentsData = {
-        contentLinks: this.contentsLinks,
+        contentLinks: this.linkList,
       };
       try {
         const response = await addMultipleContents(contentsData);
@@ -229,8 +232,10 @@ export default {
       this.$router.push(`/category/favorite`);
     },
     // 콜렉션 추가 모달 열기
-    openCollectionModal() {
+    openCollectionModal(linkList) {
+      this.linkList = linkList;
       this.isConfirmModalActive = false;
+      this.isModalActive = false;
       this.isCollectionModalActive = true;
     },
   },

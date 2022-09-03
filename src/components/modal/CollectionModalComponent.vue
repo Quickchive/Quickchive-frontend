@@ -43,19 +43,20 @@
         <div class="register-form__wrapper">
           <label class="register-form__label">링크</label>
           <div class="link__wrapper">
-            <div class="link__wrapper-inner">
+            <!-- <div class="link__wrapper-inner">
               <div class="link__index">1</div>
               <input v-model="linkList[0]" placeholder="URL 입력" />
-            </div>
+            </div> -->
             <div
-              v-for="index in linkInputs"
+              v-for="(link, index) in linkList"
               :key="index"
               class="link__wrapper-inner"
             >
               <div class="link__index">{{ index + 1 }}</div>
-              <input v-model="linkList[index + 1]" placeholder="URL 입력" />
+              <input v-model="linkList[index]" placeholder="URL 입력" />
               <button
-                @click="deleteInput()"
+                v-if="index > 0"
+                @click="deleteInput(index)"
                 class="btn--transparent btn__deleteLink"
               >
                 <img :src="minus" />
@@ -107,8 +108,10 @@ export default {
       categoryName: -1,
       description: "",
       linkInputs: 0,
-      linkList: [],
     };
+  },
+  props: {
+    linkList: Array,
   },
   mounted() {
     this.getMyCategory();
@@ -136,11 +139,11 @@ export default {
     },
     // 인풋 추가 이벤트
     createInput() {
-      this.linkInputs += 1;
+      this.linkList.push("");
     },
     // 인풋 추가 이벤트
-    deleteInput() {
-      this.linkInputs -= 1;
+    deleteInput(index) {
+      this.linkList.splice(index, 1);
     },
   },
 };
