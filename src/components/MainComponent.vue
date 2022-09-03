@@ -51,7 +51,7 @@
     <confirm-modal-component
       v-if="isConfirmModalActive"
       @rightBtn="addMultipleContents()"
-      @leftBtn="isConfirmModalActive = false"
+      @leftBtn="openCollectionModal()"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
@@ -65,6 +65,10 @@
     >
     </alert-modal-component>
     <!-- 콜렉션으로 저장 모달 -->
+    <collection-modal-component
+      v-if="isCollectionModalActive"
+      @close-modal="isCollectionModalActive = false"
+    ></collection-modal-component>
   </div>
 </template>
 
@@ -81,6 +85,7 @@ import AlertModalComponent from "./modal/AlertModalComponent.vue";
 import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
+import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
 
 export default {
   components: {
@@ -91,6 +96,7 @@ export default {
     CategoryModalComponent,
     ConfirmModalComponent,
     AlertModalComponent,
+    CollectionModalComponent,
   },
   data() {
     return {
@@ -99,6 +105,7 @@ export default {
       isModalActive: false,
       isConfirmModalActive: false,
       isAlertModalActive: false,
+      isCollectionModalActive: false,
       topBtn,
       // confirm 모달 메시지
       confirmModalContent: "URL이 2개 이상이네요! \n 저장방식을 선택해주세요",
@@ -220,6 +227,11 @@ export default {
     // 즐겨찾기 상세 페이지로 이동
     toFavoriteCategoryPage() {
       this.$router.push(`/category/favorite`);
+    },
+    // 콜렉션 추가 모달 열기
+    openCollectionModal() {
+      this.isConfirmModalActive = false;
+      this.isCollectionModalActive = true;
     },
   },
 };
