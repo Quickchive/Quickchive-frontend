@@ -16,13 +16,17 @@
         <div class="register-form__wrapper">
           <label class="register-form__label">링크<em>*</em></label>
           <div class="flex-container modal-form__wrapper">
-            <input v-model="contentsData.link" placeholder="URL 입력" />
+            <input
+              v-model="link"
+              placeholder="URL 입력"
+              oninput="this.value = this.value.replace(/ +/g, ' ')"
+            />
             <button
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-              <img v-show="!contentsData.favorite" :src="star_border" />
-              <img v-show="contentsData.favorite" :src="star" />
+              <img v-show="!favorite" :src="star_border" />
+              <img v-show="favorite" :src="star" />
             </button>
           </div>
         </div>
@@ -39,15 +43,12 @@
         <div v-show="isDetailSettingActive">
           <div class="register-form__wrapper">
             <label class="register-form__label">이름</label>
-            <input v-model="contentsData.title" placeholder="30자 이하 권장" />
+            <input v-model="title" placeholder="30자 이하 권장" />
           </div>
           <div class="flex-container modal-form__wrapper">
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
-              <select
-                v-model="contentsData.categoryName"
-                class="contents-modal__select"
-              >
+              <select v-model="categoryName" class="contents-modal__select">
                 <option value="null" selected>미분류</option>
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
@@ -57,7 +58,7 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">읽을 기한</label>
               <div class="flex-container modal-form__wrapper">
-                <input v-model="contentsData.deadline" type="date" />
+                <input v-model="deadline" type="date" />
                 <span class="contents-modal__date-description"
                   >D-DAY에 알림을 보내드립니다</span
                 >
@@ -66,11 +67,7 @@
           </div>
           <div class="register-form__wrapper">
             <label class="register-form__label">메모</label>
-            <input
-              v-model="contentsData.comment"
-              placeholder="500자 이하"
-              maxlength="500"
-            />
+            <input v-model="comment" placeholder="500자 이하" maxlength="500" />
           </div>
         </div>
       </div>
@@ -81,13 +78,16 @@
           ><img :src="alert_circle" />여러 링크들을 묶어서 저장하고
           싶다면?</span
         >
-        <button class="btn--transparent btn__collection">
+        <button
+          @click="openCollectionModal()"
+          class="btn--transparent btn__collection"
+        >
           콜렉션으로 저장하기 >>
         </button>
       </div>
       <div class="flex-container-col">
         <button
-          :disabled="!contentsData.link"
+          :disabled="!link"
           @click="createContent()"
           class="btn--sm btnPrimary"
         >
@@ -105,7 +105,7 @@ import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import { addContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
-import { validateLink, linkCounter } from "@/utils/validation";
+import { validateLink, linkCounter, filterLink } from "@/utils/validation";
 
 export default {
   name: "ModalComponent",
@@ -126,33 +126,31 @@ export default {
       comment: "",
       categoryName: -1,
       favorite: false,
-      contentsData: {
-        link: "",
-        title: "",
-        deadline: "",
-        comment: "",
-        categoryName: null,
-        favorite: false,
-      },
       data: {},
+      linkList: [],
     };
   },
   mounted() {
     this.getMyCategory();
   },
+  watch: {
+    link: function () {
+      this.linkList = filterLink(this.link);
+    },
+  },
   computed: {
     // 링크 여부 확인
     isTextLink() {
-      if (this.contentsData.link != "") {
-        return validateLink(this.contentsData.link);
+      if (this.link != "") {
+        return validateLink(this.link);
       } else {
         return null;
       }
     },
     // 링크 개수 확인
     countLink() {
-      if (this.contentsData.link != "") {
-        return linkCounter(this.contentsData.link);
+      if (this.link != "") {
+        return linkCounter(this.link);
       } else {
         return null;
       }
@@ -163,7 +161,7 @@ export default {
       this.isDetailSettingActive = true;
     },
     addFavorites() {
-      this.contentsData.favorite = !this.contentsData.favorite;
+      this.favorite = !this.favorite;
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
@@ -181,15 +179,15 @@ export default {
       if (this.countLink == 1) {
         if (
           // 0. default: link, favorite
-          this.contentsData.title == "" &&
-          this.contentsData.deadline == "" &&
-          this.contentsData.categoryName == null
+          this.title == "" &&
+          this.deadline == "" &&
+          this.categoryName == null
         ) {
           try {
             const data = {
-              link: this.contentsData.link,
-              favorite: this.contentsData.favorite,
-              comment: this.contentsData.comment,
+              link: this.link,
+              favorite: this.favorite,
+              comment: this.comment,
             };
             const response = await addContents(data);
             console.log("0", response);
@@ -204,6 +202,10 @@ export default {
         console.log("모달컴포먼트", contentsLinks);
         this.$emit("isLinkNotSingle", contentsLinks);
       }
+    },
+    openCollectionModal() {
+      const linkList = this.linkList;
+      this.$emit("openCollectionModal", linkList);
     },
   },
 };
