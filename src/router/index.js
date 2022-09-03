@@ -100,6 +100,11 @@ const routes = [
       },
     ],
   },
+  // 콜렉션 상세 페이지
+  {
+    path: "/collection/:id",
+    component: () => import("@/views/CollectionView.vue"),
+  },
   // 404 에러 페이지
   {
     path: "*",
