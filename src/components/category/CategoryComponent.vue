@@ -40,7 +40,7 @@
 <script>
 import setting from "@/assets/icon/settings.svg";
 import ContentsComponent from "@/components/contents/ContentsComponent.vue";
-import CollectionComponent from "@/components/contents/CollectionComponent.vue";
+import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";

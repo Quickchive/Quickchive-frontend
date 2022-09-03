@@ -75,9 +75,6 @@
       }
     }
   }
-  .modal-card__btn__wrapper {
-    margin-top: 30px;
-  }
 }
 
 .confirm-modal-card {
@@ -143,5 +140,65 @@
   .modal-form__textarea {
     width: 100%;
     margin-top: 35px;
+  }
+}
+
+// 콜렉션 모달
+.collection-modal-card {
+  @extend .modal-card;
+  top: 10%;
+  .modal-card__wrapper {
+    .modal-form__wrapper {
+      gap: 10px;
+      .register-form__wrapper {
+        width: 100%;
+        select {
+          width: 100%;
+        }
+      }
+      .category__wrapper {
+        width: 65%;
+      }
+    }
+  }
+}
+
+.modal-card__btn__wrapper {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.link__wrapper {
+  @include layout(column, center, flex-start);
+  gap: 8px;
+  width: 100%;
+  .link__wrapper-inner {
+    width: 100%;
+    position: relative;
+    .link__index {
+      background-color: $color-primary;
+      border-radius: 50px;
+      width: 23px;
+      height: 23px;
+      @include font(15px, 700, $color-gray-1);
+      text-align: center;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    input {
+      text-indent: 40px;
+      width: 100%;
+      padding-right: 52px;
+      &::placeholder {
+        text-indent: 40px;
+      }
+    }
+    .btn__deleteLink {
+      position: absolute;
+      top: 11px;
+      right: 20px;
+      width: auto;
+    }
   }
 }

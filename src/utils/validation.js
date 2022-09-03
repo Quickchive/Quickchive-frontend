@@ -26,6 +26,12 @@ function linkCounter(text) {
   return count;
 }
 
+// 링크 추출
+function filterLink(text) {
+  let linkList = text.split(" ");
+  return linkList;
+}
+
 // 기한 계산
 function countDday(deadline) {
   const today = new Date();
@@ -36,4 +42,4 @@ function countDday(deadline) {
   return parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)));
 }
 
-export { validatePw, validateLink, linkCounter, countDday };
+export { validatePw, validateLink, linkCounter, countDday, filterLink };

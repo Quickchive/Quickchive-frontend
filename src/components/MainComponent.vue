@@ -46,12 +46,14 @@
       @close-modal="isModalActive = false"
       @isLinkNotSingle="isLinkNotSingle"
       :contentsLinks="contentsLinks"
+      @openCollectionModal="openCollectionModal"
+      :linkList="linkList"
     ></contents-modal-component>
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
     <confirm-modal-component
       v-if="isConfirmModalActive"
       @rightBtn="addMultipleContents()"
-      @leftBtn="isConfirmModalActive = false"
+      @leftBtn="openCollectionModal()"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
@@ -65,6 +67,11 @@
     >
     </alert-modal-component>
     <!-- 콜렉션으로 저장 모달 -->
+    <collection-modal-component
+      v-if="isCollectionModalActive"
+      @close-modal="isCollectionModalActive = false"
+      :linkList="linkList"
+    ></collection-modal-component>
   </div>
 </template>
 
@@ -81,6 +88,7 @@ import AlertModalComponent from "./modal/AlertModalComponent.vue";
 import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
+import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
 
 export default {
   components: {
@@ -91,6 +99,7 @@ export default {
     CategoryModalComponent,
     ConfirmModalComponent,
     AlertModalComponent,
+    CollectionModalComponent,
   },
   data() {
     return {
@@ -99,6 +108,7 @@ export default {
       isModalActive: false,
       isConfirmModalActive: false,
       isAlertModalActive: false,
+      isCollectionModalActive: false,
       topBtn,
       // confirm 모달 메시지
       confirmModalContent: "URL이 2개 이상이네요! \n 저장방식을 선택해주세요",
@@ -114,6 +124,7 @@ export default {
       // 내 카테고리 목록
       myCategories: {},
       categoryAll: "전체",
+      linkList: [],
     };
   },
   created() {
@@ -191,9 +202,8 @@ export default {
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {
       this.isConfirmModalActive = false;
-      // 예시임 -> 수정: 사용자 입력 어떻게 받을지 고민해야함
       const contentsData = {
-        contentLinks: this.contentsLinks,
+        contentLinks: this.linkList,
       };
       try {
         const response = await addMultipleContents(contentsData);
@@ -220,6 +230,13 @@ export default {
     // 즐겨찾기 상세 페이지로 이동
     toFavoriteCategoryPage() {
       this.$router.push(`/category/favorite`);
+    },
+    // 콜렉션 추가 모달 열기
+    openCollectionModal(linkList) {
+      this.linkList = linkList;
+      this.isConfirmModalActive = false;
+      this.isModalActive = false;
+      this.isCollectionModalActive = true;
     },
   },
 };
