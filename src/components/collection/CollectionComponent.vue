@@ -62,7 +62,7 @@ export default {
     };
   },
   props: {
-    collectionData: Object,
+    collectionData: Array,
   },
 };
 </script>
