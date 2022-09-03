@@ -46,7 +46,9 @@
         <!-- 2. wrapper -->
         <div class="favorite-list__wrapper">
           <!-- 제목 -->
-          <p class="favorite-list__title">{{ filterTitle(favorite.title) }}</p>
+          <p @click="toLink(favorite.link)" class="favorite-list__title">
+            {{ filterTitle(favorite.title) }}
+          </p>
           <div class="favorite-list__inner">
             <!-- 도메인 -->
             <span class="favorite-list__domain">{{
