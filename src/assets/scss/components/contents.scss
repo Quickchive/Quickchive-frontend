@@ -156,6 +156,7 @@
         @include font(14px, 400, $color-black-text);
         margin: 0 0 5px 0;
         width: 158px;
+        cursor: pointer;
       }
       .favorite-list__inner {
         @include layout(row, center, flex-start);
