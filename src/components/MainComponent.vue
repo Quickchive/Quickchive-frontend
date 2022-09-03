@@ -1,6 +1,8 @@
 <template>
   <div>
-    <favorite-contents></favorite-contents>
+    <favorite-contents
+      @toCategoryPage="toFavoriteCategoryPage()"
+    ></favorite-contents>
     <div class="contents__wrapper-wrap">
       <all-contents
         @toCategoryPage="toCategoryPage()"
@@ -214,6 +216,10 @@ export default {
     toCategoryPage(id) {
       console.log("카테고리 id", id);
       this.$router.push(`/category/${id}`);
+    },
+    // 즐겨찾기 상세 페이지로 이동
+    toFavoriteCategoryPage() {
+      this.$router.push(`/category/favorite`);
     },
   },
 };

@@ -30,6 +30,11 @@ function fetchMyCategory() {
   return authInstance.get("users/load-categories");
 }
 
+// 자신의 즐겨찾기 조회
+function fetchMyFavorites() {
+  return authInstance.get("users/load-favorites");
+}
+
 export {
   editProfile,
   resetPw,
@@ -37,4 +42,5 @@ export {
   fetchMyContents,
   fetchMyCategory,
   fetchMyCollections,
+  fetchMyFavorites,
 };

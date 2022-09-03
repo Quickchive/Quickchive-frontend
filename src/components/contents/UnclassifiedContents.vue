@@ -26,7 +26,7 @@
         </div>
         <div class="contents-list__wrapper">
           <img :src="line" />
-          <span class="contents-list__expiry"
+          <span v-if="deadline" class="contents-list__expiry"
             >D-{{ countDday(content.deadline) }}</span
           >
           <button class="btn--transparent" @click="openMemoModal(index)">

@@ -3,12 +3,14 @@
   <div class="contents-component">
     <div class="contents__wrapper-col">
       <p class="contents__title" @click="toLink(contentsData.link)">
-        {{ filterTitle }}
+        {{ filterTitle(contentsData.title) }}
       </p>
-      <p class="contents__contents">{{ filterDescript }}</p>
+      <p class="contents__contents">
+        {{ filterDescript(contentsData.description) }}
+      </p>
       <div class="contents__inner">
         <p class="contents__domain">
-          {{ filterDomain }} |
+          {{ filterDomain(contentsData.link) }} |
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>
         <div class="contents__btn-wrapper">
@@ -28,7 +30,9 @@
     <div class="contents__wrapper">
       <!-- 이미지 -->
       <div class="contents__img">
-        <div class="contents__expiryDate">D-{{ countDday }}</div>
+        <div v-if="contentsData.deadline" class="contents__expiryDate">
+          D-{{ countDday }}
+        </div>
       </div>
       <button
         class="btn--transparent btn__editContents"
@@ -117,25 +121,37 @@ export default {
         return null;
       }
     },
+  },
+  methods: {
+    toLink(link) {
+      window.open(link, "_blank");
+    },
+    // 콘텐츠 수정 모달 오픈
+    openEditModal() {
+      this.isModalActive = true;
+    },
+    // 메모 모달 오픈
+    openMemoModal() {
+      this.isMemoModalActive = true;
+    },
     // 제목 글자수 30자 이상
-    filterTitle() {
-      if (this.contentsData.title.length >= 30) {
-        return this.contentsData.title.substr(0, 30) + "...";
+    filterTitle(title) {
+      if (title.length >= 30) {
+        return title.substr(0, 30) + "...";
       } else {
-        return this.contentsData.title;
+        return title;
       }
     },
     // 설명 글자수 30자 이상
-    filterDescript() {
-      if (this.contentsData.description.length >= 90) {
-        return this.contentsData.description.substr(0, 90) + "...";
+    filterDescript(description) {
+      if (description.length >= 90) {
+        return description.substr(0, 90) + "...";
       } else {
-        return this.contentsData.description;
+        return description;
       }
     },
     // 도메인 추출
-    filterDomain() {
-      let link = this.contentsData.link;
+    filterDomain(link) {
       let domain;
       if (link.includes("www") == true) {
         let domain1 = link.split(".");
@@ -150,19 +166,6 @@ export default {
         // console.log(domain[1]);
       }
       return domain;
-    },
-  },
-  methods: {
-    toLink(link) {
-      window.open(link, "_blank");
-    },
-    // 콘텐츠 수정 모달 오픈
-    openEditModal() {
-      this.isModalActive = true;
-    },
-    // 메모 모달 오픈
-    openMemoModal() {
-      this.isMemoModalActive = true;
     },
   },
 };
