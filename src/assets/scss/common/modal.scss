@@ -58,7 +58,7 @@
     }
     .contents-modal__date-description {
       @include font(13px, 400, $color-gray-8);
-      width: 260px;
+      width: 280px;
       margin-left: 10px;
     }
   }
@@ -74,6 +74,9 @@
         margin-right: 5px;
       }
     }
+  }
+  .modal-card__btn__wrapper {
+    margin-top: 30px;
   }
 }
 

@@ -65,17 +65,7 @@
         </div>
       </div>
 
-      <!-- 콜렉션 안내 문구 및 버튼 -->
-      <div class="modal-card__collection__wrapper">
-        <span class="modal-card__text"
-          ><img :src="alert_circle" />여러 링크들을 묶어서 저장하고
-          싶다면?</span
-        >
-        <button class="btn--transparent btn__collection">
-          콜렉션으로 저장하기 >>
-        </button>
-      </div>
-      <div class="flex-container-col">
+      <div class="flex-container-col modal-card__btn__wrapper">
         <button
           :disabled="!contentsData.link"
           @click="editContent()"
