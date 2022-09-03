@@ -71,18 +71,6 @@
   }
 }
 
-// 즐겨찾기 콘텐츠
-.favorite-content {
-  width: 100%;
-  @extend .content;
-  .favorite-content__header-wrapper {
-    @include layout(row, center, flex-start);
-    img {
-      margin-left: 5px;
-    }
-  }
-}
-
 .contents__wrapper {
   @include layout(row, flex-start, space-between);
 }
@@ -102,4 +90,78 @@
 .unclassified-content {
   @extend .content;
   width: 49%;
+}
+
+/********* 즐겨찾기 *********/
+
+// 즐겨찾기 콘텐츠
+.favorite-content {
+  width: 100%;
+  @extend .content;
+  .favorite-content__header-wrapper {
+    cursor: pointer;
+    width: 100%;
+    padding: 0 0 0 25px;
+    @include layout(row, center, flex-start);
+    img {
+      margin-left: 5px;
+    }
+  }
+}
+
+.favorite-lists {
+  height: 194px;
+  width: 100%;
+  background-color: $color-gray-1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.13);
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 5px 19px 24px 19px;
+  overflow-y: scroll;
+  position: relative;
+  flex-wrap: wrap;
+  @include layout(row, flex-start, flex-start);
+  gap: 18px;
+  top: -10px;
+  .favorite-list {
+    .favorite-list__wrapper {
+      @include layout(column, flex-start, center);
+      .favorite-list__img-wrapper {
+        @include layout(column, flex-start, center);
+        margin-bottom: 5px;
+        .favorite-list__img {
+          width: 158px;
+          height: 97px;
+          background-color: #d9d9d9;
+          position: relative;
+          .favorite-list__expiry {
+            background-color: $color-components-2;
+            @include font(11px, 400, $color-gray-1);
+            box-sizing: border-box;
+            padding: 2px 5px;
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+      }
+      .favorite-list__btn-wrapper {
+        display: flex;
+        gap: 5px;
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+      }
+      .favorite-list__title {
+        @include font(14px, 400, $color-black-text);
+        margin: 0 0 5px 0;
+        width: 158px;
+      }
+      .favorite-list__inner {
+        @include layout(row, center, flex-start);
+        gap: 5px;
+        @include font(10px, 400, $color-primary);
+      }
+    }
+  }
 }

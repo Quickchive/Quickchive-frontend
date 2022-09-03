@@ -90,6 +90,11 @@ const routes = [
           import("@/components/category/AllCategoryComponent.vue"),
       },
       {
+        path: "/category/favorite",
+        component: () =>
+          import("@/components/category/FavoriteCategoryComponent.vue"),
+      },
+      {
         path: "/category/:id",
         component: () => import("@/components/category/CategoryComponent.vue"),
       },
