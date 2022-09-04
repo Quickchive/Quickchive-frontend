@@ -117,8 +117,14 @@
   }
 }
 
+.alert-modal {
+  @extend .modal;
+  z-index: 100 !important;
+}
+
 .alert-modal-card {
   @extend .confirm-modal-card;
+  z-index: 10000 !important;
   .modal-card__button-wrapper {
     height: 56px;
     border-top: 1px solid $color-gray-4;
@@ -166,6 +172,11 @@
 .modal-card__btn__wrapper {
   margin-top: 30px;
   width: 100%;
+  button {
+    &:disabled {
+      cursor: auto;
+    }
+  }
 }
 
 .link__wrapper {

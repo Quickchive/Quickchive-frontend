@@ -15,7 +15,7 @@
       <div class="modal-card__wrapper">
         <div class="flex-container modal-form__wrapper">
           <div class="register-form__wrapper">
-            <label class="register-form__label">콜렉션 이름</label>
+            <label class="register-form__label">콜렉션 이름<em>*</em></label>
             <input v-model="title" placeholder="10자 이하 권장" />
           </div>
           <div class="register-form__wrapper category__wrapper">
@@ -32,21 +32,13 @@
         <!-- 콜렉션 설명 -->
         <div class="register-form__wrapper">
           <label class="register-form__label">콜렉션 설명</label>
-          <input
-            v-model="description"
-            placeholder="100자 이하"
-            maxlength="100"
-          />
+          <input v-model="comment" placeholder="100자 이하" maxlength="100" />
         </div>
 
         <!-- 링크 -->
         <div class="register-form__wrapper">
-          <label class="register-form__label">링크</label>
+          <label class="register-form__label">링크<em>*</em></label>
           <div class="link__wrapper">
-            <!-- <div class="link__wrapper-inner">
-              <div class="link__index">1</div>
-              <input v-model="linkList[0]" placeholder="URL 입력" />
-            </div> -->
             <div
               v-for="(link, index) in linkList"
               :key="index"
@@ -74,9 +66,22 @@
 
       <!-- 버튼 -->
       <div class="flex-container-col modal-card__btn__wrapper">
-        <button class="btn--sm btnPrimary">저장</button>
+        <button
+          @click="createCollection()"
+          :disabled="linkList == '' || !title"
+          class="btn--sm btnPrimary"
+        >
+          저장
+        </button>
       </div>
     </div>
+    <!-- 에러 모달 -->
+    <alert-modal-component
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></alert-modal-component>
   </div>
 </template>
 
@@ -89,8 +94,11 @@ import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
 import { fetchMyCategory } from "@/api/user";
 import { validateLink } from "@/utils/validation";
+import { addCollection } from "@/api/collection";
+import AlertModalComponent from "./AlertModalComponent.vue";
 
 export default {
+  components: { AlertModalComponent },
   name: "ModalComponent",
   data() {
     return {
@@ -106,8 +114,11 @@ export default {
       // 폼 항목
       title: "",
       categoryName: -1,
-      description: "",
-      linkInputs: 0,
+      comment: "",
+      // 경고 모달 메시지
+      alertModalContent: "같은 제목의 콜렉션이 \n이미 저장되어 있습니다.",
+      btnMessage: "네",
+      isAlertModalActive: false,
     };
   },
   props: {
@@ -144,6 +155,31 @@ export default {
     // 인풋 추가 이벤트
     deleteInput(index) {
       this.linkList.splice(index, 1);
+    },
+    // 콜렉션 추가
+    async createCollection() {
+      const collectionData = {
+        title: this.title,
+        contentLinkList: this.linkList.filter(function (item) {
+          return item !== null && item !== undefined && item !== "";
+        }),
+        categoryName: this.categoryName,
+        comment: this.comment,
+      };
+      // 설명 없는 경우 설명 값 삭제
+      if (this.comment == "") {
+        delete collectionData.comment;
+      }
+      try {
+        const response = await addCollection(collectionData);
+        console.log(response);
+        console.log(" 최종 보낼 값", collectionData);
+      } catch (error) {
+        console.log(error);
+        // 409: 같은 title의 collection이 존재하는 경우
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };

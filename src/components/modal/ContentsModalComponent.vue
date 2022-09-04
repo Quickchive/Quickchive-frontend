@@ -198,9 +198,9 @@ export default {
       }
       // 링크가 2개 이상인 경우
       else if (this.countLink >= 2) {
-        const contentsLinks = this.link.split(" ");
-        console.log("모달컴포먼트", contentsLinks);
-        this.$emit("isLinkNotSingle", contentsLinks);
+        const linkList = this.linkList;
+        console.log("모달컴포먼트", linkList);
+        this.$emit("isLinkNotSingle", linkList);
       }
     },
     openCollectionModal() {
