@@ -64,7 +64,16 @@
           </div>
         </div>
       </div>
-
+      <div class="modal-card__btn__wrapper">
+        <div class="flex-container">
+          <button
+            @click="$emit('deleteContent')"
+            class="btn--transparent login-form__link-register"
+          >
+            콘텐츠 삭제
+          </button>
+        </div>
+      </div>
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
           :disabled="!contentsData.link"

@@ -18,7 +18,7 @@
             <img :src="memo" />
           </button>
           <img :src="category_line" />
-          <button class="btn--transparent">
+          <button @click="createFavorites()" class="btn--transparent">
             <img :src="star" v-show="contentsData.favorite" /><img
               :src="star_border"
               v-show="!contentsData.favorite"
@@ -45,7 +45,7 @@
     <contents-edit-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
-      @contents-event="editContents()"
+      @deleteContent="isAlertModalActive = true"
       :contentsData="contentsData"
     ></contents-edit-modal-component>
     <!-- 메모 모달 컴포넌트 -->
@@ -54,6 +54,13 @@
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
     ></memo-modal-component>
+    <!-- 경고 모달 컴포넌트 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="deleteContent()"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -67,11 +74,14 @@ import { countDday } from "@/utils/validation";
 import { validateLink, linkCounter } from "@/utils/validation";
 import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComponent.vue";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
+import { addFavorite, deleteContents } from "@/api/contents";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
   components: {
     ContentsEditModalComponent,
     MemoModalComponent,
+    AlertModalComponent,
   },
   data() {
     return {
@@ -81,20 +91,35 @@ export default {
       category_line,
       star_border,
       isModalActive: false,
-      isMemoModalActive: false,
       // 전달할 메모
+      isMemoModalActive: false,
       memoContents: "",
+      // 경고 모달
+      isAlertModalActive: false,
+      alertModalContent: "해당 콘텐츠를 삭제할까요?",
+      btnMessage: "네",
       // 폼 항목
       link: "",
       title: "",
       deadline: "",
       comment: "",
       categoryName: "미분류",
+      // 더미 데이터
+      contentsData: {
+        id: 1,
+        title: "제목",
+        link: "https://naver.com",
+        comment: "설명",
+        categoryName: "카테고리",
+        favorite: true,
+        description: "설명이고",
+        createdAt: "2022-09-09",
+      },
     };
   },
-  props: {
-    contentsData: Object,
-  },
+  // props: {
+  //   contentsData: Object,
+  // },
   created() {
     console.log("콘텐츠컴포넌트 데이터", this.contentsData);
     this.memoContents = this.contentsData.comment;
@@ -166,6 +191,31 @@ export default {
         // console.log(domain[1]);
       }
       return domain;
+    },
+    // 즐겨찾기 생성
+    async createFavorites(index) {
+      console.log("인덱스", index);
+      this.contentsData.favorite = !this.contentsData.favorite;
+      try {
+        const contentId = this.contentsData.id;
+        const response = await addFavorite(contentId);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 콘텐츠 삭제
+    async deleteContent() {
+      try {
+        const contentId = this.contentsData.id;
+        const response = await deleteContents(contentId);
+        console.log(response);
+        this.$emit("close-modal");
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };
