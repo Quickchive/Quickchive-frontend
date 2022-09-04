@@ -45,18 +45,18 @@
       v-if="isModalActive"
       @close-modal="isModalActive = false"
       @isLinkNotSingle="isLinkNotSingle"
-      :contentsLinks="contentsLinks"
-      @openCollectionModal="openCollectionModal"
       :linkList="linkList"
+      @openCollectionModal="openCollectionModal"
     ></contents-modal-component>
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
     <confirm-modal-component
       v-if="isConfirmModalActive"
       @rightBtn="addMultipleContents()"
-      @leftBtn="openCollectionModal()"
+      @leftBtn="openCollectionModal(linkList)"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
+      :linkList="linkList"
     ></confirm-modal-component>
     <!-- 중복 링크일 경우 모달 컴포넌트 -->
     <alert-modal-component
@@ -193,11 +193,11 @@ export default {
     backToTop() {
       window.scrollTo(0, 0);
     },
-    isLinkNotSingle(contentsLinks) {
+    isLinkNotSingle(linkList) {
+      this.linkList = linkList;
       this.isModalActive = false;
       this.isConfirmModalActive = true;
-      this.contentsLinks = contentsLinks;
-      console.log("메인컴포넌트", this.contentsLinks);
+      console.log("메인컴포넌트", this.linkList);
     },
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="alert-modal">
     <div class="overlay"></div>
     <div class="alert-modal-card">
       <div class="modal-card__header">

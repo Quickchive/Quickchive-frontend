@@ -2,7 +2,11 @@
   <div class="category-view">
     <h1 class="page-header">
       {{ categoryName
-      }}<button class="btn--transparent--img" @click="openCategoryModal()">
+      }}<button
+        v-if="categoryName == !'미분류'"
+        class="btn--transparent--img"
+        @click="openCategoryModal()"
+      >
         <img :src="setting" />
       </button>
     </h1>

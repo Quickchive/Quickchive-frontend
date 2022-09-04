@@ -99,7 +99,8 @@
 // 콜렉션 컴포넌트
 .collection-component {
   @extend .contents-component;
-
+  align-items: flex-end;
+  padding-bottom: 13px;
   .collection__wrapper-col {
     @extend .contents__wrapper-col;
     width: 100%;
@@ -132,7 +133,6 @@
       gap: 4px;
       box-sizing: border-box;
       padding-right: 8.3px;
-      margin-bottom: 11px;
       width: 100%;
       button {
         img {
