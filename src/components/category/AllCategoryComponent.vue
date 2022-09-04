@@ -54,8 +54,17 @@ export default {
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
-      // 콘텐츠 props 데이터
-      contentsData: {},
+      // 콘텐츠 더미 데이터
+      contentsData: [
+        {
+          id: 1,
+          title: "제목",
+          link: "https://naver.com",
+          comment: "설명",
+          categoryName: "카테고리",
+          favorites: true,
+        },
+      ],
       // 콜렉션 더미 데이터
       collectionData: {
         title: "비즈니스 모델 분석법",
