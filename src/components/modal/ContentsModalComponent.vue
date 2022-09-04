@@ -1,3 +1,4 @@
+<!-- 콘텐츠 추가 모달 -->
 <template>
   <div class="modal">
     <div class="overlay"></div>
@@ -49,7 +50,7 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
               <select v-model="categoryName" class="contents-modal__select">
-                <option value="null" selected>미분류</option>
+                <option value="-1" selected>미분류</option>
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
                 </option>
@@ -95,6 +96,12 @@
         </button>
       </div>
     </div>
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="this.AlertModalComponent = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -106,9 +113,10 @@ import alert_circle from "@/assets/icon/alert-circle.svg";
 import { addContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter, filterLink } from "@/utils/validation";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
-  name: "ModalComponent",
+  components: { AlertModalComponent },
   data() {
     return {
       closeBtn,
@@ -116,7 +124,6 @@ export default {
       star,
       alert_circle,
       isDetailSettingActive: false,
-
       // 내 카테고리 목록
       myCategories: {},
       // 폼 항목
@@ -128,6 +135,10 @@ export default {
       favorite: false,
       data: {},
       linkList: [],
+      // 경고 모달
+      isAlertModalActive: false,
+      AlertModalContent: "",
+      btnMessage: "네",
     };
   },
   mounted() {
@@ -177,22 +188,29 @@ export default {
     async createContent() {
       // 링크가 1개인 경우
       if (this.countLink == 1) {
-        if (
-          // 0. default: link, favorite
-          this.title == "" &&
-          this.deadline == "" &&
-          this.categoryName == null
-        ) {
+        const contentsData = {
+          link: this.link,
+          favorite: this.favorite,
+          comment: this.comment,
+          deadline: this.deadline,
+          categoryName: this.categoryName,
+          title: this.title,
+        };
+        Object.keys(contentsData).forEach(
+          (key) =>
+            (contentsData[key] == "" || contentsData[key] == undefined) &&
+            delete contentsData[key]
+        );
+        console.log(contentsData);
+        {
           try {
-            const data = {
-              link: this.link,
-              favorite: this.favorite,
-              comment: this.comment,
-            };
-            const response = await addContents(data);
-            console.log("0", response);
+            const response = await addContents(contentsData);
+            console.log(response);
+            this.$emit("close-modal");
           } catch (error) {
             console.log(error);
+            this.alertModalContent = error.response.message;
+            this.isAlertModalActive = true;
           }
         }
       }

@@ -38,7 +38,7 @@
                 v-model="contentsData.categoryName"
                 class="contents-modal__select"
               >
-                <option value="null" selected>미분류</option>
+                <option value="-1">미분류</option>
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
                 </option>
@@ -64,7 +64,16 @@
           </div>
         </div>
       </div>
-
+      <div class="modal-card__btn__wrapper">
+        <div class="flex-container">
+          <button
+            @click="$emit('deleteContent')"
+            class="btn--transparent login-form__link-register"
+          >
+            콘텐츠 삭제
+          </button>
+        </div>
+      </div>
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
           :disabled="!contentsData.link"
@@ -75,6 +84,12 @@
         </button>
       </div>
     </div>
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -86,9 +101,10 @@ import alert_circle from "@/assets/icon/alert-circle.svg";
 import { updateContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter } from "@/utils/validation";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
-  name: "ModalComponent",
+  components: { AlertModalComponent },
   data() {
     return {
       closeBtn,
@@ -97,22 +113,11 @@ export default {
       alert_circle,
       // 내 카테고리 목록
       myCategories: {},
-      // 폼 항목
-      link: "",
-      title: "",
-      deadline: "",
-      comment: "",
-      categoryName: -1,
-      favorite: false,
-      // contentsData: {
-      //   link: "",
-      //   title: "",
-      //   deadline: "",
-      //   comment: "",
-      //   categoryName: null,
-      //   favorite: false,
-      // },
       data: {},
+      // 경고 모달
+      isAlertModalActive: false,
+      AlertModalContent: "",
+      btnMessage: "네",
     };
   },
   props: {
@@ -157,18 +162,29 @@ export default {
     async editContent() {
       try {
         if (this.countLink == 1) {
-          const data = {
+          const contentsData = {
             id: this.contentsData.id,
             link: this.contentsData.link,
             favorite: this.contentsData.favorite,
             comment: this.contentsData.comment,
+            deadline: this.contentsData.deadline,
+            categoryName: this.contentsData.categoryName,
+            title: this.contentsData.title,
           };
-          const response = await updateContents(data);
+          Object.keys(contentsData).forEach(
+            (key) =>
+              (contentsData[key] == "" || contentsData[key] == undefined) &&
+              delete contentsData[key]
+          );
+          console.log(contentsData);
+          const response = await updateContents(contentsData);
           console.log(response);
           this.$emit("close-modal");
         }
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
       }
     },
   },
