@@ -27,6 +27,15 @@
               </option>
             </select>
           </div>
+          <div class="flex-container favorite__wrapper">
+            <button
+              @click="addFavorites()"
+              class="btn--transparent btn__favorites"
+            >
+              <img v-show="!favorite" :src="star_border" />
+              <img v-show="favorite" :src="star" />
+            </button>
+          </div>
         </div>
 
         <!-- 콜렉션 설명 -->
@@ -115,6 +124,7 @@ export default {
       title: "",
       categoryName: -1,
       comment: "",
+      favorite: false,
       // 경고 모달 메시지
       alertModalContent: "같은 제목의 콜렉션이 \n이미 저장되어 있습니다.",
       btnMessage: "네",
@@ -138,6 +148,9 @@ export default {
     },
   },
   methods: {
+    addFavorites() {
+      this.favorite = !this.favorite;
+    },
     // 자신의 카테고리 조회
     async getMyCategory() {
       try {
@@ -165,6 +178,7 @@ export default {
         }),
         categoryName: this.categoryName,
         comment: this.comment,
+        favorite: this.favorite,
       };
       // 설명 없는 경우 설명 값 삭제
       if (this.comment == "") {

@@ -2,11 +2,21 @@
   <div class="collection-view">
     <!-- 콜렉션 정보 설명 -->
     <header class="collection__header">
-      <span class="collection__header-name">Collection</span>
+      <div class="flex-container">
+        <span class="collection__header-name">Collection</span>
+        <button class="btn--transparent" @click="createFavorites()">
+          <img v-if="favorite" :src="star" />
+          <img v-if="!favorite" :src="star_gray" />
+        </button>
+      </div>
+
+      <!-- 즐겨찾기 -->
+
       <div class="flex-container">
         <p class="collection__header-title">
           {{ filterTitle(collectionTitle) }}
         </p>
+
         <span class="collection__header-num"
           >총 {{ collectionData.length }}개</span
         >
@@ -48,9 +58,16 @@
 
 <script>
 import { fetchMyCollections } from "@/api/user";
+import star from "@/assets/icon/star.svg";
+import star_gray from "@/assets/icon/star_gray.svg";
+import { addFavorite } from "@/api/contents";
+
 export default {
   data() {
     return {
+      favorite: false,
+      star,
+      star_gray,
       collectionTitle: "비즈니스 모델 분석법",
       collectionDescription:
         "비즈니스 모델 수립 및 분석은 PM의 핵심역량이다. 주니어 PM이 서비스를 개선하거나, 새로운 기능을 추가할 때 이 콜렉션을 본다면 많은 도움이 될 것이다. 공백포함 100자이내 ",
@@ -152,6 +169,19 @@ export default {
         // console.log(domain[1]);
       }
       return domain;
+    },
+    // 즐겨찾기 생성
+    async createFavorites() {
+      this.favorite = !this.favorite;
+      try {
+        const collectionId = this.collectionData.id;
+        const response = await addFavorite(collectionId);
+        console.log(response);
+        // 즐겨찾기 리스트 갱신
+        this.fetchFavoritesList();
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 설명 글자수 30자 이상
     filterDescript(description) {

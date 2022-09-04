@@ -100,6 +100,7 @@ export default {
       favoritesList: [
         // 더미데이터(테스트용)
         {
+          id: 0,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -108,6 +109,7 @@ export default {
           deadline: "2022-09-28",
         },
         {
+          id: 1,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -116,6 +118,7 @@ export default {
           deadline: "2022-09-28",
         },
         {
+          id: 2,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -123,6 +126,7 @@ export default {
           comment: "메모",
         },
         {
+          id: 3,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -130,6 +134,7 @@ export default {
           comment: "메모",
         },
         {
+          id: 4,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -137,6 +142,7 @@ export default {
           comment: "메모",
         },
         {
+          id: 5,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -144,6 +150,7 @@ export default {
           comment: "메모",
         },
         {
+          id: 6,
           title:
             "제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목v제목제목제목제목",
           createdAt: "2022-09-09",
@@ -152,6 +159,7 @@ export default {
           comment: "메모",
         },
         {
+          id: 7,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://naver.com",
@@ -159,6 +167,7 @@ export default {
           comment: "메모",
         },
         {
+          id: 8,
           title: "제목",
           createdAt: "2022-09-09",
           link: "http://www.youtube.com",
@@ -179,9 +188,9 @@ export default {
     // 즐겨찾기 생성
     async createFavorites(index) {
       console.log("인덱스", index);
-      this.contentsList[index].favorite = !this.contentsList[index].favorite;
+      this.favoritesList[index].favorite = !this.favoritesList[index].favorite;
       try {
-        const contentId = this.contentsList[index].id;
+        const contentId = this.favoritesList[index].id;
         const response = await addFavorite(contentId);
         console.log(response);
         // 즐겨찾기 리스트 갱신

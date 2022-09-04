@@ -1,11 +1,6 @@
 <template>
   <div class="category-view">
-    <h1 class="page-header">
-      전체
-      <button class="btn--transparent--img" @click="openCategoryModal()">
-        <img :src="setting" />
-      </button>
-    </h1>
+    <h1 class="page-header">전체</h1>
     <div>
       <div class="category__select-wrapper">
         <select v-model="categoryFilter">
@@ -19,9 +14,9 @@
         :key="index"
         :contentsData="contents"
       ></contents-component>
-      <!-- <collection-component
+      <collection-component
         :collectionData="collectionData"
-      ></collection-component> -->
+      ></collection-component>
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
     <category-modal-component
@@ -39,14 +34,14 @@
 <script>
 import setting from "@/assets/icon/settings.svg";
 import ContentsComponent from "@/components/contents/ContentsComponent.vue";
-// import CollectionComponent from "@/components/collection/CollectionComponent.vue";
+import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
 export default {
   components: {
     ContentsComponent,
-    // CollectionComponent,
+    CollectionComponent,
     CategoryModalComponent,
   },
   data() {
