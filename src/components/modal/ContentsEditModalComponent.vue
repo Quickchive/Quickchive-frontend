@@ -67,7 +67,7 @@
       <div class="modal-card__btn__wrapper">
         <div class="flex-container">
           <button
-            @click="$emit('deleteContent')"
+            @click="isDeleteModalActive = true"
             class="btn--transparent login-form__link-register"
           >
             콘텐츠 삭제
@@ -84,6 +84,14 @@
         </button>
       </div>
     </div>
+    <!-- 삭제 확인 모달 컴포넌트 -->
+    <AlertModalComponent
+      v-if="isDeleteModalActive == true"
+      :alertModalContent="deleteModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="deleteContent()"
+    ></AlertModalComponent>
+    <!-- 에러 모달 -->
     <AlertModalComponent
       v-if="isAlertModalActive == true"
       :alertModalContent="alertModalContent"
@@ -102,6 +110,7 @@ import { updateContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter } from "@/utils/validation";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { deleteContents } from "@/api/contents";
 
 export default {
   components: { AlertModalComponent },
@@ -118,6 +127,8 @@ export default {
       isAlertModalActive: false,
       AlertModalContent: "",
       btnMessage: "네",
+      deleteModalContent: "해당 콘텐츠를 삭제할까요?",
+      isDeleteModalActive: false,
     };
   },
   props: {
@@ -181,6 +192,20 @@ export default {
           console.log(response);
           this.$emit("close-modal");
         }
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
+    },
+    // 콘텐츠 삭제
+    async deleteContent() {
+      this.isDeleteModalActive = false;
+      try {
+        const contentId = this.contentsData.id;
+        const response = await deleteContents(contentId);
+        console.log(response);
+        this.$emit("close-modal");
       } catch (error) {
         console.log(error);
         this.alertModalContent = error.response.message;
