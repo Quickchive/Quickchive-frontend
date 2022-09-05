@@ -3,21 +3,21 @@
     <h1 class="page-header">전체</h1>
     <div>
       <div class="category__select-wrapper">
-        <select v-model="categoryFilter">
+        <select v-model="categoryFilter" @change="sortData(categoryFilter)">
           <option value="latest">최신순</option>
-          <option value="favoirtes">즐겨찾기순</option>
+          <option value="favorites">즐겨찾기순</option>
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
       <!-- 콘텐츠 컴포넌트 -->
       <contents-component
-        v-for="contents in contentsData"
+        v-for="contents in newContentsArr"
         :key="contents.createdAt"
         :contentsData="contents"
       ></contents-component>
       <!-- 콜렉션 컴포넌트 -->
       <collection-component
-        v-for="collection in collectionData"
+        v-for="collection in newCollectionArr"
         :key="collection.collectionId"
         :collectionData="collection"
       ></collection-component>
@@ -42,6 +42,8 @@ import CollectionComponent from "@/components/collection/CollectionComponent.vue
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
+import { sortLatest, sortFavorites, sortDeadline } from "@/utils/sort";
+
 export default {
   components: {
     ContentsComponent,
@@ -141,22 +143,29 @@ export default {
           favorites: false,
         },
       ],
+      newContentsArr: [],
+      newCollectionArr: [],
     };
   },
   created() {
     this.fetchContentsList();
+    // 콘텐츠 컴포넌트 최신순 정렬
+    this.newContentsArr = sortLatest(this.contentsData);
+    // 콜렉션 컴포넌트 최신순 정렬
+    this.newCollectionArr = sortLatest(this.collectionData);
   },
-  watch: {
-    categoryFilter: function () {
-      console.log(this.categoryFilter);
-    },
-  },
+  // watch: {
+  //   categoryFilter: function () {
+  //     // console.log(this.categoryFilter);
+  //     this.sortData();
+  //   },
+  // },
+  computed: {},
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
       try {
         const response = await fetchMyContents();
-
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.contents;
         console.log("콘텐츠 데이터", this.contentsData);
@@ -201,6 +210,24 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+      }
+    },
+    // 정렬
+    sortData(filter) {
+      console.log("정렬 메소드");
+      // 최신순
+      if (filter == "favorites") {
+        console.log("즐겨찾기 순으로 정렬한다.");
+        this.newContentsArr = sortFavorites(this.contentsData);
+        this.newCollectionArr = sortFavorites(this.collectionData);
+      } else if (filter == "latest") {
+        console.log("최신 순으로 정렬한다.");
+        this.newContentsArr = sortLatest(this.contentsData);
+        this.newCollectionArr = sortLatest(this.collectionData);
+      } else if (filter == "expiry") {
+        console.log("만기 순으로 정렬한다.");
+        this.newContentsArr = sortDeadline(this.contentsData);
+        this.newCollectionArr = sortDeadline(this.collectionData);
       }
     },
   },
