@@ -7,6 +7,7 @@
   left: 0;
   top: 0;
   z-index: 10;
+  overflow-y: scroll;
 }
 
 .overlay {
@@ -210,12 +211,9 @@
       left: 10px;
     }
     input {
-      text-indent: 40px;
       width: 100%;
       padding-right: 52px;
-      &::placeholder {
-        text-indent: 40px;
-      }
+      padding-left: 30px;
     }
     .btn__deleteLink {
       position: absolute;
