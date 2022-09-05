@@ -65,7 +65,7 @@
             >
               <div class="link__index">{{ index + 1 }}</div>
               <input
-                v-model="collectionData.contentLinkList"
+                v-model="collectionData.contentLinkList[index]"
                 placeholder="URL 입력"
               />
               <button
