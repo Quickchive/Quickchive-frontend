@@ -5,11 +5,11 @@
       <p class="contents__title" @click="toLink(contentsData.link)">
         {{ filterTitle(contentsData.title) }}
       </p>
-      <p class="contents__contents">
+      <p class="contents__contents" v-if="contentsData.comment">
         {{ filterDescript(contentsData.comment) }}
       </p>
       <div class="contents__inner">
-        <p class="contents__domain">
+        <p class="contents__domain" v-if="contentsData.link">
           {{ filterDomain(contentsData.link) }} |
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>

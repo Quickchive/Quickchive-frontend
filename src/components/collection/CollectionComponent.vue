@@ -14,14 +14,16 @@
           </ul>
         </div>
 
-        <div
-          v-for="(list, index) in collectionData.lists"
-          :key="index"
-          class="collection__list-num"
-        >
-          <span v-if="index == 4"
-            >&nbsp;외 {{ collectionData.lists.length - index }}개</span
+        <div v-if="collectionData.lists">
+          <div
+            v-for="(list, index) in collectionData.lists"
+            :key="index"
+            class="collection__list-num"
           >
+            <span v-if="index == 4"
+              >&nbsp;외 {{ collectionData.lists.length - index }}개</span
+            >
+          </div>
         </div>
       </div>
       <div class="collection__btn-wrapper">
@@ -40,7 +42,9 @@
     <div class="collection__wrapper">
       <!-- 이미지 -->
       <div class="collection__img">
-        <div class="collection__num">+{{ collectionData.lists.length }}</div>
+        <div v-if="collectionData.lists" class="collection__num">
+          +{{ collectionData.lists.length }}
+        </div>
       </div>
       <button class="btn--transparent"><img :src="edit" /></button>
     </div>
@@ -99,11 +103,10 @@ export default {
       this.memoContents = this.collectionData.comment;
     },
     // 즐겨찾기 생성
-    async createFavorites(index) {
-      console.log("인덱스", index);
+    async createFavorites() {
       this.collectionData.favorites = !this.collectionData.favorites;
       try {
-        const contentId = this.collectionData[index].id;
+        const contentId = this.collectionData.collectionId;
         const response = await addFavorite(contentId);
         console.log(response);
       } catch (error) {

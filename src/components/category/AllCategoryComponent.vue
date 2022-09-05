@@ -10,17 +10,17 @@
         </select>
       </div>
       <!-- 콘텐츠 컴포넌트 -->
-      <contents-component
-        v-for="contents in newContentsArr"
-        :key="contents.createdAt"
-        :contentsData="contents"
-      ></contents-component>
-      <!-- 콜렉션 컴포넌트 -->
-      <collection-component
-        v-for="collection in newCollectionArr"
-        :key="collection.collectionId"
-        :collectionData="collection"
-      ></collection-component>
+      <div v-for="(data, index) in newArr" :key="index">
+        <contents-component
+          :contentsData="data"
+          v-if="!newArr[index].collectionId"
+        ></contents-component>
+        <!-- 콜렉션 컴포넌트 -->
+        <collection-component
+          v-if="!newArr[index].id && !newArr[index].deadline"
+          :collectionData="data"
+        ></collection-component>
+      </div>
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
     <category-modal-component
@@ -42,7 +42,7 @@ import CollectionComponent from "@/components/collection/CollectionComponent.vue
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
-import { sortLatest, sortFavorites, sortDeadline } from "@/utils/sort";
+import { sortLatestArr, sortFavoritesArr, sortDeadline } from "@/utils/sort";
 
 export default {
   components: {
@@ -145,21 +145,15 @@ export default {
       ],
       newContentsArr: [],
       newCollectionArr: [],
+      newArr: [],
     };
   },
   created() {
     this.fetchContentsList();
     // 콘텐츠 컴포넌트 최신순 정렬
-    this.newContentsArr = sortLatest(this.contentsData);
-    // 콜렉션 컴포넌트 최신순 정렬
-    this.newCollectionArr = sortLatest(this.collectionData);
+    this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+    console.log("newArr", this.newArr);
   },
-  // watch: {
-  //   categoryFilter: function () {
-  //     // console.log(this.categoryFilter);
-  //     this.sortData();
-  //   },
-  // },
   computed: {},
   methods: {
     // 나의 콘텐츠 조회
@@ -218,16 +212,15 @@ export default {
       // 최신순
       if (filter == "favorites") {
         console.log("즐겨찾기 순으로 정렬한다.");
-        this.newContentsArr = sortFavorites(this.contentsData);
-        this.newCollectionArr = sortFavorites(this.collectionData);
+        this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
       } else if (filter == "latest") {
         console.log("최신 순으로 정렬한다.");
-        this.newContentsArr = sortLatest(this.contentsData);
-        this.newCollectionArr = sortLatest(this.collectionData);
+        this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
         console.log("만기 순으로 정렬한다.");
-        this.newContentsArr = sortDeadline(this.contentsData);
-        this.newCollectionArr = sortDeadline(this.collectionData);
+        // 현재 콜렉션은 만기 없으니까 콘텐츠만 정렬함
+        this.newArr = sortDeadline(this.contentsData);
+        console.log(this.newArr);
       }
     },
   },
