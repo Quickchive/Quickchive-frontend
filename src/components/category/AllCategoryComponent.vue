@@ -9,13 +9,17 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
+      <!-- 콘텐츠 컴포넌트 -->
       <contents-component
-        v-for="(contents, index) in contentsData"
-        :key="index"
+        v-for="contents in contentsData"
+        :key="contents.createdAt"
         :contentsData="contents"
       ></contents-component>
+      <!-- 콜렉션 컴포넌트 -->
       <collection-component
-        :collectionData="collectionData"
+        v-for="collection in collectionData"
+        :key="collection.collectionId"
+        :collectionData="collection"
       ></collection-component>
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
@@ -57,30 +61,95 @@ export default {
       // 콘텐츠 더미 데이터
       contentsData: [
         {
-          id: 1,
+          id: 0,
           title: "제목",
           link: "https://naver.com",
           comment: "설명",
           categoryName: "카테고리",
           favorites: true,
+          deadline: "2022-09-27",
+          createdAt: "2022-08-01",
+        },
+        {
+          id: 1,
+          title: "제목",
+          link: "https://youtube.com",
+          comment: "설명",
+          categoryName: "카테고리",
+          favorites: true,
+          deadline: "2022-12-27",
+          createdAt: "2022-07-01",
+        },
+        {
+          id: 2,
+          title: "제목",
+          link: "https://naver.com",
+          comment: "설명",
+          categoryName: "카테고리",
+          favorites: false,
+          createdAt: "2022-01-01",
+        },
+        {
+          id: 3,
+          title: "제목",
+          link: "https://naver.com",
+          comment: "설명",
+          categoryName: "카테고리",
+          favorites: true,
+          deadline: "2022-10-27",
+          createdAt: "2022-02-01",
+        },
+        {
+          id: 4,
+          title: "제목",
+          link: "https://naver.com",
+          comment: "설명",
+          categoryName: "카테고리",
+          favorites: false,
+          createdAt: "2022-04-01",
         },
       ],
       // 콜렉션 더미 데이터
-      collectionData: {
-        title: "비즈니스 모델 분석법",
-        lists: [
-          "10년차 컨설턴트의 게스티네이션 노하우",
-          "KSF모델로 보는 경쟁사 분석",
-          "수익모델 분석방법",
-          "AARRR분석하기 기초",
-          "분석하기 고급",
-        ],
-        favorites: true,
-      },
+      collectionData: [
+        {
+          collectionId: 0,
+          title: "비즈니스 모델 분석법",
+          createdAt: "2022-04-01",
+          lists: [
+            "10년차 컨설턴트의 게스티네이션 노하우",
+            "KSF모델로 보는 경쟁사 분석",
+            "수익모델 분석방법",
+            "AARRR분석하기 기초",
+            "분석하기 고급",
+          ],
+          favorites: true,
+        },
+        {
+          collectionId: 1,
+          title: "애자일 방법론",
+          createdAt: "2022-08-23",
+          comment: "애자일 방법론에 대하여",
+          lists: [
+            "10년차 컨설턴트의 게스티네이션 노하우1",
+            "KSF모델로 보는 경쟁사 분석12",
+            "수익모델 분석방법3",
+            "AARRR분석하기 기초r",
+            "분석하기 고급3",
+            "AARRR분석하기 기초s",
+            "분석하기 고급s",
+          ],
+          favorites: false,
+        },
+      ],
     };
   },
   created() {
     this.fetchContentsList();
+  },
+  watch: {
+    categoryFilter: function () {
+      console.log(this.categoryFilter);
+    },
   },
   methods: {
     // 나의 콘텐츠 조회

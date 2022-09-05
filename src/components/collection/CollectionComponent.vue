@@ -74,25 +74,25 @@ export default {
       isMemoModalActive: false,
       // 메모 모달
       memoContents: "",
-      collectionData: {
-        title: "제목",
-        lists: [
-          "링크목록",
-          "링크목록",
-          "링크목록,",
-          "링크목록,",
-          "링크목록,",
-          "링크목록,",
-        ],
-        comment: "설명",
-        categoryName: "카테고리",
-        favorites: true,
-      },
+      // collectionData: {
+      //   title: "제목",
+      //   lists: [
+      //     "링크목록",
+      //     "링크목록",
+      //     "링크목록,",
+      //     "링크목록,",
+      //     "링크목록,",
+      //     "링크목록,",
+      //   ],
+      //   comment: "설명",
+      //   categoryName: "카테고리",
+      //   favorites: true,
+      // },
     };
   },
-  // props: {
-  //   collectionData: Array,
-  // },
+  props: {
+    collectionData: Object,
+  },
   methods: {
     openMemoModal() {
       this.isMemoModalActive = true;
