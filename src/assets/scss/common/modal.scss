@@ -179,12 +179,15 @@
 }
 
 .modal-card__btn__wrapper {
-  margin-top: 30px;
+  margin-top: 20px;
   width: 100%;
   button {
     &:disabled {
       cursor: auto;
     }
+  }
+  .btn--plus {
+    width: auto !important;
   }
 }
 
