@@ -45,7 +45,6 @@
     <contents-edit-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
-      @deleteContent="isAlertModalActive = true"
       :contentsData="contentsData"
     ></contents-edit-modal-component>
     <!-- 메모 모달 컴포넌트 -->
@@ -59,7 +58,6 @@
       v-if="isAlertModalActive == true"
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
-      @confirmBtn="deleteContent()"
     ></AlertModalComponent>
   </div>
 </template>
@@ -74,7 +72,7 @@ import { countDday } from "@/utils/validation";
 import { validateLink, linkCounter } from "@/utils/validation";
 import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComponent.vue";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { addFavorite, deleteContents } from "@/api/contents";
+import { addFavorite } from "@/api/contents";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
@@ -96,7 +94,6 @@ export default {
       memoContents: "",
       // 경고 모달
       isAlertModalActive: false,
-      alertModalContent: "해당 콘텐츠를 삭제할까요?",
       btnMessage: "네",
       // 폼 항목
       link: "",
@@ -202,19 +199,6 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
-      }
-    },
-    // 콘텐츠 삭제
-    async deleteContent() {
-      try {
-        const contentId = this.contentsData.id;
-        const response = await deleteContents(contentId);
-        console.log(response);
-        this.$emit("close-modal");
-      } catch (error) {
-        console.log(error);
-        this.alertModalContent = error.response.message;
-        this.isAlertModalActive = true;
       }
     },
   },
