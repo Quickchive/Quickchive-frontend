@@ -70,7 +70,9 @@
     <collection-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      :linkList="linkList"
+      :collectionData="collectionData"
+      :collectionModalTitle="collectionModalTitle"
+      @collectionEvent="createCollection()"
     ></collection-modal-component>
   </div>
 </template>
@@ -89,6 +91,7 @@ import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
+import { addCollection } from "@/api/collection";
 
 export default {
   components: {
@@ -125,6 +128,11 @@ export default {
       myCategories: {},
       categoryAll: "전체",
       linkList: [],
+      collectionData: {
+        contentLinkList: [],
+        favorite: false,
+      },
+      collectionModalTitle: "콜렉션 추가",
     };
   },
   created() {
@@ -206,6 +214,7 @@ export default {
         contentLinks: this.linkList,
       };
       try {
+        console.log("다수의 콘텐츠 추가 메소드", contentsData);
         const response = await addMultipleContents(contentsData);
         console.log(response);
       } catch (error) {
@@ -233,10 +242,23 @@ export default {
     },
     // 콜렉션 추가 모달 열기
     openCollectionModal(linkList) {
-      this.linkList = linkList;
+      this.collectionData.contentLinkList = linkList;
       this.isConfirmModalActive = false;
       this.isModalActive = false;
       this.isCollectionModalActive = true;
+    },
+    // 콜렉션 추가 이벤트
+    async createCollection(collectionData) {
+      try {
+        const response = await addCollection(collectionData);
+        console.log(response);
+        this.$emit("close-modal");
+        console.log(" 최종 보낼 값", collectionData);
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };
