@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <div class="collection-modal-card">
       <div class="modal-card__header">
-        <h1>콜렉션 추가</h1>
+        <h1>{{ collectionModalTitle }}</h1>
         <button
           type="button"
           class="btn--transparent btn__close"
@@ -16,11 +16,17 @@
         <div class="flex-container modal-form__wrapper">
           <div class="register-form__wrapper">
             <label class="register-form__label">콜렉션 이름<em>*</em></label>
-            <input v-model="title" placeholder="10자 이하 권장" />
+            <input
+              v-model="collectionData.title"
+              placeholder="10자 이하 권장"
+            />
           </div>
           <div class="register-form__wrapper category__wrapper">
             <label class="register-form__label">카테고리</label>
-            <select v-model="categoryName" class="contents-modal__select">
+            <select
+              v-model="collectionData.categoryName"
+              class="contents-modal__select"
+            >
               <option value="-1" selected>미분류</option>
               <option v-for="(category, index) in myCategories" :key="index">
                 {{ category.name }}
@@ -32,8 +38,8 @@
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-              <img v-show="!favorite" :src="star_border" />
-              <img v-show="favorite" :src="star" />
+              <img v-show="!collectionData.favorite" :src="star_border" />
+              <img v-show="collectionData.favorite" :src="star" />
             </button>
           </div>
         </div>
@@ -41,7 +47,11 @@
         <!-- 콜렉션 설명 -->
         <div class="register-form__wrapper">
           <label class="register-form__label">콜렉션 설명</label>
-          <input v-model="comment" placeholder="100자 이하" maxlength="100" />
+          <input
+            v-model="collectionData.comment"
+            placeholder="100자 이하"
+            maxlength="100"
+          />
         </div>
 
         <!-- 링크 -->
@@ -49,12 +59,15 @@
           <label class="register-form__label">링크<em>*</em></label>
           <div class="link__wrapper">
             <div
-              v-for="(link, index) in linkList"
+              v-for="(content, index) in this.collectionData.contentLinkList"
               :key="index"
               class="link__wrapper-inner"
             >
               <div class="link__index">{{ index + 1 }}</div>
-              <input v-model="linkList[index]" placeholder="URL 입력" />
+              <input
+                v-model="collectionData.contentLinkList"
+                placeholder="URL 입력"
+              />
               <button
                 v-if="index > 0"
                 @click="deleteInput(index)"
@@ -76,21 +89,16 @@
       <!-- 버튼 -->
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
-          @click="createCollection()"
-          :disabled="linkList == '' || !title"
+          @click="collectionEvent()"
+          :disabled="
+            collectionData.contentLinkList == '' || !collectionData.title
+          "
           class="btn--sm btnPrimary"
         >
           저장
         </button>
       </div>
     </div>
-    <!-- 에러 모달 -->
-    <alert-modal-component
-      v-if="isAlertModalActive == true"
-      :alertModalContent="alertModalContent"
-      :btnMessage="btnMessage"
-      @confirmBtn="isAlertModalActive = false"
-    ></alert-modal-component>
   </div>
 </template>
 
@@ -102,13 +110,8 @@ import alert_circle from "@/assets/icon/alert-circle.svg";
 import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
 import { fetchMyCategory } from "@/api/user";
-import { validateLink } from "@/utils/validation";
-import { addCollection } from "@/api/collection";
-import AlertModalComponent from "./AlertModalComponent.vue";
 
 export default {
-  components: { AlertModalComponent },
-  name: "ModalComponent",
   data() {
     return {
       closeBtn,
@@ -120,36 +123,27 @@ export default {
       minus,
       // 내 카테고리 목록
       myCategories: {},
-      // 폼 항목
-      title: "",
-      categoryName: -1,
-      comment: "",
-      favorite: false,
-      // 경고 모달 메시지
-      alertModalContent: "같은 제목의 콜렉션이 \n이미 저장되어 있습니다.",
-      btnMessage: "네",
-      isAlertModalActive: false,
     };
   },
   props: {
-    linkList: Array,
-  },
-  mounted() {
-    this.getMyCategory();
-  },
-  computed: {
-    // 링크 여부 확인
-    isTextLink() {
-      if (this.linkList != "") {
-        return validateLink(this.linkList);
-      } else {
-        return null;
-      }
+    collectionModalTitle: String,
+    collectionData: {
+      favorite: Boolean,
+
+      contentLinkList: Array,
+      title: String,
+      categoryName: String,
+      comment: String,
+      collectionId: Number,
     },
+  },
+  created() {
+    this.getMyCategory();
   },
   methods: {
     addFavorites() {
-      this.favorite = !this.favorite;
+      this.collectionData.favorite = !this.collectionData.favorite;
+      console.log("즐찾", this.collectionData.favorite);
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
@@ -163,37 +157,34 @@ export default {
     },
     // 인풋 추가 이벤트
     createInput() {
-      this.linkList.push("");
+      this.collectionData.contentLinkList.push("");
     },
     // 인풋 추가 이벤트
     deleteInput(index) {
-      this.linkList.splice(index, 1);
+      this.collectionData.contentLinkList.splice(index, 1);
     },
-    // 콜렉션 추가
-    async createCollection() {
+    // 콜렉션 이벤트 ( 콜렉션 추가, 수정 )
+    collectionEvent() {
       const collectionData = {
-        title: this.title,
-        contentLinkList: this.linkList.filter(function (item) {
+        title: this.collectionData.title,
+        comment: this.collectionData.comment,
+        categoryName: this.collectionData.categoryName,
+        contentLinkList: this.collectionData.contentLinkList.filter(function (
+          item
+        ) {
           return item !== null && item !== undefined && item !== "";
         }),
-        categoryName: this.categoryName,
-        comment: this.comment,
-        favorite: this.favorite,
+        collectionId: this.collectionData.collectionId,
+        // 즐겨찾기 추가됨
+        favorite: this.collectionData.favorite,
       };
-      // 설명 없는 경우 설명 값 삭제
-      if (this.comment == "") {
-        delete collectionData.comment;
-      }
-      try {
-        const response = await addCollection(collectionData);
-        console.log(response);
-        console.log(" 최종 보낼 값", collectionData);
-      } catch (error) {
-        console.log(error);
-        // 409: 같은 title의 collection이 존재하는 경우
-        this.alertModalContent = error.response.message;
-        this.isAlertModalActive = true;
-      }
+      Object.keys(collectionData).forEach(
+        (key) =>
+          (collectionData[key] == "" || collectionData[key] == undefined) &&
+          delete collectionData[key]
+      );
+      console.log("콜렉션 모달", collectionData);
+      this.$emit("collectionEvent", collectionData);
     },
   },
 };

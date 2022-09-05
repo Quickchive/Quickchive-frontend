@@ -20,12 +20,17 @@
     text-align: left;
     margin: 0 5px 3px 0;
   }
-  .collection__header-title {
-    @include font(22px, 400, $color-gray-5);
-    margin: 0 5px 0 0;
-  }
-  .collection__header-num {
-    @include font(12px, 400, $color-gray-5);
+  .collection__header-wrapper {
+    width: 100%;
+    @include layout(row, flex-start, space-between);
+
+    .collection__header-title {
+      @include font(22px, 400, $color-gray-5);
+      margin: 0 5px 0 0;
+    }
+    .collection__header-num {
+      @include font(12px, 400, $color-gray-5);
+    }
   }
   .collection__header-description {
     margin: 7px 0 0 0;
