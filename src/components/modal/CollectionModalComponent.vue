@@ -38,8 +38,8 @@
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-              <img v-show="!collectionData.favorite" :src="star_border" />
-              <img v-show="collectionData.favorite" :src="star" />
+              <img v-show="!collectionData.favorites" :src="star_border" />
+              <img v-show="collectionData.favorites" :src="star" />
             </button>
           </div>
         </div>
@@ -162,7 +162,7 @@ export default {
   props: {
     collectionModalTitle: String,
     collectionData: {
-      favorite: Boolean,
+      favorites: Boolean,
       contentLinkList: Array,
       title: String,
       categoryName: String,
@@ -175,8 +175,8 @@ export default {
   },
   methods: {
     addFavorites() {
-      this.collectionData.favorite = !this.collectionData.favorite;
-      console.log("즐찾", this.collectionData.favorite);
+      this.collectionData.favorites = !this.collectionData.favorites;
+      console.log("즐찾", this.collectionData.favorites);
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
@@ -209,7 +209,7 @@ export default {
         }),
         collectionId: this.collectionData.collectionId,
         // 즐겨찾기 추가됨
-        favorite: this.collectionData.favorite,
+        favorite: this.collectionData.favorites,
       };
       Object.keys(collectionData).forEach(
         (key) =>

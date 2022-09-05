@@ -117,7 +117,7 @@ export default {
           collectionId: 0,
           title: "비즈니스 모델 분석법",
           createdAt: "2022-04-01",
-          lists: [
+          contentLinkList: [
             "10년차 컨설턴트의 게스티네이션 노하우",
             "KSF모델로 보는 경쟁사 분석",
             "수익모델 분석방법",
@@ -131,7 +131,7 @@ export default {
           title: "애자일 방법론",
           createdAt: "2022-08-23",
           comment: "애자일 방법론에 대하여",
-          lists: [
+          contentLinkList: [
             "10년차 컨설턴트의 게스티네이션 노하우1",
             "KSF모델로 보는 경쟁사 분석12",
             "수익모델 분석방법3",
