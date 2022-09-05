@@ -79,13 +79,22 @@
           </div>
 
           <div class="flex-container-col modal-card__btn__wrapper">
-            <button @click="createInput()" class="btn--transparent">
+            <button @click="createInput()" class="btn--transparent btn--plus">
               <img :src="add_link" />
             </button>
           </div>
         </div>
       </div>
-
+      <div class="modal-card__btn__wrapper">
+        <div class="flex-container">
+          <button
+            @click="isDeleteModalActive = true"
+            class="btn--transparent login-form__link-register"
+          >
+            콘텐츠 삭제
+          </button>
+        </div>
+      </div>
       <!-- 버튼 -->
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
@@ -99,6 +108,20 @@
         </button>
       </div>
     </div>
+    <!-- 삭제 확인용 모달 -->
+    <AlertModalComponent
+      v-if="isDeleteModalActive == true"
+      :alertModalContent="deleteModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="deleteCollection()"
+    ></AlertModalComponent>
+    <!-- 에러 모달 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -110,8 +133,12 @@ import alert_circle from "@/assets/icon/alert-circle.svg";
 import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
 import { fetchMyCategory } from "@/api/user";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { deleteCollection } from "@/api/collection";
 
 export default {
+  components: { AlertModalComponent },
+
   data() {
     return {
       closeBtn,
@@ -123,13 +150,19 @@ export default {
       minus,
       // 내 카테고리 목록
       myCategories: {},
+      // 경고 모달
+      isAlertModalActive: false,
+      alertModalContent: "",
+      btnMessage: "네",
+      // 삭제 경고 모달
+      isDeleteModalActive: false,
+      deleteModalContent: "해당 콜렉션을 \n삭제하시겠습니까?",
     };
   },
   props: {
     collectionModalTitle: String,
     collectionData: {
       favorite: Boolean,
-
       contentLinkList: Array,
       title: String,
       categoryName: String,
@@ -185,6 +218,21 @@ export default {
       );
       console.log("콜렉션 모달", collectionData);
       this.$emit("collectionEvent", collectionData);
+    },
+    // 콜렉션 삭제
+    async deleteCollection() {
+      this.isDeleteModalActive = false;
+      try {
+        const response = await deleteCollection(
+          this.collectionData.collectionId
+        );
+        console.log(response);
+        this.$emit("close-modal");
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };
