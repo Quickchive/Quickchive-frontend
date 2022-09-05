@@ -5,11 +5,11 @@
       <p class="contents__title" @click="toLink(contentsData.link)">
         {{ filterTitle(contentsData.title) }}
       </p>
-      <p class="contents__contents">
-        {{ filterDescript(contentsData.description) }}
+      <p class="contents__contents" v-if="contentsData.comment">
+        {{ filterDescript(contentsData.comment) }}
       </p>
       <div class="contents__inner">
-        <p class="contents__domain">
+        <p class="contents__domain" v-if="contentsData.link">
           {{ filterDomain(contentsData.link) }} |
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>
@@ -19,9 +19,9 @@
           </button>
           <img :src="category_line" />
           <button @click="createFavorites()" class="btn--transparent">
-            <img :src="star" v-show="contentsData.favorite" /><img
+            <img :src="star" v-show="contentsData.favorites" /><img
               :src="star_border"
-              v-show="!contentsData.favorite"
+              v-show="!contentsData.favorites"
             />
           </button>
         </div>
@@ -102,21 +102,21 @@ export default {
       comment: "",
       categoryName: "미분류",
       // 더미 데이터
-      contentsData: {
-        id: 1,
-        title: "제목",
-        link: "https://naver.com",
-        comment: "설명",
-        categoryName: "카테고리",
-        favorite: true,
-        description: "설명이고",
-        createdAt: "2022-09-09",
-      },
+      // contentsData: {
+      //   id: 1,
+      //   title: "제목",
+      //   link: "https://naver.com",
+      //   comment: "설명",
+      //   categoryName: "카테고리",
+      //   favorite: true,
+      //   description: "설명이고",
+      //   createdAt: "2022-09-09",
+      // },
     };
   },
-  // props: {
-  //   contentsData: Object,
-  // },
+  props: {
+    contentsData: Object,
+  },
   created() {
     console.log("콘텐츠컴포넌트 데이터", this.contentsData);
     this.memoContents = this.contentsData.comment;
@@ -192,7 +192,7 @@ export default {
     // 즐겨찾기 생성
     async createFavorites(index) {
       console.log("인덱스", index);
-      this.contentsData.favorite = !this.contentsData.favorite;
+      this.contentsData.favorites = !this.contentsData.favorites;
       try {
         const contentId = this.contentsData.id;
         const response = await addFavorite(contentId);
