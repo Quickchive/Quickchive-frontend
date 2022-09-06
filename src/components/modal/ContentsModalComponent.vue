@@ -50,7 +50,7 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
               <select v-model="categoryName" class="contents-modal__select">
-                <option value="-1" selected>미분류</option>
+                <option value="" selected>미분류</option>
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
                 </option>
@@ -100,7 +100,7 @@
       v-if="isAlertModalActive == true"
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
-      @confirmBtn="this.AlertModalComponent = false"
+      @confirmBtn="isAlertModalActive = false"
     ></AlertModalComponent>
   </div>
 </template>
@@ -131,7 +131,7 @@ export default {
       title: "",
       deadline: "",
       comment: "",
-      categoryName: -1,
+      categoryName: "",
       favorite: false,
       data: {},
       linkList: [],
