@@ -1,23 +1,22 @@
 <template>
   <div>
-    <favorite-contents
+    <category-list-favorite
       @toCategoryPage="toFavoriteCategoryPage()"
-    ></favorite-contents>
+    ></category-list-favorite>
     <div class="contents__wrapper-wrap">
-      <all-contents
+      <category-list-all
         @toCategoryPage="toCategoryPage()"
         :categoryTitle="categoryAll"
-      ></all-contents>
-      <all-contents
+      ></category-list-all>
+      <category-list
         v-for="(category, index) in myCategories"
         :key="index"
         :categoryTitle="category.name"
         :categoryId="category.id"
-        @toCategoryPage="toCategoryPage(category.id)"
-      ></all-contents>
-      <unclassified-contents
+      ></category-list>
+      <category-list-unclassified
         @toCategoryPage="toCategoryPage(-1)"
-      ></unclassified-contents>
+      ></category-list-unclassified>
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
@@ -45,18 +44,18 @@
       v-if="isModalActive"
       @close-modal="isModalActive = false"
       @isLinkNotSingle="isLinkNotSingle"
-      :contentsLinks="contentsLinks"
-      @openCollectionModal="openCollectionModal"
       :linkList="linkList"
+      @openCollectionModal="openCollectionModal"
     ></contents-modal-component>
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
     <confirm-modal-component
       v-if="isConfirmModalActive"
       @rightBtn="addMultipleContents()"
-      @leftBtn="openCollectionModal()"
+      @leftBtn="openCollectionModal(linkList)"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
+      :linkList="linkList"
     ></confirm-modal-component>
     <!-- 중복 링크일 경우 모달 컴포넌트 -->
     <alert-modal-component
@@ -70,15 +69,18 @@
     <collection-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      :linkList="linkList"
+      :collectionData="collectionData"
+      :collectionModalTitle="collectionModalTitle"
+      @collectionEvent="createCollection()"
     ></collection-modal-component>
   </div>
 </template>
 
 <script>
-import FavoriteContents from "@/components/contents/FavoriteContents.vue";
-import AllContents from "@/components/contents/AllContents.vue";
-import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
+import CategoryListFavorite from "@/components/categorylist/CategoryListFavorite.vue";
+import CategoryListAll from "@/components/categorylist/CategoryListAll.vue";
+import CategoryListUnclassified from "@/components/categorylist/CategoryListUnclassified.vue";
+import CategoryList from "@/components/categorylist/CategoryList.vue";
 import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
 import plusBtn from "@/assets/icon/plusBtn.svg";
 import topBtn from "@/assets/icon/topBtn.svg";
@@ -89,13 +91,15 @@ import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
+import { addCollection } from "@/api/collection";
 
 export default {
   components: {
-    FavoriteContents,
-    AllContents,
+    CategoryListFavorite,
+    CategoryListAll,
+    CategoryList,
     ContentsModalComponent,
-    UnclassifiedContents,
+    CategoryListUnclassified,
     CategoryModalComponent,
     ConfirmModalComponent,
     AlertModalComponent,
@@ -125,6 +129,11 @@ export default {
       myCategories: {},
       categoryAll: "전체",
       linkList: [],
+      collectionData: {
+        contentLinkList: [],
+        favorite: false,
+      },
+      collectionModalTitle: "콜렉션 추가",
     };
   },
   created() {
@@ -193,11 +202,11 @@ export default {
     backToTop() {
       window.scrollTo(0, 0);
     },
-    isLinkNotSingle(contentsLinks) {
+    isLinkNotSingle(linkList) {
+      this.linkList = linkList;
       this.isModalActive = false;
       this.isConfirmModalActive = true;
-      this.contentsLinks = contentsLinks;
-      console.log("메인컴포넌트", this.contentsLinks);
+      console.log("메인컴포넌트", this.linkList);
     },
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {
@@ -206,6 +215,7 @@ export default {
         contentLinks: this.linkList,
       };
       try {
+        console.log("다수의 콘텐츠 추가 메소드", contentsData);
         const response = await addMultipleContents(contentsData);
         console.log(response);
       } catch (error) {
@@ -233,10 +243,23 @@ export default {
     },
     // 콜렉션 추가 모달 열기
     openCollectionModal(linkList) {
-      this.linkList = linkList;
+      this.collectionData.contentLinkList = linkList;
       this.isConfirmModalActive = false;
       this.isModalActive = false;
       this.isCollectionModalActive = true;
+    },
+    // 콜렉션 추가 이벤트
+    async createCollection(collectionData) {
+      try {
+        const response = await addCollection(collectionData);
+        console.log(response);
+        this.$emit("close-modal");
+        console.log(" 최종 보낼 값", collectionData);
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };

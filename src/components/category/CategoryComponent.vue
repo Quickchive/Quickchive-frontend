@@ -2,7 +2,11 @@
   <div class="category-view">
     <h1 class="page-header">
       {{ categoryName
-      }}<button class="btn--transparent--img" @click="openCategoryModal()">
+      }}<button
+        v-if="categoryName == !'미분류'"
+        class="btn--transparent--img"
+        @click="openCategoryModal()"
+      >
         <img :src="setting" />
       </button>
     </h1>
@@ -39,7 +43,7 @@
 
 <script>
 import setting from "@/assets/icon/settings.svg";
-import ContentsComponent from "@/components/contents/ContentsComponent.vue";
+import ContentsComponent from "@/components/content/ContentsComponent.vue";
 import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";

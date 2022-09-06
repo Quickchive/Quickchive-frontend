@@ -7,6 +7,7 @@
   left: 0;
   top: 0;
   z-index: 10;
+  overflow-y: scroll;
 }
 
 .overlay {
@@ -53,7 +54,7 @@
       .contents-modal__select {
         width: 200px;
         margin-right: 10px;
-        @include font(15px, 400, $color-gray-8);
+        @include font(15px, 400, $color-gray-6);
       }
     }
     .contents-modal__date-description {
@@ -117,8 +118,19 @@
   }
 }
 
+.alert-modal {
+  @extend .modal;
+  z-index: 100 !important;
+}
+
+.confirm-modal {
+  @extend .modal;
+  z-index: 100 !important;
+}
+
 .alert-modal-card {
   @extend .confirm-modal-card;
+  z-index: 10000 !important;
   .modal-card__button-wrapper {
     height: 56px;
     border-top: 1px solid $color-gray-4;
@@ -159,13 +171,25 @@
       .category__wrapper {
         width: 65%;
       }
+      .favorite__wrapper {
+        position: relative;
+        top: 20px;
+      }
     }
   }
 }
 
 .modal-card__btn__wrapper {
-  margin-top: 30px;
+  margin-top: 20px;
   width: 100%;
+  button {
+    &:disabled {
+      cursor: auto;
+    }
+  }
+  .btn--plus {
+    width: auto !important;
+  }
 }
 
 .link__wrapper {
@@ -187,12 +211,9 @@
       left: 10px;
     }
     input {
-      text-indent: 40px;
       width: 100%;
       padding-right: 52px;
-      &::placeholder {
-        text-indent: 40px;
-      }
+      padding-left: 30px;
     }
     .btn__deleteLink {
       position: absolute;

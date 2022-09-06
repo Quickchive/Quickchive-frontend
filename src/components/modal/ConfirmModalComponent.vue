@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="confirm-modal">
     <div class="overlay"></div>
     <div class="confirm-modal-card">
       <div class="modal-card__header">
@@ -22,6 +22,7 @@ export default {
     confirmModalContent: String,
     leftBtnMessage: String,
     rightBtnMessage: String,
+    // collectionData: Object,
   },
   // 개행
   methods: {

@@ -2,14 +2,27 @@
 <template>
   <div class="contents-component">
     <div class="contents__wrapper-col">
-      <p class="contents__title" @click="toLink(contentsData.link)">
-        {{ filterTitle(contentsData.title) }}
-      </p>
+      <div class="flex-container">
+        <p class="contents__title" @click="toLink(contentsData.link)">
+          {{ filterTitle(contentsData.title) }}
+        </p>
+        <!-- readflag -->
+        <div v-if="!contentsData.readFlag" class="contents__readflag"></div>
+      </div>
       <p class="contents__contents">
-        {{ filterDescript(contentsData.description) }}
+        <span v-if="contentsData.description">{{
+          filterDescript(contentsData.description)
+        }}</span>
       </p>
+
       <div class="contents__inner">
-        <p class="contents__domain">
+        <!-- 사이트 네임 있는 경우 -->
+        <p class="contents__domain" v-if="contentsData.siteName">
+          {{ contentsData.siteName }} |
+          {{ contentsData.createdAt.substring(0, 10) }}
+        </p>
+        <!-- 사이트 네임 없는 경우 -->
+        <p class="contents__domain" v-if="!contentsData.siteName">
           {{ filterDomain(contentsData.link) }} |
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>
@@ -18,7 +31,7 @@
             <img :src="memo" />
           </button>
           <img :src="category_line" />
-          <button class="btn--transparent">
+          <button @click="createFavorites()" class="btn--transparent">
             <img :src="star" v-show="contentsData.favorite" /><img
               :src="star_border"
               v-show="!contentsData.favorite"
@@ -30,6 +43,7 @@
     <div class="contents__wrapper">
       <!-- 이미지 -->
       <div class="contents__img">
+        <img :src="contentsData.coverImg" onerror="this.style.display='none'" />
         <div v-if="contentsData.deadline" class="contents__expiryDate">
           D-{{ countDday }}
         </div>
@@ -45,7 +59,6 @@
     <contents-edit-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
-      @contents-event="editContents()"
       :contentsData="contentsData"
     ></contents-edit-modal-component>
     <!-- 메모 모달 컴포넌트 -->
@@ -54,6 +67,13 @@
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
     ></memo-modal-component>
+    <!-- 경고 모달 컴포넌트 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="this.isAlertModalActive == false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -67,11 +87,14 @@ import { countDday } from "@/utils/validation";
 import { validateLink, linkCounter } from "@/utils/validation";
 import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComponent.vue";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
+import { addFavorite } from "@/api/contents";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
   components: {
     ContentsEditModalComponent,
     MemoModalComponent,
+    AlertModalComponent,
   },
   data() {
     return {
@@ -81,9 +104,12 @@ export default {
       category_line,
       star_border,
       isModalActive: false,
-      isMemoModalActive: false,
       // 전달할 메모
+      isMemoModalActive: false,
       memoContents: "",
+      // 경고 모달
+      isAlertModalActive: false,
+      btnMessage: "네",
       // 폼 항목
       link: "",
       title: "",
@@ -166,6 +192,18 @@ export default {
         // console.log(domain[1]);
       }
       return domain;
+    },
+    // 즐겨찾기 생성
+    async createFavorites(index) {
+      console.log("인덱스", index);
+      this.contentsData.favorite = !this.contentsData.favorite;
+      try {
+        const contentId = this.contentsData.id;
+        const response = await addFavorite(contentId);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

@@ -7,7 +7,9 @@
           @toggle-menu="openBurger()"
           :active="menuActive"
         ></burger-menu>
-        <button @click="clickLogo()" class="btn--transparent">로고</button>
+        <button @click="clickLogo()" class="btn--transparent btn__logo">
+          Quickchive
+        </button>
       </div>
       <div class="nav__wrapper">
         <div v-if="isUserLogin" class="input__search__wrapper">

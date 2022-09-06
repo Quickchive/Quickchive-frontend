@@ -110,11 +110,11 @@
 }
 
 .favorite-lists {
-  height: 194px;
+  height: 180px;
   width: 100%;
   background-color: $color-gray-1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.13);
-  border-radius: 10px;
+  border-radius: 0px 0px 10px 10px;
   box-sizing: border-box;
   padding: 5px 19px 24px 19px;
   overflow-y: scroll;
@@ -124,6 +124,7 @@
   gap: 18px;
   top: -10px;
   .favorite-list {
+    height: 170px;
     .favorite-list__wrapper {
       @include layout(column, flex-start, center);
       .favorite-list__img-wrapper {

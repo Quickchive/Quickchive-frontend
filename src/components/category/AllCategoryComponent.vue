@@ -1,27 +1,26 @@
 <template>
   <div class="category-view">
-    <h1 class="page-header">
-      전체
-      <button class="btn--transparent--img" @click="openCategoryModal()">
-        <img :src="setting" />
-      </button>
-    </h1>
+    <h1 class="page-header">전체</h1>
     <div>
       <div class="category__select-wrapper">
-        <select v-model="categoryFilter">
+        <select v-model="categoryFilter" @change="sortData(categoryFilter)">
           <option value="latest">최신순</option>
-          <option value="favoirtes">즐겨찾기순</option>
+          <option value="favorites">즐겨찾기순</option>
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <contents-component
-        v-for="(contents, index) in contentsData"
-        :key="index"
-        :contentsData="contents"
-      ></contents-component>
-      <!-- <collection-component
-        :collectionData="collectionData"
-      ></collection-component> -->
+      <!-- 콘텐츠 컴포넌트 -->
+      <div v-for="(data, index) in newArr" :key="index">
+        <contents-component
+          :contentsData="data"
+          v-if="!newArr[index].collectionId"
+        ></contents-component>
+        <!-- 콜렉션 컴포넌트 -->
+        <collection-component
+          v-if="!newArr[index].id && !newArr[index].deadline"
+          :collectionData="data"
+        ></collection-component>
+      </div>
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
     <category-modal-component
@@ -38,15 +37,17 @@
 
 <script>
 import setting from "@/assets/icon/settings.svg";
-import ContentsComponent from "@/components/contents/ContentsComponent.vue";
-// import CollectionComponent from "@/components/collection/CollectionComponent.vue";
+import ContentsComponent from "@/components/content/ContentsComponent.vue";
+import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
+import { sortLatestArr, sortFavoritesArr, sortDeadline } from "@/utils/sort";
+
 export default {
   components: {
     ContentsComponent,
-    // CollectionComponent,
+    CollectionComponent,
     CategoryModalComponent,
   },
   data() {
@@ -59,31 +60,27 @@ export default {
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
-      // 콘텐츠 props 데이터
-      contentsData: {},
+      // 콘텐츠 더미 데이터
+      contentsData: [],
       // 콜렉션 더미 데이터
-      collectionData: {
-        title: "비즈니스 모델 분석법",
-        lists: [
-          "10년차 컨설턴트의 게스티네이션 노하우",
-          "KSF모델로 보는 경쟁사 분석",
-          "수익모델 분석방법",
-          "AARRR분석하기 기초",
-          "분석하기 고급",
-        ],
-        favorites: true,
-      },
+      collectionData: [],
+      newContentsArr: [],
+      newCollectionArr: [],
+      newArr: [],
     };
   },
   created() {
     this.fetchContentsList();
+    // 콘텐츠 컴포넌트 최신순 정렬
+    this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+    console.log("newArr", this.newArr);
   },
+  computed: {},
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
       try {
         const response = await fetchMyContents();
-
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.contents;
         console.log("콘텐츠 데이터", this.contentsData);
@@ -128,6 +125,23 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+      }
+    },
+    // 정렬
+    sortData(filter) {
+      console.log("정렬 메소드");
+      // 최신순
+      if (filter == "favorites") {
+        console.log("즐겨찾기 순으로 정렬한다.");
+        this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
+      } else if (filter == "latest") {
+        console.log("최신 순으로 정렬한다.");
+        this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+      } else if (filter == "expiry") {
+        console.log("만기 순으로 정렬한다.");
+        // 현재 콜렉션은 만기 없으니까 콘텐츠만 정렬함
+        this.newArr = sortDeadline(this.contentsData);
+        console.log(this.newArr);
       }
     },
   },
