@@ -54,7 +54,7 @@
       .contents-modal__select {
         width: 200px;
         margin-right: 10px;
-        @include font(15px, 400, $color-gray-8);
+        @include font(15px, 400, $color-gray-6);
       }
     }
     .contents-modal__date-description {

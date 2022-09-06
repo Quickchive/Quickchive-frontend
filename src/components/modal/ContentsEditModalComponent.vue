@@ -34,11 +34,24 @@
           <div class="flex-container modal-form__wrapper">
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
+              <!-- 미분류 카테고리인 경우 -->
               <select
-                v-model="contentsData.categoryName"
+                v-if="contentsData.category == null"
+                v-model="categoryName"
                 class="contents-modal__select"
               >
-                <option value="-1">미분류</option>
+                <option value="">미분류</option>
+                <option v-for="(category, index) in myCategories" :key="index">
+                  {{ category.name }}
+                </option>
+              </select>
+              <!-- 미분류 카테고리 아닌 경우 -->
+              <select
+                v-if="contentsData.category"
+                v-model="contentsData.category.name"
+                class="contents-modal__select"
+              >
+                <option value="">미분류s</option>
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
                 </option>
@@ -129,6 +142,7 @@ export default {
       btnMessage: "네",
       deleteModalContent: "해당 콘텐츠를 삭제할까요?",
       isDeleteModalActive: false,
+      categoryName: "",
     };
   },
   props: {
@@ -179,7 +193,7 @@ export default {
             favorite: this.contentsData.favorite,
             comment: this.contentsData.comment,
             deadline: this.contentsData.deadline,
-            categoryName: this.contentsData.categoryName,
+            categoryName: this.categoryName || this.contentsData.category.name,
             title: this.contentsData.title,
           };
           Object.keys(contentsData).forEach(
@@ -187,10 +201,11 @@ export default {
               (contentsData[key] == "" || contentsData[key] == undefined) &&
               delete contentsData[key]
           );
-          console.log(contentsData);
+          console.log("콘텐츠 수정 contentsData", contentsData);
           const response = await updateContents(contentsData);
           console.log(response);
           this.$emit("close-modal");
+          this.$router.go();
         }
       } catch (error) {
         console.log(error);

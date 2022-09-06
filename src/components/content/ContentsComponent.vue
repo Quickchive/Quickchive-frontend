@@ -2,14 +2,27 @@
 <template>
   <div class="contents-component">
     <div class="contents__wrapper-col">
-      <p class="contents__title" @click="toLink(contentsData.link)">
-        {{ filterTitle(contentsData.title) }}
+      <div class="flex-container">
+        <p class="contents__title" @click="toLink(contentsData.link)">
+          {{ filterTitle(contentsData.title) }}
+        </p>
+        <!-- readflag -->
+        <div v-if="!contentsData.readFlag" class="contents__readflag"></div>
+      </div>
+      <p class="contents__contents">
+        <span v-if="contentsData.description">{{
+          filterDescript(contentsData.description)
+        }}</span>
       </p>
-      <p class="contents__contents" v-if="contentsData.comment">
-        {{ filterDescript(contentsData.comment) }}
-      </p>
+
       <div class="contents__inner">
-        <p class="contents__domain" v-if="contentsData.link">
+        <!-- 사이트 네임 있는 경우 -->
+        <p class="contents__domain" v-if="contentsData.siteName">
+          {{ contentsData.siteName }} |
+          {{ contentsData.createdAt.substring(0, 10) }}
+        </p>
+        <!-- 사이트 네임 없는 경우 -->
+        <p class="contents__domain" v-if="!contentsData.siteName">
           {{ filterDomain(contentsData.link) }} |
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>
@@ -19,9 +32,9 @@
           </button>
           <img :src="category_line" />
           <button @click="createFavorites()" class="btn--transparent">
-            <img :src="star" v-show="contentsData.favorites" /><img
+            <img :src="star" v-show="contentsData.favorite" /><img
               :src="star_border"
-              v-show="!contentsData.favorites"
+              v-show="!contentsData.favorite"
             />
           </button>
         </div>
@@ -30,6 +43,7 @@
     <div class="contents__wrapper">
       <!-- 이미지 -->
       <div class="contents__img">
+        <img :src="contentsData.coverImg" onerror="this.style.display='none'" />
         <div v-if="contentsData.deadline" class="contents__expiryDate">
           D-{{ countDday }}
         </div>
@@ -102,17 +116,6 @@ export default {
       deadline: "",
       comment: "",
       categoryName: "미분류",
-      // 더미 데이터
-      // contentsData: {
-      //   id: 1,
-      //   title: "제목",
-      //   link: "https://naver.com",
-      //   comment: "설명",
-      //   categoryName: "카테고리",
-      //   favorite: true,
-      //   description: "설명이고",
-      //   createdAt: "2022-09-09",
-      // },
     };
   },
   props: {
@@ -193,7 +196,7 @@ export default {
     // 즐겨찾기 생성
     async createFavorites(index) {
       console.log("인덱스", index);
-      this.contentsData.favorites = !this.contentsData.favorites;
+      this.contentsData.favorite = !this.contentsData.favorite;
       try {
         const contentId = this.contentsData.id;
         const response = await addFavorite(contentId);

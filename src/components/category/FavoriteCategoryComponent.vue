@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ContentsComponent from "@/components/contents/ContentsComponent.vue";
+import ContentsComponent from "@/components/content/ContentsComponent.vue";
 import { fetchMyFavorites } from "@/api/user";
 
 export default {
