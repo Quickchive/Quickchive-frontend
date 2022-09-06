@@ -1,23 +1,22 @@
 <template>
   <div>
-    <favorite-contents
+    <category-list-favorite
       @toCategoryPage="toFavoriteCategoryPage()"
-    ></favorite-contents>
+    ></category-list-favorite>
     <div class="contents__wrapper-wrap">
-      <all-contents
+      <category-list-all
         @toCategoryPage="toCategoryPage()"
         :categoryTitle="categoryAll"
-      ></all-contents>
-      <all-contents
+      ></category-list-all>
+      <category-list
         v-for="(category, index) in myCategories"
         :key="index"
         :categoryTitle="category.name"
         :categoryId="category.id"
-        @toCategoryPage="toCategoryPage(category.id)"
-      ></all-contents>
-      <unclassified-contents
+      ></category-list>
+      <category-list-unclassified
         @toCategoryPage="toCategoryPage(-1)"
-      ></unclassified-contents>
+      ></category-list-unclassified>
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
@@ -78,9 +77,10 @@
 </template>
 
 <script>
-import FavoriteContents from "@/components/contents/FavoriteContents.vue";
-import AllContents from "@/components/contents/AllContents.vue";
-import UnclassifiedContents from "@/components/contents/UnclassifiedContents.vue";
+import CategoryListFavorite from "@/components/categorylist/CategoryListFavorite.vue";
+import CategoryListAll from "@/components/categorylist/CategoryListAll.vue";
+import CategoryListUnclassified from "@/components/categorylist/CategoryListUnclassified.vue";
+import CategoryList from "@/components/categorylist/CategoryList.vue";
 import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
 import plusBtn from "@/assets/icon/plusBtn.svg";
 import topBtn from "@/assets/icon/topBtn.svg";
@@ -95,10 +95,11 @@ import { addCollection } from "@/api/collection";
 
 export default {
   components: {
-    FavoriteContents,
-    AllContents,
+    CategoryListFavorite,
+    CategoryListAll,
+    CategoryList,
     ContentsModalComponent,
-    UnclassifiedContents,
+    CategoryListUnclassified,
     CategoryModalComponent,
     ConfirmModalComponent,
     AlertModalComponent,

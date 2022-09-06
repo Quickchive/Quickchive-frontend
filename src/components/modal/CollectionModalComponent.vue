@@ -27,7 +27,7 @@
               v-model="collectionData.categoryName"
               class="contents-modal__select"
             >
-              <option value="-1" selected>미분류</option>
+              <option value="" selected>미분류</option>
               <option v-for="(category, index) in myCategories" :key="index">
                 {{ category.name }}
               </option>
@@ -165,7 +165,10 @@ export default {
       favorites: Boolean,
       contentLinkList: Array,
       title: String,
-      categoryName: String,
+      categoryName: {
+        type: String,
+        default: "",
+      },
       comment: String,
       collectionId: Number,
     },

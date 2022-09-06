@@ -1,8 +1,8 @@
 <template>
-  <div class="unclassified-content">
+  <div class="all-content">
     <header>
       <div @click="toCategoryPage()" class="content__header">
-        <h3>미분류</h3>
+        <h3>{{ categoryTitle }}</h3>
       </div>
       <button @click="showContent()">
         <img v-if="!contentState" :src="plus" />
@@ -16,7 +16,7 @@
         :key="index"
         class="contents-list"
       >
-        <div class="contents-list__wrapper" @click="toLink(content.link)">
+        <div class="contents-list__wrapper">
           <button class="btn--transparent--img" @click="toLink(content.link)">
             <span class="contents-list__icon">웹</span>
             <span class="contents-list__title">
@@ -26,7 +26,7 @@
         </div>
         <div class="contents-list__wrapper">
           <img :src="line" />
-          <span v-if="deadline" class="contents-list__expiry"
+          <span v-if="content.deadline" class="contents-list__expiry"
             >D-{{ countDday(content.deadline) }}</span
           >
           <button class="btn--transparent" @click="openMemoModal(index)">
@@ -55,8 +55,8 @@ import memo from "@/assets/icon/memo.svg";
 import star from "@/assets/icon/star.svg";
 import star_gray from "@/assets/icon/star_gray.svg";
 import { fetchMyContents } from "@/api/user";
-import { countDday } from "@/utils/validation";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
+import { countDday } from "@/utils/validation";
 import { addFavorite } from "@/api/contents";
 
 export default {
@@ -71,10 +71,11 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
-
-      // 더미 데이터
-      contentsList: [],
     };
+  },
+  props: {
+    categoryTitle: String,
+    categoryId: Number,
   },
   created() {
     this.fetchContentsList();
@@ -97,12 +98,12 @@ export default {
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
-      this.$emit("toCategoryPage");
+      this.$router.push("/category/all");
     },
     // 나의 콘텐츠 조회 (카테고리 아이디 받아서 조회하기)
     async fetchContentsList() {
       try {
-        const response = await fetchMyContents(-1);
+        const response = await fetchMyContents(this.categoryId);
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsList = response.data.contents;
         console.log("콘텐츠 데이터", this.contentsList);

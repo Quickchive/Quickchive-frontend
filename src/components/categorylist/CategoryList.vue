@@ -71,17 +71,6 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
-      // 더미 데이터
-      contentsList: [
-        {
-          title: "제목",
-          link: "https://naver.com",
-          comment: "메모",
-          categoryName: "카테고리",
-          favorite: true,
-          description: "설명이고",
-        },
-      ],
     };
   },
   props: {
@@ -109,7 +98,7 @@ export default {
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
-      this.$router.push("/category/all");
+      this.$router.push(`/category/${this.categoryId}`);
     },
     // 나의 콘텐츠 조회 (카테고리 아이디 받아서 조회하기)
     async fetchContentsList() {

@@ -58,6 +58,7 @@
       v-if="isAlertModalActive == true"
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
+      @confirmBtn="this.isAlertModalActive == false"
     ></AlertModalComponent>
   </div>
 </template>
