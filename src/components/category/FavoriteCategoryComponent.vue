@@ -33,35 +33,7 @@ export default {
       categoryFilter: "latest",
       categoryId: "",
       // 즐겨찾기 더미 데이터
-      contentsData: [
-        {
-          title:
-            "제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목ㄴ",
-          createdAt: "2022-09-09",
-          link: "http://naver.com",
-          favorite: true,
-          comment: "메모",
-          deadline: "2022-09-28",
-          description: "설명",
-        },
-        {
-          title: "제목",
-          createdAt: "2022-09-09",
-          link: "http://naver.com",
-          favorite: true,
-          comment: "메모",
-          deadline: "2022-09-28",
-          description: "설명",
-        },
-        {
-          title: "제목",
-          createdAt: "2022-09-09",
-          link: "http://naver.com",
-          favorite: true,
-          comment: "메모",
-          description: "설명",
-        },
-      ],
+      contentsData: [],
     };
   },
   async created() {

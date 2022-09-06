@@ -71,8 +71,6 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
-
-      // 더미 데이터
       contentsList: [],
     };
   },
