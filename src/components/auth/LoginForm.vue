@@ -89,6 +89,8 @@ export default {
           password: this.pw,
         };
         await this.$store.dispatch("LOGIN", userData);
+        // 로그인 유지 여부 저장
+        this.$store.dispatch("STAY_LOGIN", this.stayLogin);
         this.$router.push("/main");
       } catch (error) {
         console.log(error);
