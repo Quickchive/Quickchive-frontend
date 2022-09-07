@@ -70,8 +70,7 @@
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
       :collectionData="collectionData"
-      :collectionModalTitle="collectionModalTitle"
-      @collectionEvent="createCollection()"
+      @createCollection="createCollection()"
     ></collection-modal-component>
   </div>
 </template>
