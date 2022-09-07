@@ -25,7 +25,7 @@
             <label class="register-form__label">카테고리</label>
             <!-- 미분류 카테고리인 경우 -->
             <select
-              v-if="colectionData.category == null"
+              v-if="collectionData.category == null"
               v-model="categoryName"
               class="contents-modal__select"
             >
