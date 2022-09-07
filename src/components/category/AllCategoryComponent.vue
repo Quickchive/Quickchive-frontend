@@ -42,7 +42,7 @@ import CollectionComponent from "@/components/collection/CollectionComponent.vue
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
-import { sortLatestArr, sortFavoritesArr, sortDeadline } from "@/utils/sort";
+import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
 
 export default {
   components: {
@@ -139,8 +139,7 @@ export default {
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
         console.log("만기 순으로 정렬한다.");
-        // 현재 콜렉션은 만기 없으니까 콘텐츠만 정렬함
-        this.newArr = sortDeadline(this.contentsData);
+        this.newArr = sortDeadlineArr(this.contentsData);
         console.log(this.newArr);
       }
     },
