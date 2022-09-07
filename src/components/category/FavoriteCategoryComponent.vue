@@ -48,7 +48,9 @@ export default {
       try {
         const response = await fetchMyFavorites();
         // 콘텐츠 컴포넌트에 데이터 전달
-        this.contentsData = response.data.favorites;
+        this.contentsData = response.data.favorite_contents;
+        this.collectionData = response.data.favorite_collections;
+
         console.log("콘텐츠 데이터", this.contentsData);
       } catch (error) {
         console.log(error);

@@ -22,29 +22,30 @@
           <div class="favorite-list__img-wrapper">
             <!-- 이미지 -->
             <div class="favorite-list__img">
+              <img
+                :src="favoritesList[index].coverImg"
+                onerror="this.style.display='none'"
+              />
               <span v-if="favorite.deadline" class="favorite-list__expiry"
                 >D-{{ countDday(favorite.deadline) }}</span
               >
-              <div class="favorite-list__btn-wrapper">
-                <button class="btn--transparent" @click="openMemoModal(index)">
-                  <img :src="memo" />
-                </button>
-                <img :src="line_white" />
-                <!-- 즐겨찾기 -->
-                <button
-                  class="btn--transparent"
-                  @click="createFavorites(index)"
-                >
-                  <img v-if="favorite.favorite" :src="star" />
-                  <img v-if="!favorite.favorite" :src="star_gray" />
-                </button>
-              </div>
+            </div>
+            <div class="favorite-list__btn-wrapper">
+              <button class="btn--transparent" @click="openMemoModal(index)">
+                <img :src="memo" />
+              </button>
+              <img :src="line_white" />
+              <!-- 즐겨찾기 -->
+              <button class="btn--transparent" @click="createFavorites(index)">
+                <img v-if="favorite.favorite" :src="star" />
+                <img v-if="!favorite.favorite" :src="star_gray" />
+              </button>
             </div>
             <!-- 메모 -->
           </div>
         </div>
         <!-- 2. wrapper -->
-        <div class="favorite-list__wrapper">
+        <div class="favorite-list__wrapper-text">
           <!-- 제목 -->
           <p @click="toLink(favorite.link)" class="favorite-list__title">
             {{ filterTitle(favorite.title) }}
@@ -97,6 +98,7 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
+      favoritesList: {},
     };
   },
   created() {
@@ -125,7 +127,8 @@ export default {
     async fetchFavoritesList() {
       try {
         const response = await fetchMyFavorites();
-        this.favoritesList = response.data.favorites;
+        this.favoritesList = response.data.favorite_contents;
+        this.favoriteCollectionList = response.data.favorite_collections;
         console.log("콘텐츠 데이터", this.favoritesList);
       } catch (error) {
         console.log(error);
