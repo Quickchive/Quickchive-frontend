@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <div class="collection-modal-card">
       <div class="modal-card__header">
-        <h1>콜렉션 추가</h1>
+        <h1>콜렉션 수정</h1>
         <button
           type="button"
           class="btn--transparent btn__close"
@@ -24,8 +24,23 @@
           <div class="register-form__wrapper category__wrapper">
             <label class="register-form__label">카테고리</label>
             <!-- 미분류 카테고리인 경우 -->
-            <select v-model="categoryName" class="contents-modal__select">
+            <select
+              v-if="colectionData.category == null"
+              v-model="categoryName"
+              class="contents-modal__select"
+            >
               <option value="">미분류</option>
+              <option v-for="(category, index) in myCategories" :key="index">
+                {{ category.name }}
+              </option>
+            </select>
+            <!-- 미분류 카테고리 아닌 경우 -->
+            <select
+              v-if="collectionData.category"
+              v-model="collectionData.category.name"
+              class="contents-modal__select"
+            >
+              <option value="">미분류s</option>
               <option v-for="(category, index) in myCategories" :key="index">
                 {{ category.name }}
               </option>
@@ -75,6 +90,7 @@
               </button>
             </div>
           </div>
+
           <div class="flex-container-col modal-card__btn__wrapper">
             <button @click="createInput()" class="btn--transparent btn--plus">
               <img :src="add_link" />
@@ -82,11 +98,20 @@
           </div>
         </div>
       </div>
-
+      <div class="modal-card__btn__wrapper">
+        <div class="flex-container">
+          <button
+            @click="isDeleteModalActive = true"
+            class="btn--transparent login-form__link-register"
+          >
+            콘텐츠 삭제
+          </button>
+        </div>
+      </div>
       <!-- 버튼 -->
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
-          @click="createCollection()"
+          @click="collectionEdit()"
           :disabled="
             collectionData.contentLinkList == '' || !collectionData.title
           "
@@ -96,7 +121,13 @@
         </button>
       </div>
     </div>
-
+    <!-- 삭제 확인용 모달 -->
+    <AlertModalComponent
+      v-if="isDeleteModalActive == true"
+      :alertModalContent="deleteModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="deleteCollection()"
+    ></AlertModalComponent>
     <!-- 에러 모달 -->
     <AlertModalComponent
       v-if="isAlertModalActive == true"
@@ -116,6 +147,7 @@ import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
 import { fetchMyCategory } from "@/api/user";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { deleteCollection } from "@/api/collection";
 
 export default {
   components: { AlertModalComponent },
@@ -138,12 +170,11 @@ export default {
       // 삭제 경고 모달
       isDeleteModalActive: false,
       deleteModalContent: "해당 콜렉션을 \n삭제하시겠습니까?",
-      // 폼 항목
       categoryName: "",
     };
   },
   props: {
-    collectionData: Object,
+    collectionData: {},
   },
   created() {
     this.getMyCategory();
@@ -171,17 +202,18 @@ export default {
     deleteInput(index) {
       this.collectionData.contentLinkList.splice(index, 1);
     },
-    // 콜렉션 추가
-    createCollection() {
+    // 콜렉션 수정
+    editCollection() {
       const collectionData = {
         title: this.collectionData.title,
         comment: this.collectionData.comment,
-        categoryName: this.categoryName,
+        categoryName: this.categoryName || this.collectionData.category.name,
         contentLinkList: this.collectionData.contentLinkList.filter(function (
           item
         ) {
           return item !== null && item !== undefined && item !== "";
         }),
+        collectionId: this.collectionData.collectionId,
         // 즐겨찾기 추가됨
         favorite: this.collectionData.favorite,
       };
@@ -191,7 +223,22 @@ export default {
           delete collectionData[key]
       );
       console.log("콜렉션 모달", collectionData);
-      this.$emit("createCollection", collectionData);
+      this.$emit("collectionEdit", collectionData);
+    },
+    // 콜렉션 삭제
+    async deleteCollection() {
+      this.isDeleteModalActive = false;
+      try {
+        const response = await deleteCollection(
+          this.collectionData.collectionId
+        );
+        console.log(response);
+        this.$emit("close-modal");
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };
