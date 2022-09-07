@@ -70,7 +70,6 @@
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
       :collectionData="collectionData"
-      @createCollection="createCollection()"
     ></collection-modal-component>
   </div>
 </template>
@@ -90,7 +89,6 @@ import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
-import { addCollection } from "@/api/collection";
 
 export default {
   components: {
@@ -254,19 +252,6 @@ export default {
       this.isConfirmModalActive = false;
       this.isModalActive = false;
       this.isCollectionModalActive = true;
-    },
-    // 콜렉션 추가 이벤트
-    async createCollection(collectionData) {
-      try {
-        const response = await addCollection(collectionData);
-        console.log(response);
-        this.$emit("close-modal");
-        console.log(" 최종 보낼 값", collectionData);
-      } catch (error) {
-        console.log(error);
-        this.alertModalContent = error.response.message;
-        this.isAlertModalActive = true;
-      }
     },
   },
 };
