@@ -11,7 +11,7 @@
       </button>
     </header>
     <!-- 즐겨찾기 목록 -->
-    <div v-if="contentState" class="favorite-lists">
+    <div v-if="contentState && favoritesList.length > 0" class="favorite-lists">
       <div
         v-for="(favorite, index) in favoritesList"
         :key="index"

@@ -10,7 +10,7 @@
       </button>
     </header>
     <!-- 콘텐츠 목록 -->
-    <div v-if="contentState" class="contents-lists">
+    <div v-if="contentState && contentsList.length > 0" class="contents-lists">
       <div
         v-for="(content, index) in contentsList"
         :key="index"
@@ -26,7 +26,7 @@
         </div>
         <div class="contents-list__wrapper">
           <img :src="line" />
-          <span v-if="deadline" class="contents-list__expiry"
+          <span v-if="content.deadline" class="contents-list__expiry"
             >D-{{ countDday(content.deadline) }}</span
           >
           <button class="btn--transparent" @click="openMemoModal(index)">

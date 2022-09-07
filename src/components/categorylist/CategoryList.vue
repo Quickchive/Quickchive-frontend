@@ -10,7 +10,7 @@
       </button>
     </header>
     <!-- 콘텐츠 목록 -->
-    <div v-if="contentState" class="contents-lists">
+    <div v-if="contentState && contentsList.length > 0" class="contents-lists">
       <div
         v-for="(content, index) in contentsList"
         :key="index"
