@@ -163,6 +163,8 @@ export default {
         await this.$store.dispatch("KAKAO_LOGIN", code);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
       }
     },
     // 구글 로그인 요청
@@ -172,6 +174,8 @@ export default {
         await this.$store.dispatch("GOOGLE_LOGIN", code);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
       }
     },
     // 카테고리 추가 모달 열기
@@ -191,6 +195,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
       }
     },
     // 콘텐츠 추가 모달 열기
@@ -219,6 +225,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.message;
+        this.isAlertModalActive = true;
       }
     },
     // 자신의 카테고리 조회
