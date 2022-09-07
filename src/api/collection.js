@@ -15,4 +15,14 @@ function deleteCollection(collectionId) {
   return authInstance.delete(`collections/delete/${collectionId}`);
 }
 
-export { addCollection, updateCollection, deleteCollection };
+// 콜렉션 즐겨찾기 추가
+function addFavoriteCollection(collectionId) {
+  return authInstance.patch(`collections/favorite/${collectionId}`);
+}
+
+export {
+  addCollection,
+  updateCollection,
+  deleteCollection,
+  addFavoriteCollection,
+};

@@ -1,34 +1,35 @@
 <template>
-  <div class="collection-component">
+  <div class="collection-component" v-if="collectionData">
     <div class="collection__wrapper-col">
       <span class="collection-tag">Collection</span>
-      <p class="collection__title">{{ collectionData.title }}</p>
+      <p class="collection__title" v-if="collectionData.title">
+        {{ filterTitle(collectionData.title) }}
+      </p>
       <div class="collection__lists-wrapper">
-        <div>
-          <ul
-            v-for="(list, index) in collectionData.contentLinkList"
-            :key="index"
-            class="collection__lists"
-          >
-            <li class="collection__list" v-if="index <= 3">{{ list }}</li>
+        <div v-if="collectionData.contents">
+          <ul class="collection__lists">
+            <li
+              v-for="(list, index) in collectionData.contents"
+              :key="index"
+              class="collection__list"
+            >
+              <span v-if="list.title">{{ filterTitle(list.title) }}</span>
+            </li>
           </ul>
         </div>
 
-        <div v-if="collectionData.contentLinkList">
+        <div v-if="collectionData.contents">
           <div
-            v-for="(list, index) in collectionData.contentLinkList"
+            v-for="(list, index) in collectionData.contents"
             :key="index"
             class="collection__list-num"
           >
-            <span v-if="index == 4"
-              >&nbsp;외
-              {{ collectionData.contentLinkList.length - index }}개</span
-            >
+            <span v-if="index == 4">&nbsp;외 {{ list.length - index }}개</span>
           </div>
         </div>
       </div>
-      <div class="collection_inner" v-if="collectionData.createdAt">
-        <p>
+      <div class="collection__inner" v-if="collectionData.createdAt">
+        <p class="collection__createdAt">
           {{ collectionData.createdAt.substring(0, 10) }}
         </p>
         <div class="collection__btn-wrapper">
@@ -37,9 +38,9 @@
           </button>
           <img :src="category_line" />
           <button @click="createFavorites()" class="btn--transparent">
-            <img :src="star" v-show="collectionData.favorites" /><img
+            <img :src="star" v-show="collectionData.favorite" /><img
               :src="star_border"
-              v-show="!collectionData.favorites"
+              v-show="!collectionData.favorite"
             />
           </button>
         </div>
@@ -47,9 +48,13 @@
     </div>
     <div class="collection__wrapper">
       <!-- 이미지 -->
-      <div class="collection__img">
-        <div v-if="collectionData.contentLinkList" class="collection__num">
-          +{{ collectionData.contentLinkList.length }}
+      <div class="collection__img" v-if="collectionData.contents">
+        <img
+          :src="collectionData.contents[0].coverImg"
+          onerror="this.style.display='none'"
+        />
+        <div v-if="collectionData.contents" class="collection__num">
+          +{{ collectionData.contents.length }}
         </div>
       </div>
       <button class="btn--transparent" @click="openEditModal()">
@@ -66,7 +71,6 @@
     <collection-edit-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      @editCollection="editCollection()"
       :collectionData="collectionData"
     ></collection-edit-modal-component>
     <!-- 에러 모달 -->
@@ -86,9 +90,8 @@ import star_border from "@/assets/icon/star_border.svg";
 import edit from "@/assets/icon/edit.svg";
 import category_line from "@/assets/icon/category_line.svg";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { addFavorite } from "@/api/contents";
+import { addFavoriteCollection } from "@/api/collection";
 import CollectionEditModalComponent from "@/components/modal/CollectionEditModalComponent.vue";
-import { updateCollection } from "@/api/collection";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
@@ -117,7 +120,9 @@ export default {
     };
   },
   props: {
-    collectionData: Object,
+    collectionData: {
+      type: Object,
+    },
   },
   methods: {
     openMemoModal() {
@@ -126,10 +131,10 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavorites() {
-      this.collectionData.favorites = !this.collectionData.favorites;
+      this.collectionData.favorite = !this.collectionData.favorite;
       try {
-        const contentId = this.collectionData.collectionId;
-        const response = await addFavorite(contentId);
+        const contentId = this.collectionData.id;
+        const response = await addFavoriteCollection(contentId);
         console.log(response);
       } catch (error) {
         console.log(error);
@@ -138,17 +143,13 @@ export default {
     openEditModal() {
       this.isCollectionModalActive = true;
     },
-    // 콜렉션 수정
-    async editCollection(collectionData) {
-      try {
-        const response = await updateCollection(collectionData);
-        console.log(response);
-        this.$emit("close-modal");
-        console.log(" 최종 보낼 값", collectionData);
-      } catch (error) {
-        console.log(error);
-        this.alertModalContent = error.response.message;
-        this.isAlertModalActive = true;
+
+    // 제목 글자수 30자 이상
+    filterTitle(title) {
+      if (title.length >= 30) {
+        return title.substr(0, 30) + "...";
+      } else {
+        return title;
       }
     },
   },

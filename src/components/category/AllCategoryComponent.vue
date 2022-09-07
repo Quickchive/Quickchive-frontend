@@ -13,11 +13,11 @@
       <div v-for="(data, index) in newArr" :key="index">
         <contents-component
           :contentsData="data"
-          v-if="!newArr[index].collectionId"
+          v-if="!newArr[index].contents"
         ></contents-component>
         <!-- 콜렉션 컴포넌트 -->
         <collection-component
-          v-if="!newArr[index].id && !newArr[index].deadline"
+          v-if="!newArr[index].deadline"
           :collectionData="data"
         ></collection-component>
       </div>
@@ -69,13 +69,13 @@ export default {
       newArr: [],
     };
   },
-  created() {
-    this.fetchContentsList();
+  async created() {
+    await this.fetchContentsList();
+    await this.fetchCollectionList();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
     console.log("newArr", this.newArr);
   },
-  computed: {},
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
@@ -90,12 +90,11 @@ export default {
     },
     // 나의 콜렉션 조회
     async fetchCollectionList() {
-      this.categoryId = this.$route.params.id;
-      console.log("카테고리 id", this.categoryId);
       try {
-        const response = await fetchMyCollections(this.categoryId);
+        const response = await fetchMyCollections();
         // 콘텐츠 컴포넌트에 데이터 전달
-        this.collectionData = response.data;
+        this.collectionData = response.data.collections;
+        console.log("콜렉션 데이터", this.collectionData);
       } catch (error) {
         console.log(error);
       }
@@ -139,7 +138,7 @@ export default {
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
         console.log("만기 순으로 정렬한다.");
-        this.newArr = sortDeadlineArr(this.contentsData);
+        this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
         console.log(this.newArr);
       }
     },
