@@ -48,7 +48,7 @@
     width: 100%;
     border-bottom: 1px solid $color-gray-2;
     padding: 8px 0 7px 0;
-    @include layout(row, flex-start, space-between);
+    @include layout(row, center, space-between);
     .contents-list__wrapper {
       @include layout(row, center, flex-start);
       .contents-list__expiry {
@@ -60,9 +60,11 @@
       }
       .contents-list__icon {
         margin-right: 4px;
+        @include layout(column, center, center);
       }
       button {
         margin: 0 6px 0 6px;
+        @include layout(row, center, center);
       }
       .contents-list__title {
         @include font(14px, 400, $color-black-text);

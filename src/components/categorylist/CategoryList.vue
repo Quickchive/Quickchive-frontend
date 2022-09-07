@@ -2,7 +2,7 @@
   <div class="all-content">
     <header>
       <div @click="toCategoryPage()" class="content__header">
-        <h3>{{ categoryTitle }}</h3>
+        <h3>{{ filterCategoryTitle(categoryTitle) }}</h3>
       </div>
       <button @click="showContent()">
         <img v-if="!contentState" :src="plus" />
@@ -18,7 +18,7 @@
       >
         <div class="contents-list__wrapper">
           <button class="btn--transparent--img" @click="toLink(content.link)">
-            <span class="contents-list__icon">웹</span>
+            <span class="contents-list__icon"><img :src="web" /></span>
             <span class="contents-list__title">
               {{ filterTitle(content.title) }}
             </span>
@@ -54,6 +54,8 @@ import line from "@/assets/icon/line.svg";
 import memo from "@/assets/icon/memo.svg";
 import star from "@/assets/icon/star.svg";
 import star_gray from "@/assets/icon/star_gray.svg";
+import web from "@/assets/icon/web.svg";
+
 import { fetchMyContents } from "@/api/user";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { countDday } from "@/utils/validation";
@@ -69,6 +71,7 @@ export default {
       memo,
       star,
       star_gray,
+      web,
       contentState: false,
       isMemoModalActive: false,
       contentsList: [],
@@ -146,6 +149,14 @@ export default {
     },
     toLink(link) {
       window.open(link, "_blank");
+    },
+    // 제목 글자수 10자 이상
+    filterCategoryTitle(title) {
+      if (title.length >= 10) {
+        return title.substr(0, 10) + "...";
+      } else {
+        return title;
+      }
     },
   },
 };
