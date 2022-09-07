@@ -58,7 +58,7 @@ import { fetchMyContents } from "@/api/user";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { countDday } from "@/utils/validation";
 import { addFavorite } from "@/api/contents";
-
+import { eventBus } from "@/main.js";
 export default {
   components: { MemoModalComponent },
   data() {
@@ -71,6 +71,9 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
+      contentsList: [],
+      data: 1,
+      isFavoriteListUpdated: 0,
     };
   },
   props: {
@@ -79,6 +82,18 @@ export default {
   },
   created() {
     this.fetchContentsList();
+    eventBus.$on("fetchFavoritesList", (data) => {
+      this.isFavoriteListUpdated += data;
+      console.log(
+        "CategoryList에 이벤트 버스 도착",
+        this.isFavoriteListUpdated
+      );
+    });
+  },
+  watch: {
+    isFavoriteListUpdated: function () {
+      this.fetchContentsList();
+    },
   },
   methods: {
     showContent() {
@@ -92,6 +107,7 @@ export default {
         const contentId = this.contentsList[index].id;
         const response = await addFavorite(contentId);
         console.log(response);
+        eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
       }

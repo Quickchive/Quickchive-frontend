@@ -84,6 +84,7 @@ import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavorite } from "@/api/contents";
 import { countDday } from "@/utils/validation";
 import { fetchMyFavorites } from "@/api/user";
+import { eventBus } from "@/main.js";
 
 export default {
   components: { MemoModalComponent },
@@ -99,10 +100,21 @@ export default {
       contentState: false,
       isMemoModalActive: false,
       favoritesList: {},
+      isFavoriteListUpdated: 0,
+      data: 1,
     };
   },
   created() {
     this.fetchFavoritesList();
+    eventBus.$on("fetchFavoritesList", (data) => {
+      this.isFavoriteListUpdated += data;
+      console.log("이벤트 버스 도착", this.isFavoriteListUpdated);
+    });
+  },
+  watch: {
+    isFavoriteListUpdated: function () {
+      this.fetchFavoritesList();
+    },
   },
   methods: {
     showContent() {
@@ -119,6 +131,7 @@ export default {
         console.log(response);
         // 즐겨찾기 리스트 갱신
         this.fetchFavoritesList();
+        eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
       }
