@@ -22,7 +22,10 @@
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>
         <!-- 사이트 네임 없는 경우 -->
-        <p class="contents__domain" v-if="!contentsData.siteName">
+        <p
+          class="contents__domain"
+          v-if="!contentsData.siteName && contentsData.link"
+        >
           {{ filterDomain(contentsData.link) }} |
           {{ contentsData.createdAt.substring(0, 10) }}
         </p>

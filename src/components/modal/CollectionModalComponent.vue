@@ -116,6 +116,7 @@ import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
 import { fetchMyCategory } from "@/api/user";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { addCollection } from "@/api/collection";
 
 export default {
   components: { AlertModalComponent },
@@ -172,7 +173,7 @@ export default {
       this.collectionData.contentLinkList.splice(index, 1);
     },
     // 콜렉션 추가
-    createCollection() {
+    async createCollection() {
       const collectionData = {
         title: this.collectionData.title,
         comment: this.collectionData.comment,
@@ -191,7 +192,16 @@ export default {
           delete collectionData[key]
       );
       console.log("콜렉션 모달", collectionData);
-      this.$emit("createCollection", collectionData);
+      try {
+        console.log(" 최종 보낼 값", collectionData);
+        const response = await addCollection(collectionData);
+        console.log(response);
+        this.$emit("close-modal");
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
+      }
     },
   },
 };
