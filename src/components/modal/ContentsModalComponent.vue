@@ -209,7 +209,7 @@ export default {
             this.$emit("close-modal");
           } catch (error) {
             console.log(error);
-            this.alertModalContent = error.response.message;
+            this.alertModalContent = error.response.data.message;
             this.isAlertModalActive = true;
           }
         }

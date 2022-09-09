@@ -192,7 +192,7 @@ export default {
         console.log(" 최종 보낼 값", collectionData);
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.message;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
