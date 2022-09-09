@@ -17,7 +17,7 @@
         ></contents-component>
         <!-- 콜렉션 컴포넌트 -->
         <collection-component
-          v-if="!newArr[index].deadline"
+          v-if="newArr[index].contents"
           :collectionData="data"
         ></collection-component>
       </div>
@@ -69,12 +69,8 @@ export default {
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
-      // 콘텐츠 더미 데이터
       contentsData: [],
-      // 콜렉션 더미 데이터
       collectionData: [],
-      newContentsArr: [],
-      newCollectionArr: [],
       newArr: [],
       isAlertModalActive: false,
       AlertModalContent: "",
