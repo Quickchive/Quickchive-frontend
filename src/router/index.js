@@ -105,6 +105,11 @@ const routes = [
     path: "/collection/:id",
     component: () => import("@/views/CollectionView.vue"),
   },
+  // 검색 결과 페이지
+  {
+    path: "/search",
+    component: () => import("@/views/SearchView.vue"),
+  },
   // 404 에러 페이지
   {
     path: "*",

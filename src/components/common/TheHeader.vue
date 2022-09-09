@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <nav>
-      <div class="nav__wrapper">
+      <div class="nav__wrapper--left">
         <burger-menu
           v-if="isUserLogin"
           @toggle-menu="openBurger()"
@@ -11,10 +11,15 @@
           Quickchive
         </button>
       </div>
-      <div class="nav__wrapper">
+      <div class="nav__wrapper--right">
         <div v-if="isUserLogin" class="input__search__wrapper">
-          <input placeholder="제목, 메모 검색" class="input__search" />
-          <button class="btn__search" @click="searchContent">
+          <input
+            placeholder="제목, 메모 검색"
+            class="input__search"
+            v-model="data"
+            @keyup.enter="searchData()"
+          />
+          <button class="btn__search" @click="searchData()">
             <img :src="search" />
           </button>
         </div>
@@ -65,6 +70,7 @@ import profile from "@/assets/icon/profile.svg";
 import search from "@/assets/icon/search.svg";
 import category from "@/assets/icon/category.svg";
 import { fetchMyCategory } from "@/api/user";
+import { eventBus } from "@/main";
 export default {
   components: {
     "burger-menu": Burger,
@@ -82,6 +88,7 @@ export default {
       search,
       category,
       categories: [],
+      data: "",
     };
   },
   computed: {
@@ -109,8 +116,17 @@ export default {
         this.$router.push("/mypage/sns");
       }
     },
-    searchContent() {
-      console.log("검색");
+    // 검색
+    async searchData() {
+      if (this.$route.fullPath == "/search") {
+        this.$router.push("/search").catch(() => {});
+        console.log("현재경로가  /search");
+        this.$store.dispatch("SEARCH", this.data);
+      } else {
+        this.$store.dispatch("SEARCH", this.data);
+        this.$router.push("/search");
+      }
+      await eventBus.$emit("search", this.data);
     },
     // 로그아웃
     logoutUser() {

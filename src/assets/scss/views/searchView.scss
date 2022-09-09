@@ -1,0 +1,27 @@
+@import "../mixin";
+
+.search-view {
+  box-sizing: border-box;
+  padding: 113px 0px;
+  @include layout(column, center, flex-start);
+  .search__wrapper {
+    @include font(16px, 400, $color-black-text);
+    line-height: 30px;
+    margin-bottom: 32px;
+    p {
+      width: 100%;
+    }
+    .search__text--highlight {
+      @include font(16px, 400, $color-components-2);
+    }
+    box-sizing: border-box;
+    padding-bottom: 12px;
+    width: 745px;
+    text-align: center;
+    border-bottom: 1px solid $color-gray-4;
+  }
+  .no-result {
+    @include font(25px, 400, $color-black-text);
+    height: 100vh;
+  }
+}

@@ -5,6 +5,7 @@ import store from "./store";
 import "@/assets/scss/_index.scss";
 
 Vue.config.productionTip = false;
+
 export const eventBus = new Vue();
 
 new Vue({

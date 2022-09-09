@@ -22,6 +22,7 @@ export default new Vuex.Store({
     refreshToken: "" || localStorage.getItem("refreshToken"),
     oauthInfo: "" || localStorage.getItem("oauthInfo"),
     stayLoginState: false || localStorage.getItem("stayLogin"),
+    searchWord: "",
   },
   getters: {
     // 로그인 여부 확인
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     isUserStayLogin(state) {
       return state.stayLoginState;
+    },
+    getSearchWord(state) {
+      return state.searchWord;
     },
   },
   mutations: {
@@ -69,6 +73,9 @@ export default new Vuex.Store({
     },
     setStayLoginState(state, stayLoginState) {
       state.stayLoginState = stayLoginState;
+    },
+    setSearchWord(state, word) {
+      state.searchWord = word;
     },
   },
   actions: {
@@ -174,6 +181,11 @@ export default new Vuex.Store({
       commit("setStayLoginState", stayLoginState);
       localStorage.setItem("stayLogin", stayLoginState);
       console.log("로그인 유지 값 로컬스토리지에 세팅");
+    },
+
+    // 검색
+    SEARCH({ commit }, word) {
+      commit("setSearchWord", word);
     },
   },
 });
