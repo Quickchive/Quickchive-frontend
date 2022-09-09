@@ -2,7 +2,11 @@
   <div class="collection-component" v-if="collectionData">
     <div class="collection__wrapper-col">
       <span class="collection-tag">Collection</span>
-      <p class="collection__title" v-if="collectionData.title">
+      <p
+        class="collection__title"
+        v-if="collectionData.title"
+        @click="toDetail()"
+      >
         {{ filterTitle(collectionData.title) }}
       </p>
       <div class="collection__lists-wrapper">
@@ -151,6 +155,11 @@ export default {
       } else {
         return title;
       }
+    },
+    // 콜렉션 상세 페이지로 이동
+    toDetail() {
+      console.log("id", this.collectionData.id);
+      this.$router.push(`/collection/${this.collectionData.id}`);
     },
   },
 };

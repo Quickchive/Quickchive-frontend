@@ -10,32 +10,71 @@
       </button>
     </header>
     <!-- 콘텐츠 목록 -->
-    <div v-if="contentState && contentsList.length > 0" class="contents-lists">
-      <div
-        v-for="(content, index) in contentsList"
-        :key="index"
-        class="contents-list"
-      >
-        <div class="contents-list__wrapper" @click="toLink(content.link)">
-          <button class="btn--transparent--img" @click="toLink(content.link)">
-            <span class="contents-list__icon"><img :src="web" /></span>
-            <span class="contents-list__title">
-              {{ filterTitle(content.title) }}
-            </span>
-          </button>
+    <div
+      class="contents-lists"
+      v-if="
+        contentState && (contentsList.length > 0 || collectionList.length > 0)
+      "
+    >
+      <div>
+        <div
+          v-for="(content, index) in contentsList"
+          :key="index"
+          class="contents-list"
+        >
+          <div class="contents-list__wrapper" @click="toLink(content.link)">
+            <button class="btn--transparent--img" @click="toLink(content.link)">
+              <span class="contents-list__icon"><img :src="web" /></span>
+              <span class="contents-list__title">
+                {{ filterTitle(content.title) }}
+              </span>
+            </button>
+          </div>
+          <div class="contents-list__wrapper">
+            <img :src="line" />
+            <span v-if="content.deadline" class="contents-list__expiry"
+              >D-{{ countDday(content.deadline) }}</span
+            >
+            <button class="btn--transparent" @click="openMemoModal(index)">
+              <img :src="memo" />
+            </button>
+            <button class="btn--transparent" @click="createFavorites(index)">
+              <img v-if="content.favorite" :src="star" />
+              <img v-if="!content.favorite" :src="star_gray" />
+            </button>
+          </div>
         </div>
-        <div class="contents-list__wrapper">
-          <img :src="line" />
-          <span v-if="content.deadline" class="contents-list__expiry"
-            >D-{{ countDday(content.deadline) }}</span
-          >
-          <button class="btn--transparent" @click="openMemoModal(index)">
-            <img :src="memo" />
-          </button>
-          <button class="btn--transparent" @click="createFavorites(index)">
-            <img v-if="content.favorite" :src="star" />
-            <img v-if="!content.favorite" :src="star_gray" />
-          </button>
+      </div>
+      <div>
+        <div
+          v-for="(collection, index) in collectionList"
+          :key="index"
+          class="contents-list"
+        >
+          <div class="contents-list__wrapper">
+            <button
+              class="btn--transparent--img"
+              @click="toDetail(collection.id)"
+            >
+              <span class="contents-list__icon"><img :src="web" /></span>
+              <span class="contents-list__title">
+                {{ filterTitle(collection.title) }}
+              </span>
+            </button>
+          </div>
+          <div class="contents-list__wrapper">
+            <img :src="line" />
+            <button class="btn--transparent" @click="openMemoModal(index)">
+              <img :src="memo" />
+            </button>
+            <button
+              class="btn--transparent"
+              @click="createFavoriteCollection(index)"
+            >
+              <img v-if="collection.favorite" :src="star" />
+              <img v-if="!collection.favorite" :src="star_gray" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -56,6 +95,9 @@ import star from "@/assets/icon/star.svg";
 import star_gray from "@/assets/icon/star_gray.svg";
 import web from "@/assets/icon/web.svg";
 import { fetchMyContents } from "@/api/user";
+import { fetchMyCollections } from "@/api/user";
+import { addFavoriteCollection } from "@/api/collection";
+
 import { countDday } from "@/utils/validation";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavorite } from "@/api/contents";
@@ -75,12 +117,16 @@ export default {
       contentState: false,
       isMemoModalActive: false,
       contentsList: [],
+      collectionList: [],
+
       data: 1,
       isFavoriteListUpdated: 0,
     };
   },
   created() {
     this.fetchContentsList();
+    this.fetchCollectionsList();
+
     eventBus.$on("fetchFavoritesList", (data) => {
       this.isFavoriteListUpdated += data;
       console.log(
@@ -92,6 +138,7 @@ export default {
   watch: {
     isFavoriteListUpdated: function () {
       this.fetchContentsList();
+      this.fetchCollectionsList();
     },
   },
   methods: {
@@ -112,6 +159,20 @@ export default {
         console.log(error);
       }
     },
+    // 즐겨찾기 생성
+    async createFavoriteCollection(index) {
+      this.collectionList[index].favorite =
+        !this.collectionList[index].favorite;
+      try {
+        const collectionId = this.conllectionList[index].id;
+
+        const response = await addFavoriteCollection(collectionId);
+        console.log(response);
+        eventBus.$emit("fetchFavoritesList", this.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
       this.$emit("toCategoryPage");
@@ -123,6 +184,15 @@ export default {
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsList = response.data.contents;
         console.log("콘텐츠 데이터", this.contentsList);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async fetchCollectionsList() {
+      try {
+        // const collectionId = this.$route.path.id;
+        const response = await fetchMyCollections(this.categoryId);
+        this.collectionList = response.data.collections;
       } catch (error) {
         console.log(error);
       }
@@ -146,6 +216,10 @@ export default {
     },
     toLink(link) {
       window.open(link, "_blank");
+    },
+    // 콜렉션 상세 페이지로 이동
+    toDetail(id) {
+      this.$router.push(`/collection/${id}`);
     },
   },
 };
