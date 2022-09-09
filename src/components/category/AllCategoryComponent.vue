@@ -88,15 +88,6 @@ export default {
     await this.fetchCollectionList();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
-    console.log("newArr", this.newArr);
-  },
-  watch: {
-    collectionData() {
-      this.fetchCollectionList();
-    },
-    contentsData() {
-      this.fetchContentsList();
-    },
   },
   methods: {
     // 나의 콘텐츠 조회
@@ -105,7 +96,6 @@ export default {
         const response = await fetchMyContents();
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.contents;
-        console.log("콘텐츠 데이터", this.contentsData);
       } catch (error) {
         console.log(error);
       }
@@ -117,7 +107,6 @@ export default {
         const response = await fetchMyCollections();
         // 콘텐츠 컴포넌트에 데이터 전달
         this.collectionData = response.data.collections;
-        console.log("콜렉션 데이터", this.collectionData);
       } catch (error) {
         console.log(error);
       }
@@ -155,16 +144,12 @@ export default {
     },
     // 정렬
     sortData(filter) {
-      console.log("정렬 메소드");
       // 최신순
       if (filter == "favorites") {
-        console.log("즐겨찾기 순으로 정렬한다.");
         this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
       } else if (filter == "latest") {
-        console.log("최신 순으로 정렬한다.");
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
-        console.log("만기 순으로 정렬한다.");
         this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
         console.log(this.newArr);
       }
