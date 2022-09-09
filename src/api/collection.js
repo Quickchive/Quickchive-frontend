@@ -12,7 +12,9 @@ function updateCollection(collectionData) {
 
 // 콜렉션 삭제
 function deleteCollection(collectionId) {
-  return authInstance.delete(`collections/delete/${collectionId}`);
+  return authInstance.delete(
+    `collections/delete/?collectionId=${collectionId}`
+  );
 }
 
 // 콜렉션 즐겨찾기 추가
