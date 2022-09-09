@@ -215,7 +215,6 @@ export default {
       const newLinkList = linkList.map((a) => a.link);
       console.log(newLinkList);
       console.log("콜렉션 수정 - 링크 목록");
-
       const collectionData = {
         title: this.collectionData.title,
         comment: this.collectionData.comment,
@@ -247,9 +246,7 @@ export default {
     async deleteCollection() {
       this.isDeleteModalActive = false;
       try {
-        const response = await deleteCollection(
-          this.collectionData.collectionId
-        );
+        const response = await deleteCollection(this.collectionData.id);
         console.log(response);
         this.$emit("close-modal");
       } catch (error) {
