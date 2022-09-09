@@ -14,19 +14,22 @@
       <div class="category__select-wrapper">
         <select v-model="categoryFilter" @change="sortData(categoryFilter)">
           <option value="latest">최신순</option>
-          <option value="favoirtes">즐겨찾기순</option>
+          <option value="favorites">즐겨찾기순</option>
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <contents-component
-        v-for="(contents, index) in contentsData"
-        :key="index"
-        :contentsData="contents"
-      ></contents-component>
-      <collection-component
-        v-show="isCollectionActive"
-        :collectionData="collectionData"
-      ></collection-component>
+      <!-- 콘텐츠 컴포넌트 -->
+      <div v-for="(data, index) in newArr" :key="index">
+        <contents-component
+          :contentsData="data"
+          v-if="!newArr[index].contents"
+        ></contents-component>
+        <!-- 콜렉션 컴포넌트 -->
+        <collection-component
+          v-if="newArr[index].contents"
+          :collectionData="data"
+        ></collection-component>
+      </div>
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
     <category-modal-component
@@ -68,27 +71,15 @@ export default {
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
-      // 콘텐츠 props 데이터
-      contentsData: {},
-      // 콜렉션 더미 데이터
-      collectionData: {
-        title: "비즈니스 모델 분석법",
-        lists: [
-          "10년차 컨설턴트의 게스티네이션 노하우",
-          "KSF모델로 보는 경쟁사 분석",
-          "수익모델 분석방법",
-          "AARRR분석하기 기초",
-          "분석하기 고급",
-        ],
-        favorites: true,
-      },
-      path: this.$route.params.id,
+      contentsData: [],
+      collectionData: [],
+      newArr: [],
     };
   },
   async created() {
     this.categoryId = this.$route.params.id;
-    this.fetchContentsList();
-    this.fetchCategoryName();
+    await this.fetchContentsList();
+    await this.fetchCategoryName();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
     console.log("newArr", this.newArr);
@@ -121,7 +112,7 @@ export default {
       try {
         const response = await fetchMyCollections(this.categoryId);
         // 콘텐츠 컴포넌트에 데이터 전달
-        this.collectionData = response.data;
+        this.collectionData = response.data.collections;
       } catch (error) {
         console.log(error);
       }
@@ -188,7 +179,7 @@ export default {
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
         console.log("만기 순으로 정렬한다.");
-        this.newArr = sortDeadlineArr(this.contentsData);
+        this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
         console.log(this.newArr);
       }
     },
