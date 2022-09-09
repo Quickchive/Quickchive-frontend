@@ -142,7 +142,6 @@ export default {
         const response = await fetchMyFavorites();
         this.favoritesList = response.data.favorite_contents;
         this.favoriteCollectionList = response.data.favorite_collections;
-        console.log("콘텐츠 데이터", this.favoritesList);
       } catch (error) {
         console.log(error);
       }
@@ -182,7 +181,6 @@ export default {
       return domain;
     },
     countDday(deadline) {
-      console.log(countDday(deadline));
       return countDday(deadline);
     },
     // 카테고리 상세 페이지로 이동

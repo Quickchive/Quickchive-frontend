@@ -152,13 +152,11 @@ export default {
   methods: {
     addFavorites() {
       this.collectionData.favorite = !this.collectionData.favorite;
-      console.log("즐찾", this.collectionData.favorite);
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log("카테고리 목록 조회", response.data.categories);
         this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
@@ -183,7 +181,6 @@ export default {
         ) {
           return item !== null && item !== undefined && item !== "";
         }),
-        // 즐겨찾기 추가됨
         favorite: this.collectionData.favorite,
       };
       Object.keys(collectionData).forEach(
@@ -191,9 +188,7 @@ export default {
           (collectionData[key] == "" || collectionData[key] == undefined) &&
           delete collectionData[key]
       );
-      console.log("콜렉션 모달", collectionData);
       try {
-        console.log(" 최종 보낼 값", collectionData);
         const response = await addCollection(collectionData);
         console.log(response);
         this.$emit("close-modal");

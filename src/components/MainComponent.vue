@@ -218,7 +218,6 @@ export default {
         contentLinks: this.linkList,
       };
       try {
-        console.log("다수의 콘텐츠 추가 메소드", contentsData);
         const response = await addMultipleContents(contentsData);
         console.log(response);
       } catch (error) {
@@ -231,7 +230,6 @@ export default {
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log("카테고리 목록 조회", response.data.categories);
         this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
@@ -239,7 +237,6 @@ export default {
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage(id) {
-      console.log("카테고리 id", id);
       this.$router.push(`/category/${id}`);
     },
     // 즐겨찾기 상세 페이지로 이동

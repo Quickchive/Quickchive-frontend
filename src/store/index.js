@@ -98,7 +98,7 @@ export default new Vuex.Store({
         const { data } = await fetchProfile();
         commit("setNickname", data.name);
         commit("setEmail", data.email);
-        console.log("여긴 vuex, 로그인 여부 확인중", data);
+        console.log("vuex에서 로그인 여부 확인중", data);
         if (data.statusCode == 201) {
           commit("setLoginState", true);
         } else if (data.statusCode == 200) {

@@ -149,7 +149,6 @@ export default {
       try {
         const response = await fetchMyCategory();
         this.categories = response.data.categories;
-        console.log(response.data.categories);
       } catch (error) {
         console.log(error);
       }

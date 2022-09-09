@@ -177,7 +177,6 @@ export default {
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log("카테고리 목록 조회", response.data.categories);
         this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
@@ -201,7 +200,6 @@ export default {
               (contentsData[key] == "" || contentsData[key] == undefined) &&
               delete contentsData[key]
           );
-          console.log("콘텐츠 수정 contentsData", contentsData);
           const response = await updateContents(contentsData);
           console.log(response);
           this.$emit("close-modal");
