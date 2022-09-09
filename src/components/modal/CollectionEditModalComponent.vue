@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <div class="collection-modal-card">
       <div class="modal-card__header">
-        <h1>콜렉션 추가</h1>
+        <h1>콜렉션 수정</h1>
         <button
           type="button"
           class="btn--transparent btn__close"
@@ -24,7 +24,22 @@
           <div class="register-form__wrapper category__wrapper">
             <label class="register-form__label">카테고리</label>
             <!-- 미분류 카테고리인 경우 -->
-            <select v-model="categoryName" class="contents-modal__select">
+            <select
+              v-if="collectionData.category == null"
+              v-model="categoryName"
+              class="contents-modal__select"
+            >
+              <option value="">미분류</option>
+              <option v-for="(category, index) in myCategories" :key="index">
+                {{ category.name }}
+              </option>
+            </select>
+            <!-- 미분류 카테고리 아닌 경우 -->
+            <select
+              v-if="collectionData.category"
+              v-model="collectionData.category.name"
+              class="contents-modal__select"
+            >
               <option value="">미분류</option>
               <option v-for="(category, index) in myCategories" :key="index">
                 {{ category.name }}
@@ -57,13 +72,13 @@
           <label class="register-form__label">링크<em>*</em></label>
           <div class="link__wrapper">
             <div
-              v-for="(content, index) in this.collectionData.contentLinkList"
-              :key="index"
               class="link__wrapper-inner"
+              v-for="(content, index) in this.collectionData.contents"
+              :key="index"
             >
               <div class="link__index">{{ index + 1 }}</div>
               <input
-                v-model="collectionData.contentLinkList[index]"
+                v-model="collectionData.contents[index].link"
                 placeholder="URL 입력"
               />
               <button
@@ -75,20 +90,36 @@
               </button>
             </div>
           </div>
-          <div class="flex-container-col modal-card__btn__wrapper">
-            <button @click="createInput()" class="btn--transparent btn--plus">
+
+          <div
+            class="flex-container-col modal-card__btn__wrapper"
+            v-if="collectionData.contents[0].link"
+          >
+            <button
+              @click="createInput(collectionData.contents.length)"
+              class="btn--transparent btn--plus"
+            >
               <img :src="add_link" />
             </button>
           </div>
         </div>
       </div>
-
+      <div class="modal-card__btn__wrapper">
+        <div class="flex-container">
+          <button
+            @click="isDeleteModalActive = true"
+            class="btn--transparent login-form__link-register"
+          >
+            콘텐츠 삭제
+          </button>
+        </div>
+      </div>
       <!-- 버튼 -->
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
-          @click="createCollection()"
+          @click="editCollection()"
           :disabled="
-            collectionData.contentLinkList == '' || !collectionData.title
+            collectionData.contents.link == '' || !collectionData.title
           "
           class="btn--sm btnPrimary"
         >
@@ -96,7 +127,13 @@
         </button>
       </div>
     </div>
-
+    <!-- 삭제 확인용 모달 -->
+    <AlertModalComponent
+      v-if="isDeleteModalActive == true"
+      :alertModalContent="deleteModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="deleteCollection()"
+    ></AlertModalComponent>
     <!-- 에러 모달 -->
     <AlertModalComponent
       v-if="isAlertModalActive == true"
@@ -116,7 +153,8 @@ import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
 import { fetchMyCategory } from "@/api/user";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
-import { addCollection } from "@/api/collection";
+import { deleteCollection } from "@/api/collection";
+import { updateCollection } from "@/api/collection";
 
 export default {
   components: { AlertModalComponent },
@@ -139,12 +177,11 @@ export default {
       // 삭제 경고 모달
       isDeleteModalActive: false,
       deleteModalContent: "해당 콜렉션을 \n삭제하시겠습니까?",
-      // 폼 항목
       categoryName: "",
     };
   },
   props: {
-    collectionData: Object,
+    collectionData: [],
   },
   created() {
     this.getMyCategory();
@@ -165,24 +202,30 @@ export default {
       }
     },
     // 인풋 추가 이벤트
-    createInput() {
-      this.collectionData.contentLinkList.push("");
+    createInput(index) {
+      // this.collectionData.contents.push("");
+      const arr = { link: "" };
+      // this.collectionData.contents[index].link = "";
+      this.collectionData.contents.push(arr);
+      console.log(index);
     },
-    // 인풋 추가 이벤트
+    // 인풋 삭제 이벤트
     deleteInput(index) {
-      this.collectionData.contentLinkList.splice(index, 1);
+      this.collectionData.contents.splice(index, 1);
     },
-    // 콜렉션 추가
-    async createCollection() {
+    // 콜렉션 수정
+    async editCollection() {
+      const linkList = this.collectionData.contents;
+      const newLinkList = linkList.map((a) => a.link);
+      console.log(newLinkList);
+      console.log("콜렉션 수정 - 링크 목록");
+
       const collectionData = {
         title: this.collectionData.title,
         comment: this.collectionData.comment,
-        categoryName: this.categoryName,
-        contentLinkList: this.collectionData.contentLinkList.filter(function (
-          item
-        ) {
-          return item !== null && item !== undefined && item !== "";
-        }),
+        categoryName: this.categoryName || this.collectionData.category.name,
+        contentLinkList: newLinkList,
+        collectionId: this.collectionData.id,
         // 즐겨찾기 추가됨
         favorite: this.collectionData.favorite,
       };
@@ -192,9 +235,25 @@ export default {
           delete collectionData[key]
       );
       console.log("콜렉션 모달", collectionData);
+      this.$emit("collectionEdit", collectionData);
       try {
+        const response = await updateCollection(collectionData);
+        console.log(response);
+        this.$emit("close-modal");
         console.log(" 최종 보낼 값", collectionData);
-        const response = await addCollection(collectionData);
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
+      }
+    },
+    // 콜렉션 삭제
+    async deleteCollection() {
+      this.isDeleteModalActive = false;
+      try {
+        const response = await deleteCollection(
+          this.collectionData.collectionId
+        );
         console.log(response);
         this.$emit("close-modal");
       } catch (error) {

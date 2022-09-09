@@ -13,11 +13,11 @@
       <div v-for="(data, index) in newArr" :key="index">
         <contents-component
           :contentsData="data"
-          v-if="!newArr[index].collectionId"
+          v-if="!newArr[index].contents"
         ></contents-component>
         <!-- 콜렉션 컴포넌트 -->
         <collection-component
-          v-if="!newArr[index].id && !newArr[index].deadline"
+          v-if="!newArr[index].deadline"
           :collectionData="data"
         ></collection-component>
       </div>
@@ -32,6 +32,13 @@
       @deleteCategory="deleteCategory"
       :deleteBtn="deleteBtn"
     ></category-modal-component>
+    <!-- 에러 모달 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -42,13 +49,15 @@ import CollectionComponent from "@/components/collection/CollectionComponent.vue
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
-import { sortLatestArr, sortFavoritesArr, sortDeadline } from "@/utils/sort";
+import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
   components: {
     ContentsComponent,
     CollectionComponent,
     CategoryModalComponent,
+    AlertModalComponent,
   },
   data() {
     return {
@@ -67,15 +76,18 @@ export default {
       newContentsArr: [],
       newCollectionArr: [],
       newArr: [],
+      isAlertModalActive: false,
+      AlertModalContent: "",
+      btnMessage: "네",
     };
   },
-  created() {
-    this.fetchContentsList();
+  async created() {
+    await this.fetchContentsList();
+    await this.fetchCollectionList();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
     console.log("newArr", this.newArr);
   },
-  computed: {},
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
@@ -90,12 +102,11 @@ export default {
     },
     // 나의 콜렉션 조회
     async fetchCollectionList() {
-      this.categoryId = this.$route.params.id;
-      console.log("카테고리 id", this.categoryId);
       try {
-        const response = await fetchMyCollections(this.categoryId);
+        const response = await fetchMyCollections();
         // 콘텐츠 컴포넌트에 데이터 전달
-        this.collectionData = response.data;
+        this.collectionData = response.data.collections;
+        console.log("콜렉션 데이터", this.collectionData);
       } catch (error) {
         console.log(error);
       }
@@ -116,6 +127,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 카테고리 삭제
@@ -125,6 +138,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 정렬
@@ -139,8 +154,7 @@ export default {
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
         console.log("만기 순으로 정렬한다.");
-        // 현재 콜렉션은 만기 없으니까 콘텐츠만 정렬함
-        this.newArr = sortDeadline(this.contentsData);
+        this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
         console.log(this.newArr);
       }
     },

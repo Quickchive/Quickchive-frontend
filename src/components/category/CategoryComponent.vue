@@ -12,7 +12,7 @@
     </h1>
     <div>
       <div class="category__select-wrapper">
-        <select v-model="categoryFilter">
+        <select v-model="categoryFilter" @change="sortData(categoryFilter)">
           <option value="latest">최신순</option>
           <option value="favoirtes">즐겨찾기순</option>
           <option value="expiry">읽을기한순</option>
@@ -49,6 +49,7 @@ import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vu
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
+import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
 
 export default {
   components: {
@@ -88,6 +89,9 @@ export default {
     this.categoryId = this.$route.params.id;
     this.fetchContentsList();
     this.fetchCategoryName();
+    // 콘텐츠 컴포넌트 최신순 정렬
+    this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+    console.log("newArr", this.newArr);
   },
   watch: {
     $route() {
@@ -170,6 +174,22 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    // 정렬
+    sortData(filter) {
+      console.log("정렬 메소드");
+      // 최신순
+      if (filter == "favorites") {
+        console.log("즐겨찾기 순으로 정렬한다.");
+        this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
+      } else if (filter == "latest") {
+        console.log("최신 순으로 정렬한다.");
+        this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+      } else if (filter == "expiry") {
+        console.log("만기 순으로 정렬한다.");
+        this.newArr = sortDeadlineArr(this.contentsData);
+        console.log(this.newArr);
       }
     },
   },

@@ -103,6 +103,13 @@
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
     ></confirm-modal-component>
+    <!-- 에러 모달 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -111,9 +118,10 @@ import { validatePw } from "@/utils/validation";
 import { editProfile } from "@/api/user";
 import { deleteUser } from "@/api/auth";
 import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
-  components: { ConfirmModalComponent },
+  components: { ConfirmModalComponent, AlertModalComponent },
   data() {
     return {
       nickname: this.$store.state.nickname,
@@ -125,6 +133,9 @@ export default {
         "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
       leftBtnMessage: "네",
       rightBtnMessage: "아니오",
+      isAlertModalActive: false,
+      AlertModalContent: "",
+      btnMessage: "네",
     };
   },
   created() {
@@ -205,11 +216,11 @@ export default {
         };
         const response = await editProfile(userData);
         console.log(response);
-        alert("회원정보 수정에 성공하였습니다.");
         this.$router.push("/main");
       } catch (error) {
         console.log(error);
-        alert("회원정보 수정에 실패하였습니다.");
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 회원 탈퇴
@@ -222,6 +233,8 @@ export default {
         this.$router.push("/");
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
   },

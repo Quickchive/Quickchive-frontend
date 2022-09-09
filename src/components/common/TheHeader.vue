@@ -41,7 +41,10 @@
     </nav>
     <!-- 버거 메뉴 펼쳤을 때-->
     <div class="burger-menu__nav" v-show="menuActive">
-      <span v-if="isUserLogin">{{ this.$store.state.nickname }}님 </span>
+      <span v-if="isUserLogin" class="burger-menu__nickname"
+        ><strong>{{ this.$store.state.nickname }}</strong
+        >&nbsp;님
+      </span>
       <ul>
         <li id="burger-menu__nav-category"><img :src="category" />카테고리</li>
       </ul>
@@ -52,7 +55,7 @@
           :key="index"
           @click="toCategoryPage(index)"
         >
-          {{ category.name }}
+          {{ filterTitle(category.name) }}
         </li>
         <li @click="toUnclassiCategoryPage()">미분류</li>
       </ul>
@@ -173,6 +176,14 @@ export default {
         await this.fetchCategoryList();
       } catch (error) {
         console.log(error);
+      }
+    },
+    // 제목 글자수 10자 이상
+    filterTitle(title) {
+      if (title.length >= 10) {
+        return title.substr(0, 10) + "...";
+      } else {
+        return title;
       }
     },
   },
