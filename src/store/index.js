@@ -21,6 +21,7 @@ export default new Vuex.Store({
     accessToken: "" || getAuthFromCookie("accessToken"),
     refreshToken: "" || localStorage.getItem("refreshToken"),
     oauthInfo: "" || localStorage.getItem("oauthInfo"),
+    stayLoginState: false || localStorage.getItem("stayLogin"),
   },
   getters: {
     // 로그인 여부 확인
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     // 소셜 로그인 여부 확인
     isOauthLogin(state) {
       return state.oauthLoginState;
+    },
+    isUserStayLogin(state) {
+      return state.stayLoginState;
     },
   },
   mutations: {
@@ -62,6 +66,9 @@ export default new Vuex.Store({
     },
     setOauthLoginState(state, oauthLoginState) {
       state.oauthLoginState = oauthLoginState;
+    },
+    setStayLoginState(state, stayLoginState) {
+      state.stayLoginState = stayLoginState;
     },
   },
   actions: {
@@ -112,16 +119,22 @@ export default new Vuex.Store({
     },
     // 구글 로그인 요청
     async GOOGLE_LOGIN({ commit }, code) {
-      const response = await googleLogin(code);
-      console.log(response);
-      if (response.data.statusCode == 200) {
-        console.log("구글 로그인 성공");
-        localStorage.setItem("refreshToken", response.data.refresh_token);
-        saveAuthToCookie(response.data.access_token);
-        commit("setNickname", response.data.name);
-        commit("setEmail", response.data.email);
-        commit("setOauthLoginState", true);
-        commit("setLoginState", false);
+      try {
+        const response = await googleLogin(code);
+        console.log(response);
+        if (response.data.statusCode == 200) {
+          console.log("구글 로그인 성공");
+          localStorage.setItem("refreshToken", response.data.refresh_token);
+          saveAuthToCookie(response.data.access_token);
+          commit("setNickname", response.data.name);
+          commit("setEmail", response.data.email);
+          commit("setOauthLoginState", true);
+          commit("setLoginState", false);
+        }
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 카카오 로그인 요청
@@ -140,6 +153,8 @@ export default new Vuex.Store({
         }
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 액세스 토큰 갱신
@@ -153,6 +168,12 @@ export default new Vuex.Store({
       commit("setRefreshToken", refreshToken);
       localStorage.setItem("refreshToken", refreshToken);
       console.log("여긴 vuex, refrest 토큰값 갱신함");
+    },
+    // 로그인 유지
+    STAY_LOGIN({ commit }, stayLoginState) {
+      commit("setStayLoginState", stayLoginState);
+      localStorage.setItem("stayLogin", stayLoginState);
+      console.log("로그인 유지 값 로컬스토리지에 세팅");
     },
   },
 });

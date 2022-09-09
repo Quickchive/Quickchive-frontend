@@ -70,8 +70,6 @@
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
       :collectionData="collectionData"
-      :collectionModalTitle="collectionModalTitle"
-      @collectionEvent="createCollection()"
     ></collection-modal-component>
   </div>
 </template>
@@ -91,7 +89,6 @@ import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
-import { addCollection } from "@/api/collection";
 
 export default {
   components: {
@@ -164,6 +161,8 @@ export default {
         await this.$store.dispatch("KAKAO_LOGIN", code);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 구글 로그인 요청
@@ -173,6 +172,8 @@ export default {
         await this.$store.dispatch("GOOGLE_LOGIN", code);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 카테고리 추가 모달 열기
@@ -192,6 +193,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 콘텐츠 추가 모달 열기
@@ -220,6 +223,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 자신의 카테고리 조회
@@ -247,19 +252,6 @@ export default {
       this.isConfirmModalActive = false;
       this.isModalActive = false;
       this.isCollectionModalActive = true;
-    },
-    // 콜렉션 추가 이벤트
-    async createCollection(collectionData) {
-      try {
-        const response = await addCollection(collectionData);
-        console.log(response);
-        this.$emit("close-modal");
-        console.log(" 최종 보낼 값", collectionData);
-      } catch (error) {
-        console.log(error);
-        this.alertModalContent = error.response.message;
-        this.isAlertModalActive = true;
-      }
     },
   },
 };

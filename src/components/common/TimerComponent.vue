@@ -21,6 +21,9 @@ export default {
   },
   methods: {
     startTimer() {
+      this.totalTime = 5 * 60;
+      clearInterval(this.timer);
+      this.timer = null;
       this.timer = setInterval(() => this.countdown(), 1000);
       this.message = "인증메일을 확인해주세요.";
     },
@@ -40,6 +43,10 @@ export default {
         this.totalTime = 0;
         this.message = "인증시간이 만료되었습니다.";
       }
+    },
+    stopTimer(timerMessage) {
+      this.totalTime = 0;
+      this.timerMessage = timerMessage;
     },
   },
   computed: {

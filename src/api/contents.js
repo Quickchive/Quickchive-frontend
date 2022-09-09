@@ -25,10 +25,16 @@ function addFavorite(contentId) {
   return authInstance.patch(`contents/favorite/${contentId}`);
 }
 
+// 읽었음 표시
+function postReadFlag(contentId) {
+  return authInstance.patch(`contents/read/${contentId}`);
+}
+
 export {
   addContents,
   updateContents,
   deleteContents,
   addMultipleContents,
   addFavorite,
+  postReadFlag,
 };

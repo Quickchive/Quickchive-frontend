@@ -48,7 +48,7 @@
     width: 100%;
     border-bottom: 1px solid $color-gray-2;
     padding: 8px 0 7px 0;
-    @include layout(row, flex-start, space-between);
+    @include layout(row, center, space-between);
     .contents-list__wrapper {
       @include layout(row, center, flex-start);
       .contents-list__expiry {
@@ -60,9 +60,11 @@
       }
       .contents-list__icon {
         margin-right: 4px;
+        @include layout(column, center, center);
       }
       button {
         margin: 0 6px 0 6px;
+        @include layout(row, center, center);
       }
       .contents-list__title {
         @include font(14px, 400, $color-black-text);
@@ -133,8 +135,12 @@
         .favorite-list__img {
           width: 158px;
           height: 97px;
-          background-color: #d9d9d9;
+          background-color: $color-gray-7;
           position: relative;
+          img {
+            width: 100%;
+            height: 100%;
+          }
           .favorite-list__expiry {
             background-color: $color-components-2;
             @include font(11px, 400, $color-gray-1);
@@ -149,9 +155,9 @@
       .favorite-list__btn-wrapper {
         display: flex;
         gap: 5px;
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
+        position: relative;
+        bottom: 23px;
+        left: 110px;
       }
       .favorite-list__title {
         @include font(14px, 400, $color-black-text);
@@ -164,6 +170,10 @@
         gap: 5px;
         @include font(10px, 400, $color-primary);
       }
+    }
+    .favorite-list__wrapper-text {
+      @extend .favorite-list__wrapper;
+      margin-top: -16px;
     }
   }
 }

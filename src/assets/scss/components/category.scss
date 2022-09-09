@@ -117,8 +117,8 @@
 // 콜렉션 컴포넌트
 .collection-component {
   @extend .contents-component;
-  align-items: flex-end;
   padding-bottom: 13px;
+  @include layout(row, flex-end, space-between);
   .collection__wrapper-col {
     @extend .contents__wrapper-col;
     width: 100%;
@@ -129,21 +129,31 @@
     // 콜렉션 제목
     .collection__title {
       @extend .contents__title;
+      margin: 0;
     }
     .collection__lists-wrapper {
       display: flex;
       align-items: flex-end;
+
       // 콜렉션 - 목록
       .collection__lists {
-        @include font(14px, 400, $color-black-text);
+        @include font(14px, 400, $color-gray-10);
         margin: 0;
         padding: 0;
         list-style-position: inside;
-        display: flex;
         line-height: 19px;
+        height: 77px;
       }
       .collection__list-num {
         @include font(14px, 400, $color-gray-4);
+      }
+    }
+    .collection__inner {
+      @include layout(row, center, space-between);
+      width: 100%;
+      .collection__createdAt {
+        @include font(12px, 400, $color-primary);
+        width: 100%;
       }
     }
     .collection__btn-wrapper {
