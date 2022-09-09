@@ -151,11 +151,6 @@ export default {
       }
     },
   },
-  // watch: {
-  //   contentsData: function () {
-  //     this.fetchContentsList();
-  //   },
-  // },
   methods: {
     async toLink(link) {
       // 해당 링크로 이동
@@ -170,6 +165,7 @@ export default {
     },
     // 콘텐츠 수정 모달 오픈
     openEditModal() {
+      this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
       this.isModalActive = true;
     },
     // 메모 모달 오픈
