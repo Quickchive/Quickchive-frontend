@@ -161,7 +161,7 @@ export default {
         await this.$store.dispatch("KAKAO_LOGIN", code);
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.message;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
@@ -172,7 +172,7 @@ export default {
         await this.$store.dispatch("GOOGLE_LOGIN", code);
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.message;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
@@ -193,7 +193,7 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.message;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
@@ -223,7 +223,7 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.message;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },

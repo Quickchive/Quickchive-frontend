@@ -32,6 +32,13 @@
       @deleteCategory="deleteCategory"
       :deleteBtn="deleteBtn"
     ></category-modal-component>
+    <!-- 에러 모달 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -43,12 +50,14 @@ import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vu
 import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
 import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
   components: {
     ContentsComponent,
     CollectionComponent,
     CategoryModalComponent,
+    AlertModalComponent,
   },
   data() {
     return {
@@ -67,6 +76,9 @@ export default {
       newContentsArr: [],
       newCollectionArr: [],
       newArr: [],
+      isAlertModalActive: false,
+      AlertModalContent: "",
+      btnMessage: "네",
     };
   },
   async created() {
@@ -115,6 +127,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 카테고리 삭제
@@ -124,6 +138,8 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 정렬
