@@ -89,6 +89,12 @@ export default {
       this.fetchCategoryName();
       this.categoryId = this.$route.params.id;
     },
+    collectionData() {
+      this.fetchCollectionList();
+    },
+    contentsData() {
+      this.fetchContentsList();
+    },
   },
   methods: {
     // 나의 콘텐츠 조회

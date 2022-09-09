@@ -84,6 +84,14 @@ export default {
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
     console.log("newArr", this.newArr);
   },
+  watch: {
+    collectionData() {
+      this.fetchCollectionList();
+    },
+    contentsData() {
+      this.fetchContentsList();
+    },
+  },
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
@@ -96,6 +104,7 @@ export default {
         console.log(error);
       }
     },
+
     // 나의 콜렉션 조회
     async fetchCollectionList() {
       try {

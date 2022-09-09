@@ -1,6 +1,9 @@
 <template>
   <div class="collection-view">
     <!-- 콜렉션 정보 설명 -->
+    <div v-if="!collectionData">
+      <h2>(임시)콜렉션 정보가 존재하지 않습니다.</h2>
+    </div>
     <div v-if="collectionData">
       <header class="collection__header">
         <div class="flex-container">
@@ -128,6 +131,11 @@ export default {
   },
   created() {
     this.fetchCollectionsList();
+  },
+  watch: {
+    collectionData() {
+      this.fetchCollectionsList();
+    },
   },
   methods: {
     // 콜렉션 리스트 조회
