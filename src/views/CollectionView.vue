@@ -89,7 +89,6 @@
     <collection-edit-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      :collectionModalTitle="collectionModalTitle"
       :collectionData="collectionData"
     ></collection-edit-modal-component>
     <!-- 에러 모달 -->
@@ -134,7 +133,6 @@ export default {
     // 콜렉션 리스트 조회
     async fetchCollectionsList() {
       try {
-        // const collectionId = this.$route.path.id;
         const response = await fetchMyCollections();
         this.collectionData = response.data.collections;
         this.collectionData = this.collectionData.filter(
