@@ -80,6 +80,7 @@ export default {
     this.categoryId = this.$route.params.id;
     await this.fetchContentsList();
     await this.fetchCategoryName();
+    await this.fetchCollectionList();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
   },
@@ -89,12 +90,12 @@ export default {
       this.fetchCategoryName();
       this.categoryId = this.$route.params.id;
     },
-    collectionData() {
-      this.fetchCollectionList();
-    },
-    contentsData() {
-      this.fetchContentsList();
-    },
+    // collectionData() {
+    //   this.fetchCollectionList();
+    // },
+    // contentsData() {
+    //   this.fetchContentsList();
+    // },
   },
   methods: {
     // 나의 콘텐츠 조회
