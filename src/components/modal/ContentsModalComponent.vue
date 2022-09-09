@@ -178,7 +178,6 @@ export default {
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log("카테고리 목록 조회", response.data.categories);
         this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
@@ -217,7 +216,6 @@ export default {
       // 링크가 2개 이상인 경우
       else if (this.countLink >= 2) {
         const linkList = this.linkList;
-        console.log("모달컴포먼트", linkList);
         this.$emit("isLinkNotSingle", linkList);
       }
     },

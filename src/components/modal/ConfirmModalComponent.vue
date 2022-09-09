@@ -22,7 +22,6 @@ export default {
     confirmModalContent: String,
     leftBtnMessage: String,
     rightBtnMessage: String,
-    // collectionData: Object,
   },
   // 개행
   methods: {

@@ -82,7 +82,6 @@ export default {
     await this.fetchCategoryName();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
-    console.log("newArr", this.newArr);
   },
   watch: {
     $route() {
@@ -95,12 +94,9 @@ export default {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
       const categoryId = this.$route.params.id;
-      console.log("카테고리 id", categoryId);
       try {
         const response = await fetchMyContents(categoryId);
-        // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.contents;
-        console.log("콘텐츠 데이터", this.contentsData);
       } catch (error) {
         console.log(error);
       }
@@ -108,10 +104,8 @@ export default {
     // 나의 콜렉션 조회
     async fetchCollectionList() {
       this.categoryId = this.$route.params.id;
-      console.log("카테고리 id", this.categoryId);
       try {
         const response = await fetchMyCollections(this.categoryId);
-        // 콘텐츠 컴포넌트에 데이터 전달
         this.collectionData = response.data.collections;
       } catch (error) {
         console.log(error);

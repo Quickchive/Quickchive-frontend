@@ -131,7 +131,6 @@ export default {
   },
   computed: {
     countDday() {
-      console.log(countDday(this.contentsData.deadline));
       return countDday(this.contentsData.deadline);
     },
     // 링크 여부 확인
