@@ -63,6 +63,52 @@
           </div>
         </div>
       </div>
+      <div
+        v-for="(favorite, index) in favoritesCollectionList"
+        :key="favorite.id"
+        class="favorite-list"
+      >
+        <!-- 1. wrapper -->
+        <div class="favorite-list__wrapper">
+          <div class="favorite-list__img-wrapper">
+            <!-- 이미지 -->
+            <div class="favorite-list__img" v-if="favoritesCollectionList">
+              <img
+                :src="favoritesCollectionList[index].contents[0].coverImg"
+                onerror="this.style.display='none'"
+              />
+            </div>
+            <div class="favorite-list__btn-wrapper">
+              <button class="btn--transparent" @click="openMemoModal(index)">
+                <img :src="memo" />
+              </button>
+              <img :src="line_white" />
+              <!-- 즐겨찾기 -->
+              <button class="btn--transparent" @click="createFavorites(index)">
+                <img v-if="favorite.favorite" :src="star" />
+                <img v-if="!favorite.favorite" :src="star_gray" />
+              </button>
+            </div>
+            <!-- 메모 -->
+          </div>
+        </div>
+        <!-- 2. wrapper -->
+        <div class="favorite-list__wrapper-text">
+          <!-- 제목 -->
+          <p @click="toDetail(favorite.id)" class="favorite-list__title">
+            {{ filterTitle(favorite.title) }}
+          </p>
+          <div class="favorite-list__inner">
+            <!-- 도메인 -->
+            <span class="favorite-list__domain">Collection</span>
+            <img :src="line" />
+            <!-- 날짜 -->
+            <span class="favorite-list__date">{{
+              favorite.createdAt.substr(0, 10)
+            }}</span>
+          </div>
+        </div>
+      </div>
     </div>
     <memo-modal-component
       v-if="isMemoModalActive"
@@ -99,7 +145,8 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
-      favoritesList: {},
+      favoritesList: [],
+      favoritesCollectionList: [],
       isFavoriteListUpdated: 0,
       data: 1,
     };
@@ -141,7 +188,7 @@ export default {
       try {
         const response = await fetchMyFavorites();
         this.favoritesList = response.data.favorite_contents;
-        this.favoriteCollectionList = response.data.favorite_collections;
+        this.favoritesCollectionList = response.data.favorite_collections;
       } catch (error) {
         console.log(error);
       }
@@ -161,6 +208,9 @@ export default {
     },
     toLink(link) {
       window.open(link, "_blank");
+    },
+    toDetail(id) {
+      this.$router.push(`/collection/${id}`);
     },
     // 도메인 추출
     filterDomain(link) {

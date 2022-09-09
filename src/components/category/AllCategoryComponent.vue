@@ -9,6 +9,12 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
+      <div
+        class="alert"
+        v-if="contentsData.length == 0 && collectionData.length == 0"
+      >
+        <h2>(임시) 아직 콘텐츠&콜렉션이 없습니다😯</h2>
+      </div>
       <!-- 콘텐츠 컴포넌트 -->
       <div v-for="(data, index) in newArr" :key="index">
         <contents-component
