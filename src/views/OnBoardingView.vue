@@ -5,7 +5,9 @@
       체계적으로 정리하는 방법
     </h1>
     <img :src="onboardingImg" />
-    <button class="btn__register btnValid" @click="toLogin">로그인</button>
+    <button v-if="!isUserLogin" class="btn__register btnValid" @click="toLogin">
+      로그인
+    </button>
   </div>
 </template>
 
@@ -16,6 +18,15 @@ export default {
     return {
       onboardingImg,
     };
+  },
+  computed: {
+    isUserLogin() {
+      if (this.$store.getters.isLogin == true) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     toLogin() {
