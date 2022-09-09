@@ -59,7 +59,7 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">읽을 기한</label>
               <div class="flex-container modal-form__wrapper">
-                <input v-model="deadline" type="date" />
+                <input v-model="deadline" type="date" v-if="contentsData" />
                 <span class="contents-modal__date-description"
                   >D-DAY에 알림을 보내드립니다</span
                 >
@@ -144,6 +144,9 @@ export default {
   mounted() {
     this.getMyCategory();
   },
+  props: {
+    contentsData: Object,
+  },
   watch: {
     link: function () {
       this.linkList = filterLink(this.link);
@@ -178,7 +181,6 @@ export default {
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log("카테고리 목록 조회", response.data.categories);
         this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
@@ -217,7 +219,6 @@ export default {
       // 링크가 2개 이상인 경우
       else if (this.countLink >= 2) {
         const linkList = this.linkList;
-        console.log("모달컴포먼트", linkList);
         this.$emit("isLinkNotSingle", linkList);
       }
     },

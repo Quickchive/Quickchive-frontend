@@ -118,7 +118,6 @@ export default {
       isMemoModalActive: false,
       contentsList: [],
       collectionList: [],
-
       data: 1,
       isFavoriteListUpdated: 0,
     };
@@ -183,14 +182,12 @@ export default {
         const response = await fetchMyContents(-1);
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsList = response.data.contents;
-        console.log("콘텐츠 데이터", this.contentsList);
       } catch (error) {
         console.log(error);
       }
     },
     async fetchCollectionsList() {
       try {
-        // const collectionId = this.$route.path.id;
         const response = await fetchMyCollections(this.categoryId);
         this.collectionList = response.data.collections;
       } catch (error) {
@@ -211,7 +208,6 @@ export default {
       }
     },
     countDday(deadline) {
-      console.log(countDday(deadline));
       return countDday(deadline);
     },
     toLink(link) {

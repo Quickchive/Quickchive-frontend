@@ -59,7 +59,7 @@ const routes = [
       },
       // step2: 비밀번호 재설정
       {
-        path: "/resetpw",
+        path: "/resetpw/:code",
         component: () => import("@/components/auth/ResetPwForm.vue"),
       },
     ],

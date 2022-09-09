@@ -189,13 +189,11 @@ export default {
   methods: {
     addFavorites() {
       this.collectionData.favorite = !this.collectionData.favorite;
-      console.log("즐찾", this.collectionData.favorite);
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log("카테고리 목록 조회", response.data.categories);
         this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
@@ -203,9 +201,7 @@ export default {
     },
     // 인풋 추가 이벤트
     createInput(index) {
-      // this.collectionData.contents.push("");
       const arr = { link: "" };
-      // this.collectionData.contents[index].link = "";
       this.collectionData.contents.push(arr);
       console.log(index);
     },
@@ -219,7 +215,6 @@ export default {
       const newLinkList = linkList.map((a) => a.link);
       console.log(newLinkList);
       console.log("콜렉션 수정 - 링크 목록");
-
       const collectionData = {
         title: this.collectionData.title,
         comment: this.collectionData.comment,
@@ -251,9 +246,7 @@ export default {
     async deleteCollection() {
       this.isDeleteModalActive = false;
       try {
-        const response = await deleteCollection(
-          this.collectionData.collectionId
-        );
+        const response = await deleteCollection(this.collectionData.id);
         console.log(response);
         this.$emit("close-modal");
       } catch (error) {

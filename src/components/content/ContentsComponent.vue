@@ -131,7 +131,6 @@ export default {
   },
   computed: {
     countDday() {
-      console.log(countDday(this.contentsData.deadline));
       return countDday(this.contentsData.deadline);
     },
     // 링크 여부 확인
@@ -165,7 +164,6 @@ export default {
     },
     // 콘텐츠 수정 모달 오픈
     openEditModal() {
-      this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
       this.isModalActive = true;
     },
     // 메모 모달 오픈

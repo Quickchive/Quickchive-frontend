@@ -1,6 +1,9 @@
 <template>
   <div class="collection-view">
     <!-- 콜렉션 정보 설명 -->
+    <div v-if="!collectionData">
+      <h2>(임시)콜렉션 정보가 존재하지 않습니다.</h2>
+    </div>
     <div v-if="collectionData">
       <header class="collection__header">
         <div class="flex-container">
@@ -89,7 +92,6 @@
     <collection-edit-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      :collectionModalTitle="collectionModalTitle"
       :collectionData="collectionData"
     ></collection-edit-modal-component>
     <!-- 에러 모달 -->
@@ -130,11 +132,15 @@ export default {
   created() {
     this.fetchCollectionsList();
   },
+  watch: {
+    collectionData() {
+      this.fetchCollectionsList();
+    },
+  },
   methods: {
     // 콜렉션 리스트 조회
     async fetchCollectionsList() {
       try {
-        // const collectionId = this.$route.path.id;
         const response = await fetchMyCollections();
         this.collectionData = response.data.collections;
         this.collectionData = this.collectionData.filter(

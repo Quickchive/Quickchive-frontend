@@ -147,7 +147,6 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      console.log("인덱스", index);
       this.contentsList[index].favorite = !this.contentsList[index].favorite;
       try {
         const contentId = this.contentsList[index].id;
@@ -164,7 +163,6 @@ export default {
         !this.collectionList[index].favorite;
       try {
         const collectionId = this.conllectionList[index].id;
-
         const response = await addFavoriteCollection(collectionId);
         console.log(response);
         eventBus.$emit("fetchFavoritesList", this.data);
@@ -180,16 +178,13 @@ export default {
     async fetchContentsList() {
       try {
         const response = await fetchMyContents(this.categoryId);
-        // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsList = response.data.contents;
-        console.log("콘텐츠 데이터", this.contentsList);
       } catch (error) {
         console.log(error);
       }
     },
     async fetchCollectionsList() {
       try {
-        // const collectionId = this.$route.path.id;
         const response = await fetchMyCollections(this.categoryId);
         this.collectionList = response.data.collections;
       } catch (error) {
@@ -210,7 +205,6 @@ export default {
       }
     },
     countDday(deadline) {
-      console.log(countDday(deadline));
       return countDday(deadline);
     },
     toLink(link) {

@@ -3,7 +3,7 @@
     <h1 class="page-header">
       {{ categoryName
       }}<button
-        v-if="categoryName == !'미분류'"
+        v-if="this.categoryName !== '미분류'"
         class="btn--transparent--img"
         @click="openCategoryModal()"
       >
@@ -17,6 +17,11 @@
           <option value="favorites">즐겨찾기순</option>
           <option value="expiry">읽을기한순</option>
         </select>
+      </div>
+      <div v-if="contentsData.length == 0 && collectionData.length == 0">
+        <h2 class="alert">
+          (임시) 해당 카테고리에 속하는 콘텐츠&콜렉션이 없습니다😯
+        </h2>
       </div>
       <!-- 콘텐츠 컴포넌트 -->
       <div v-for="(data, index) in newArr" :key="index">
@@ -80,9 +85,9 @@ export default {
     this.categoryId = this.$route.params.id;
     await this.fetchContentsList();
     await this.fetchCategoryName();
+    await this.fetchCollectionList();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
-    console.log("newArr", this.newArr);
   },
   watch: {
     $route() {
@@ -90,17 +95,20 @@ export default {
       this.fetchCategoryName();
       this.categoryId = this.$route.params.id;
     },
+    // collectionData() {
+    //   this.fetchCollectionList();
+    // },
+    // contentsData() {
+    //   this.fetchContentsList();
+    // },
   },
   methods: {
     // 나의 콘텐츠 조회
     async fetchContentsList() {
       const categoryId = this.$route.params.id;
-      console.log("카테고리 id", categoryId);
       try {
         const response = await fetchMyContents(categoryId);
-        // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.contents;
-        console.log("콘텐츠 데이터", this.contentsData);
       } catch (error) {
         console.log(error);
       }
@@ -108,10 +116,8 @@ export default {
     // 나의 콜렉션 조회
     async fetchCollectionList() {
       this.categoryId = this.$route.params.id;
-      console.log("카테고리 id", this.categoryId);
       try {
         const response = await fetchMyCollections(this.categoryId);
-        // 콘텐츠 컴포넌트에 데이터 전달
         this.collectionData = response.data.collections;
       } catch (error) {
         console.log(error);
@@ -187,4 +193,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.alert {
+  padding: 50px 0;
+  box-sizing: border-box;
+  display: block;
+}
+</style>
