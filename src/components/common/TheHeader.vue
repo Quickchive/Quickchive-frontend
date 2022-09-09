@@ -27,8 +27,8 @@
           <img :src="profile" />
         </button>
         <div>
-          <button v-if="!isUserLogin" class="btn__login--sm">
-            <router-link to="/login">로그인</router-link>
+          <button v-if="!isUserLogin" class="btn__login--sm" @click="toLogin()">
+            로그인
           </button>
           <button
             v-if="isUserLogin"
@@ -186,6 +186,9 @@ export default {
       } else {
         return title;
       }
+    },
+    toLogin() {
+      this.$router.push("/login");
     },
   },
 };
