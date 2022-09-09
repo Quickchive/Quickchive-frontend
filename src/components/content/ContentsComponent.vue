@@ -125,9 +125,7 @@ export default {
     contentsData: Object,
   },
   created() {
-    console.log("콘텐츠컴포넌트 데이터", this.contentsData);
     this.memoContents = this.contentsData.comment;
-    console.log("메모", this.memoContents);
   },
   computed: {
     countDday() {
@@ -204,8 +202,7 @@ export default {
       return domain;
     },
     // 즐겨찾기 생성
-    async createFavorites(index) {
-      console.log("인덱스", index);
+    async createFavorites() {
       this.contentsData.favorite = !this.contentsData.favorite;
       try {
         const contentId = this.contentsData.id;
