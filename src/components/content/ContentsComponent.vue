@@ -7,7 +7,7 @@
           {{ filterTitle(contentsData.title) }}
         </p>
         <!-- readflag -->
-        <div v-if="!contentsData.readFlag" class="contents__readflag"></div>
+        <div v-if="contentsData.readFlag" class="contents__readflag"></div>
       </div>
       <p class="contents__contents">
         <span v-if="contentsData.description">{{
@@ -90,7 +90,7 @@ import { countDday } from "@/utils/validation";
 import { validateLink, linkCounter } from "@/utils/validation";
 import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComponent.vue";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { addFavorite } from "@/api/contents";
+import { addFavorite, postReadFlag } from "@/api/contents";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
@@ -151,9 +151,22 @@ export default {
       }
     },
   },
+  // watch: {
+  //   contentsData: function () {
+  //     this.fetchContentsList();
+  //   },
+  // },
   methods: {
-    toLink(link) {
+    async toLink(link) {
+      // 해당 링크로 이동
       window.open(link, "_blank");
+      // 읽었음 표시
+      try {
+        const response = await postReadFlag(this.contentsData.id);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 콘텐츠 수정 모달 오픈
     openEditModal() {
