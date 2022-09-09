@@ -17,6 +17,7 @@
             placeholder="제목, 메모 검색"
             class="input__search"
             v-model="data"
+            @keyup.enter="searchData()"
           />
           <button class="btn__search" @click="searchData()">
             <img :src="search" />
@@ -69,7 +70,7 @@ import profile from "@/assets/icon/profile.svg";
 import search from "@/assets/icon/search.svg";
 import category from "@/assets/icon/category.svg";
 import { fetchMyCategory } from "@/api/user";
-import { eventBus } from "@/main.js";
+import { eventBus } from "@/main";
 export default {
   components: {
     "burger-menu": Burger,
@@ -119,13 +120,13 @@ export default {
     async searchData() {
       if (this.$route.fullPath == "/search") {
         this.$router.push("/search").catch(() => {});
-        await eventBus.$emit("search", this.data);
         console.log("현재경로가  /search");
+        this.$store.dispatch("SEARCH", this.data);
       } else {
-        await this.$router.push("/search");
-        await eventBus.$emit("search", this.data);
-        console.log("현재경로가  /search 아님");
+        this.$store.dispatch("SEARCH", this.data);
+        this.$router.push("/search");
       }
+      await eventBus.$emit("search", this.data);
     },
     // 로그아웃
     logoutUser() {

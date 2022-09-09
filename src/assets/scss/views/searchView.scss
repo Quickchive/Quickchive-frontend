@@ -20,4 +20,8 @@
     text-align: center;
     border-bottom: 1px solid $color-gray-4;
   }
+  .no-result {
+    @include font(25px, 400, $color-black-text);
+    height: 100vh;
+  }
 }
