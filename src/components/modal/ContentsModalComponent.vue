@@ -59,7 +59,7 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">읽을 기한</label>
               <div class="flex-container modal-form__wrapper">
-                <input v-model="deadline" type="date" />
+                <input v-model="deadline" type="date" v-if="contentsData" />
                 <span class="contents-modal__date-description"
                   >D-DAY에 알림을 보내드립니다</span
                 >
@@ -143,6 +143,9 @@ export default {
   },
   mounted() {
     this.getMyCategory();
+  },
+  props: {
+    contentsData: Object,
   },
   watch: {
     link: function () {
