@@ -1,7 +1,8 @@
 <template>
   <div class="search-view">
     <div class="search__wrapper">
-      '{{ data }}'에 대한 검색 결과가
+      <p>'{{ data }}'</p>
+      에 대한 검색 결과가
       <span class="search__text--highlight">{{ searchResultNum }}</span
       >건 있습니다.
     </div>

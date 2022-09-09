@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <nav>
-      <div class="nav__wrapper">
+      <div class="nav__wrapper--left">
         <burger-menu
           v-if="isUserLogin"
           @toggle-menu="openBurger()"
@@ -11,8 +11,8 @@
           Quickchive
         </button>
       </div>
-      <div class="nav__wrapper">
-        <div v-if="!isUserLogin" class="input__search__wrapper">
+      <div class="nav__wrapper--right">
+        <div v-if="isUserLogin" class="input__search__wrapper">
           <input
             placeholder="제목, 메모 검색"
             class="input__search"
