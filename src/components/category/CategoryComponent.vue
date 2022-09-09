@@ -95,12 +95,6 @@ export default {
       this.fetchCategoryName();
       this.categoryId = this.$route.params.id;
     },
-    // collectionData() {
-    //   this.fetchCollectionList();
-    // },
-    // contentsData() {
-    //   this.fetchContentsList();
-    // },
   },
   methods: {
     // 나의 콘텐츠 조회
@@ -175,16 +169,12 @@ export default {
     },
     // 정렬
     sortData(filter) {
-      console.log("정렬 메소드");
       // 최신순
       if (filter == "favorites") {
-        console.log("즐겨찾기 순으로 정렬한다.");
         this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
       } else if (filter == "latest") {
-        console.log("최신 순으로 정렬한다.");
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
-        console.log("만기 순으로 정렬한다.");
         this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
         console.log(this.newArr);
       }

@@ -57,7 +57,6 @@ export default {
     await this.fetchFavoritesList();
     // 콘텐츠 컴포넌트 최신순 정렬
     this.newArr = sortLatestArr(this.contentsData, this.collectionData);
-    console.log("newArr", this.newArr);
   },
   methods: {
     // 나의 즐겨찾기 조회
@@ -67,19 +66,15 @@ export default {
         // 콘텐츠 컴포넌트에 데이터 전달
         this.contentsData = response.data.favorite_contents;
         this.collectionData = response.data.favorite_collections;
-        console.log("즐겨찾기 데이터", response.data);
       } catch (error) {
         console.log(error);
       }
     },
     // 정렬
     sortData(filter) {
-      console.log("정렬 메소드");
       if (filter == "latest") {
-        console.log("최신 순으로 정렬한다.");
         this.newArr = sortLatestArr(this.contentsData, this.collectionData);
       } else if (filter == "expiry") {
-        console.log("만기 순으로 정렬한다.");
         this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
         console.log(this.newArr);
       }
