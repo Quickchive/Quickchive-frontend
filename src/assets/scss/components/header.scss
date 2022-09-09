@@ -9,16 +9,24 @@
   nav {
     height: 100%;
     @include layout(row, center, space-between);
-    .nav__wrapper {
+    width: 100%;
+    .nav__wrapper--left {
       @include layout(row, center, flex-start);
+      width: auto;
+    }
+    .nav__wrapper--right {
+      @include layout(row, center, flex-end);
+      width: 100%;
       .input__search__wrapper {
         position: relative;
-        width: 531px;
+        // max-width: 800px;
+        width: 100%;
         margin-right: 28px;
+        @include layout(row, center, flex-end);
         .btn__search {
           position: absolute;
           z-index: 10;
-          right: 21px;
+          right: 15px;
           top: 5px;
           background-color: transparent;
         }

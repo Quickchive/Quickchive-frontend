@@ -39,7 +39,7 @@
   border-radius: 0 0 10px 10px;
   box-sizing: border-box;
   padding: 16px 25px;
-  @include layout(column, flex-start, flex-start);
+  @include layout(column, space-between, flex-start);
   position: relative;
   top: -10px;
   // left: 0px;
@@ -68,6 +68,7 @@
       }
       .contents-list__title {
         @include font(14px, 400, $color-black-text);
+        text-align: left;
       }
     }
   }
