@@ -150,6 +150,9 @@ export default {
   },
   mounted() {
     this.getMyCategory();
+    if (this.contentsData.deadline !== null) {
+      this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
+    }
   },
   computed: {
     // 링크 여부 확인

@@ -3,7 +3,7 @@
     <h1 class="page-header">
       {{ categoryName
       }}<button
-        v-if="categoryName == !'미분류'"
+        v-if="this.categoryName !== '미분류'"
         class="btn--transparent--img"
         @click="openCategoryModal()"
       >

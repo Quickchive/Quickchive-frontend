@@ -164,7 +164,6 @@ export default {
     },
     // 콘텐츠 수정 모달 오픈
     openEditModal() {
-      this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
       this.isModalActive = true;
     },
     // 메모 모달 오픈
