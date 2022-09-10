@@ -123,7 +123,7 @@ export default {
     toMypage() {
       if (this.$store.getters.isLogin) {
         this.$router.push("/mypage");
-      } else if (this.$store.getters.isOauthLogin) {
+      } else if (!this.$store.getters.isLogin) {
         this.$router.push("/mypage/sns");
       }
     },

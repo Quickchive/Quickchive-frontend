@@ -6,7 +6,7 @@
     </h1>
     <img :src="onboardingImg" />
     <button
-      v-if="!this.$store.getters.isLogin || !this.$store.getters.isOauthLogin"
+      v-if="!this.$store.getters.isLogin && !this.$store.getters.isOauthLogin"
       class="btn__register btnValid"
       @click="toLogin"
     >
