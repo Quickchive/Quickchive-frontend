@@ -43,12 +43,17 @@
     <span class="login-form__or">OR</span>
 
     <div class="oauth-btn__wrapper">
-      <a href="https://api.hou27.shop/api/oauth/kakao-auth" target="_blank">
-        <img :src="kakaoBtn"
-      /></a>
-      <a href="https://api.hou27.shop/api/oauth/google-auth" target="_blank">
-        <img :src="googleBtn" />
-      </a>
+      <button @click="setStayLogin()" class="btn--transparent">
+        <a href="https://api.hou27.shop/api/oauth/kakao-auth" target="_blank">
+          <img :src="kakaoBtn"
+        /></a>
+      </button>
+
+      <button @click="setStayLogin()" class="btn--transparent">
+        <a href="https://api.hou27.shop/api/oauth/google-auth" target="_blank">
+          <img :src="googleBtn" />
+        </a>
+      </button>
     </div>
     <alert-modal-component
       v-if="isAlertModalActive"
@@ -97,6 +102,9 @@ export default {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
+    },
+    setStayLogin() {
+      this.$store.dispatch("STAY_LOGIN", this.stayLogin);
     },
   },
 };
