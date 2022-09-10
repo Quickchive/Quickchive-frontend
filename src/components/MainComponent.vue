@@ -136,11 +136,17 @@ export default {
   created() {
     const path = this.$route.path;
     const loginInfo = path.slice(6);
-    if (loginInfo == "google/redirect") {
+    if (
+      loginInfo == "google/redirect" &&
+      localStorage.getItem("oauthInfo") !== "google"
+    ) {
       this.getGoogleLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "google");
-    } else if (loginInfo == "kakao/redirect") {
+    } else if (
+      loginInfo == "kakao/redirect" &&
+      localStorage.getItem("oauthInfo") !== "kakao"
+    ) {
       this.getKakaoLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "kakao");
