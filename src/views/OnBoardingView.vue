@@ -5,7 +5,11 @@
       체계적으로 정리하는 방법
     </h1>
     <img :src="onboardingImg" />
-    <button v-if="!isUserLogin" class="btn__register btnValid" @click="toLogin">
+    <button
+      v-if="!this.$store.getters.isLogin || !this.$store.getters.isOauthLogin"
+      class="btn__register btnValid"
+      @click="toLogin"
+    >
       로그인
     </button>
   </div>

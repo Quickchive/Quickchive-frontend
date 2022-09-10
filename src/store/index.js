@@ -16,11 +16,11 @@ export default new Vuex.Store({
   state: {
     nickname: "",
     email: "",
-    loginState: false,
+    loginState: false || localStorage.getItem("refreshToken"),
     oauthLoginState: false,
     accessToken: "" || getAuthFromCookie("accessToken"),
     refreshToken: "" || localStorage.getItem("refreshToken"),
-    oauthInfo: "" || localStorage.getItem("oauthInfo"),
+    oauthInfo: false || localStorage.getItem("oauthInfo"),
     stayLoginState: false || localStorage.getItem("stayLogin"),
     searchWord: "",
   },
