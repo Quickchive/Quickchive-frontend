@@ -3,7 +3,7 @@
     <nav>
       <div class="nav__wrapper--left">
         <burger-menu
-          v-if="this.$store.getters.isLogin"
+          v-if="this.$store.getters.isLogin || this.$store.getters.isOauthLogin"
           @toggle-menu="openBurger()"
           :active="menuActive"
         ></burger-menu>
@@ -12,7 +12,10 @@
         </button>
       </div>
       <div class="nav__wrapper--right">
-        <div v-if="this.$store.getters.isLogin" class="input__search__wrapper">
+        <div
+          v-if="this.$store.getters.isLogin || this.$store.getters.isOauthLogin"
+          class="input__search__wrapper"
+        >
           <input
             placeholder="제목, 메모 검색"
             class="input__search"
@@ -23,12 +26,18 @@
             <img :src="search" />
           </button>
         </div>
-        <button class="btn--transparent" @click="toMypage">
+        <button
+          v-if="this.$store.getters.isLogin || this.$store.getters.isOauthLogin"
+          class="btn--transparent"
+          @click="toMypage"
+        >
           <img :src="profile" />
         </button>
         <div>
           <button
-            v-if="!this.$store.getters.isLogin"
+            v-if="
+              !this.$store.getters.isLogin && !this.$store.getters.isOauthLogin
+            "
             class="btn__login--sm"
             @click="toLogin()"
           >
@@ -42,7 +51,9 @@
     </nav>
     <!-- 버거 메뉴 펼쳤을 때-->
     <div class="burger-menu__nav" v-show="menuActive">
-      <span v-if="this.$store.getters.isLogin" class="burger-menu__nickname"
+      <span
+        v-if="this.$store.getters.isLogin || this.$store.getters.isOauthLogin"
+        class="burger-menu__nickname"
         ><strong>{{ this.$store.state.nickname }}</strong
         >&nbsp;님
       </span>
