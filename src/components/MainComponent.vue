@@ -133,26 +133,26 @@ export default {
       collectionModalTitle: "콜렉션 추가",
     };
   },
-  created() {
+  async created() {
+    // 카테고리 조회
     const path = this.$route.path;
     const loginInfo = path.slice(6);
     if (
       loginInfo == "google/redirect" &&
       localStorage.getItem("oauthInfo") !== "google"
     ) {
-      this.getGoogleLogin();
+      await this.getGoogleLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "google");
     } else if (
       loginInfo == "kakao/redirect" &&
       localStorage.getItem("oauthInfo") !== "kakao"
     ) {
-      this.getKakaoLogin();
+      await this.getKakaoLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "kakao");
     }
-    // 카테고리 조회
-    this.getMyCategory();
+    await this.getMyCategory();
   },
   computed: {
     isUserLogin() {
