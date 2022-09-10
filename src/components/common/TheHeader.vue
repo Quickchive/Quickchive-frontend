@@ -3,7 +3,7 @@
     <nav>
       <div class="nav__wrapper--left">
         <burger-menu
-          v-if="isUserLogin"
+          v-if="this.$store.getters.isLogin"
           @toggle-menu="openBurger()"
           :active="menuActive"
         ></burger-menu>
@@ -12,7 +12,7 @@
         </button>
       </div>
       <div class="nav__wrapper--right">
-        <div v-if="isUserLogin" class="input__search__wrapper">
+        <div v-if="this.$store.getters.isLogin" class="input__search__wrapper">
           <input
             placeholder="제목, 메모 검색"
             class="input__search"
@@ -23,18 +23,18 @@
             <img :src="search" />
           </button>
         </div>
-        <button v-if="isUserLogin" class="btn--transparent" @click="toMypage">
+        <button class="btn--transparent" @click="toMypage">
           <img :src="profile" />
         </button>
         <div>
-          <button v-if="!isUserLogin" class="btn__login--sm" @click="toLogin()">
+          <button
+            v-if="!this.$store.getters.isLogin"
+            class="btn__login--sm"
+            @click="toLogin()"
+          >
             로그인
           </button>
-          <button
-            v-if="isUserLogin"
-            @click="logoutUser()"
-            class="btn__logout--sm"
-          >
+          <button v-else @click="logoutUser()" class="btn__logout--sm">
             로그아웃
           </button>
         </div>
@@ -42,7 +42,7 @@
     </nav>
     <!-- 버거 메뉴 펼쳤을 때-->
     <div class="burger-menu__nav" v-show="menuActive">
-      <span v-if="isUserLogin" class="burger-menu__nickname"
+      <span v-if="this.$store.getters.isLogin" class="burger-menu__nickname"
         ><strong>{{ this.$store.state.nickname }}</strong
         >&nbsp;님
       </span>
