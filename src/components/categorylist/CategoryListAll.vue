@@ -13,12 +13,12 @@
     <div
       class="contents-lists"
       v-if="
-        contentState && (contentsList.length > 0 || collectionList.length > 0)
+        contentState && (contentsData.length > 0 || collectionsData.length > 0)
       "
     >
       <div>
         <div
-          v-for="(content, index) in contentsList"
+          v-for="(content, index) in contentsData"
           :key="index"
           class="contents-list"
         >
@@ -47,7 +47,7 @@
       </div>
       <div>
         <div
-          v-for="(collection, index) in collectionList"
+          v-for="(collection, index) in collectionsData"
           :key="index"
           class="contents-list"
         >
@@ -94,8 +94,6 @@ import memo from "@/assets/icon/memo.svg";
 import star from "@/assets/icon/star.svg";
 import star_gray from "@/assets/icon/star_gray.svg";
 import web from "@/assets/icon/web.svg";
-import { fetchMyContents } from "@/api/user";
-import { fetchMyCollections } from "@/api/user";
 import { addFavoriteCollection } from "@/api/collection";
 
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
@@ -118,17 +116,17 @@ export default {
       isMemoModalActive: false,
       data: 1,
       isFavoriteListUpdated: 0,
-      contentsList: [],
-      collectionList: [],
+      contentsData: [],
+      collectionsData: [],
     };
   },
   props: {
     categoryTitle: String,
     categoryId: Number,
   },
-  created() {
-    this.fetchContentsList();
-    this.fetchCollectionsList();
+  async created() {
+    // await this.$store.dispatch("GET_CONTENTS");
+    // await this.$store.dispatch("GET_COLLECTIONS");
 
     eventBus.$on("fetchFavoritesList", (data) => {
       this.isFavoriteListUpdated += data;
@@ -139,20 +137,25 @@ export default {
     });
   },
   watch: {
-    isFavoriteListUpdated: function () {
-      this.fetchContentsList();
-      this.fetchCollectionsList();
+    isFavoriteListUpdated() {
+      this.$store.dispatch("GET_CONTENTS");
+      this.$store.dispatch("GET_COLLECTIONS");
     },
   },
   methods: {
-    showContent() {
+    async showContent() {
+      await this.$store.dispatch("GET_CONTENTS");
+      await this.$store.dispatch("GET_COLLECTIONS");
+      this.contentsData = this.$store.getters.getContents;
+      this.collectionsData = this.$store.getters.getCollections;
       this.contentState = !this.contentState;
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      this.contentsList[index].favorite = !this.contentsList[index].favorite;
+      this.$store.getters.getContents[index].favorite =
+        !this.$store.getters.getContents[index].favorite;
       try {
-        const contentId = this.contentsList[index].id;
+        const contentId = this.$store.getters.getContents[index].id;
         const response = await addFavorite(contentId);
         console.log(response);
         eventBus.$emit("fetchFavoritesList", this.data);
@@ -162,10 +165,10 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavoriteCollection(index) {
-      this.collectionList[index].favorite =
-        !this.collectionList[index].favorite;
+      this.$store.getters.getCollections[index].favorite =
+        !this.$store.getters.getCollections[index].favorite;
       try {
-        const collectionId = this.conllectionList[index].id;
+        const collectionId = this.$store.getters.getCollections[index].id;
         const response = await addFavoriteCollection(collectionId);
         console.log(response);
         eventBus.$emit("fetchFavoritesList", this.data);
@@ -177,27 +180,10 @@ export default {
     toCategoryPage() {
       this.$router.push("/category/all");
     },
-    async fetchContentsList() {
-      try {
-        const response = await fetchMyContents(this.categoryId);
-        // 콘텐츠 컴포넌트에 데이터 전달
-        this.contentsList = response.data.contents;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async fetchCollectionsList() {
-      try {
-        const response = await fetchMyCollections(this.categoryId);
-        this.collectionList = response.data.collections;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 메모 모달 열기
     openMemoModal(index) {
       this.isMemoModalActive = true;
-      this.memoContents = this.contentsList[index].comment;
+      this.memoContents = this.$store.getters.getContents[index].comment;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

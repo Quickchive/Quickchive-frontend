@@ -9,7 +9,7 @@
           <div class="register-form__wrapper">
             <label for="sns" class="register-form__label">간편로그인</label>
             <span id="sns" class="mypage__email">{{
-              this.$store.state.oauthInfo
+              this.$store.state.authStore.oauthInfo
             }}</span>
           </div>
 
@@ -88,7 +88,7 @@ export default {
   created() {
     // 프로필 조회
     this.$store.dispatch("FETCH_PROFILE");
-    this.nickname = this.$store.state.nickname;
+    this.nickname = this.$store.state.authStore.nickname;
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
