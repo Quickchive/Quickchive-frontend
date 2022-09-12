@@ -9,7 +9,7 @@
           <div class="register-form__wrapper">
             <label for="email" class="register-form__label">이메일</label>
             <span id="email" class="mypage__email">{{
-              this.$store.state.email
+              this.$store.state.authStore.email
             }}</span>
           </div>
 
@@ -124,7 +124,7 @@ export default {
   components: { ConfirmModalComponent, AlertModalComponent },
   data() {
     return {
-      nickname: this.$store.state.nickname,
+      nickname: this.$store.state.authStore.nickname,
       oldPw: "",
       pw: "",
       pwCheck: "",
@@ -141,7 +141,7 @@ export default {
   created() {
     // 프로필 조회
     this.$store.dispatch("FETCH_PROFILE");
-    this.nickname = this.$store.state.nickname;
+    this.nickname = this.$store.state.authStore.nickname;
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자

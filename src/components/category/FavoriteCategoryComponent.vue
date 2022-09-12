@@ -8,21 +8,18 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <div
-        class="alert"
-        v-if="contentsData.length == 0 && collectionData.length == 0"
-      >
+      <div class="alert" v-if="newArr.length == 0">
         <h2>(임시) 아직 콘텐츠&콜렉션이 없습니다😯</h2>
       </div>
       <!-- 콘텐츠 컴포넌트 -->
       <div v-for="(data, index) in newArr" :key="index">
         <contents-component
           :contentsData="data"
-          v-if="newArr[index].coverImg"
+          v-if="!data.contents"
         ></contents-component>
         <!-- 콜렉션 컴포넌트 -->
         <collection-component
-          v-if="!newArr[index].coverImg"
+          v-if="data.contents"
           :collectionData="data"
         ></collection-component>
       </div>
@@ -33,8 +30,7 @@
 <script>
 import ContentsComponent from "@/components/content/ContentsComponent.vue";
 import CollectionComponent from "@/components/collection/CollectionComponent.vue";
-import { fetchMyFavorites } from "@/api/user";
-import { sortLatestArr, sortDeadlineArr } from "@/utils/sort";
+import { sortDeadlineArr } from "@/utils/sort";
 
 export default {
   components: {
@@ -54,28 +50,21 @@ export default {
     };
   },
   async created() {
-    await this.fetchFavoritesList();
-    // 콘텐츠 컴포넌트 최신순 정렬
-    this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+    await this.$store.dispatch("GET_FAVORITES");
+    this.newArr = this.$store.getters.getLatestSortedFavorite;
   },
   methods: {
-    // 나의 즐겨찾기 조회
-    async fetchFavoritesList() {
-      try {
-        const response = await fetchMyFavorites();
-        // 콘텐츠 컴포넌트에 데이터 전달
-        this.contentsData = response.data.favorite_contents;
-        this.collectionData = response.data.favorite_collections;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 정렬
-    sortData(filter) {
+    async sortData(filter) {
       if (filter == "latest") {
-        this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+        await this.$store.dispatch("GET_FAVORITES");
+
+        this.newArr = this.$store.getters.getLatestSortedFavorite;
       } else if (filter == "expiry") {
-        this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
+        this.newArr = sortDeadlineArr(
+          this.$store.getters.getFavoriteContents,
+          this.$store.getters.getFavoriteCollections
+        );
         console.log(this.newArr);
       }
     },

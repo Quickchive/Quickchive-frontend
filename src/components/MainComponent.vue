@@ -87,7 +87,6 @@ import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue"
 import AlertModalComponent from "./modal/AlertModalComponent.vue";
 import { addMultipleContents } from "@/api/contents";
 import { addCategory } from "@/api/category";
-import { fetchMyCategory } from "@/api/user";
 import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
 
 export default {
@@ -152,7 +151,8 @@ export default {
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "kakao");
     }
-    await this.getMyCategory();
+    await this.$store.dispatch("GET_CATEGORIES");
+    this.myCategories = this.$store.getters.getCategories;
   },
   computed: {
     isUserLogin() {
@@ -230,15 +230,6 @@ export default {
         console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
-      }
-    },
-    // 자신의 카테고리 조회
-    async getMyCategory() {
-      try {
-        const response = await fetchMyCategory();
-        this.myCategories = response.data.categories;
-      } catch (error) {
-        console.log(error);
       }
     },
     // 카테고리 상세 페이지로 이동

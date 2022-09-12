@@ -3,8 +3,6 @@
 // 1. 최신순 정렬(createdAt)
 // - 콘텐츠 및 콜렉션을 우리 웹사이트에 가장 최근에 저장한 순서대로 노출
 function sortLatestArr(contentsData, collectionData) {
-  console.log("최신순 정렬");
-
   // 1) 콘텐츠 배열과 콜렉션 배열을 합친다.(spread operator: 전개연산자)
   const newArr = [...contentsData, ...collectionData];
   // 2) 문자열 - 날짜를 날짜 - 날짜로 변경
@@ -19,7 +17,6 @@ function sortLatestArr(contentsData, collectionData) {
 // *즐겨찾기가 지정된 콘텐츠 및 콜렉션은 수정된 날짜 순서대로 노출
 // (예: 22.8.23 23:34 저장 + 22.9.10에 즐겨찾기 지정 > 22.9.6 14:00 저장 + 22.9.6 14:03에 즐겨찾기 지정)
 function sortFavoritesArr(contentsData, collectionData) {
-  console.log("즐겨찾기순 정렬");
   const newArr = [...contentsData, ...collectionData];
 
   // 즐겨찾기 있는 것만 분류
@@ -45,7 +42,6 @@ function sortFavoritesArr(contentsData, collectionData) {
 // 3. 읽을 기한 순(
 function sortDeadlineArr(contentsData, collectionData) {
   // const newArr = [...contentsData, ...collectionData];
-  console.log("읽을기한순 정렬");
 
   // 기한이 있는 것만 분류
   const deadlineContentArr = contentsData.filter((data) => data.deadline);

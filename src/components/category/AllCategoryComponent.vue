@@ -11,22 +11,27 @@
       </div>
       <div
         class="alert"
-        v-if="contentsData.length == 0 && collectionData.length == 0"
+        v-if="
+          !this.$store.getters.getContents &&
+          !this.$store.getters.getCollections
+        "
       >
         <h2>(임시) 아직 콘텐츠&콜렉션이 없습니다😯</h2>
       </div>
-      <!-- 콘텐츠 컴포넌트 -->
-      <div v-for="(data, index) in newArr" :key="index">
-        <contents-component
-          :contentsData="data"
-          v-if="!newArr[index].contents"
-        ></contents-component>
-        <!-- 콜렉션 컴포넌트 -->
-        <collection-component
-          v-if="newArr[index].contents"
-          :collectionData="data"
-        ></collection-component>
+      <div v-else>
+        <div v-for="(data, index) in newArr" :key="index">
+          <contents-component
+            :contentsData="data"
+            v-if="!newArr[index].contents"
+          ></contents-component>
+          <!-- 콜렉션 컴포넌트 -->
+          <collection-component
+            v-if="newArr[index].contents"
+            :collectionData="data"
+          ></collection-component>
+        </div>
       </div>
+      <!-- 콘텐츠 컴포넌트 -->
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
     <category-modal-component
@@ -53,7 +58,6 @@ import setting from "@/assets/icon/settings.svg";
 import ContentsComponent from "@/components/content/ContentsComponent.vue";
 import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
-import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
 import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
@@ -75,8 +79,6 @@ export default {
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
-      contentsData: [],
-      collectionData: [],
       newArr: [],
       isAlertModalActive: false,
       AlertModalContent: "",
@@ -84,33 +86,15 @@ export default {
     };
   },
   async created() {
-    await this.fetchContentsList();
-    await this.fetchCollectionList();
+    await this.$store.dispatch("GET_CONTENTS");
+    await this.$store.dispatch("GET_COLLECTIONS");
     // 콘텐츠 컴포넌트 최신순 정렬
-    this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+    this.newArr = sortLatestArr(
+      this.$store.getters.getContents,
+      this.$store.getters.getCollections
+    );
   },
   methods: {
-    // 나의 콘텐츠 조회
-    async fetchContentsList() {
-      try {
-        const response = await fetchMyContents();
-        // 콘텐츠 컴포넌트에 데이터 전달
-        this.contentsData = response.data.contents;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    // 나의 콜렉션 조회
-    async fetchCollectionList() {
-      try {
-        const response = await fetchMyCollections();
-        // 콘텐츠 컴포넌트에 데이터 전달
-        this.collectionData = response.data.collections;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 카테고리 추가 모달 열기
     openCategoryModal() {
       this.isCategoryModalActive = true;
@@ -146,11 +130,20 @@ export default {
     sortData(filter) {
       // 최신순
       if (filter == "favorites") {
-        this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
+        this.newArr = sortFavoritesArr(
+          this.$store.getters.getContents,
+          this.$store.getters.getCollections
+        );
       } else if (filter == "latest") {
-        this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+        this.newArr = sortLatestArr(
+          this.$store.getters.getContents,
+          this.$store.getters.getCollections
+        );
       } else if (filter == "expiry") {
-        this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
+        this.newArr = sortDeadlineArr(
+          this.$store.getters.getContents,
+          this.$store.getters.getCollections
+        );
         console.log(this.newArr);
       }
     },

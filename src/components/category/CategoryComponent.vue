@@ -18,22 +18,29 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <div v-if="contentsData.length == 0 && collectionData.length == 0">
+      <div
+        v-if="
+          !this.$store.getters.getContents &&
+          !this.$store.getters.getCollections
+        "
+      >
         <h2 class="alert">
           (임시) 해당 카테고리에 속하는 콘텐츠&콜렉션이 없습니다😯
         </h2>
       </div>
-      <!-- 콘텐츠 컴포넌트 -->
-      <div v-for="(data, index) in newArr" :key="index">
-        <contents-component
-          :contentsData="data"
-          v-if="!newArr[index].contents"
-        ></contents-component>
-        <!-- 콜렉션 컴포넌트 -->
-        <collection-component
-          v-if="newArr[index].contents"
-          :collectionData="data"
-        ></collection-component>
+      <div v-else>
+        <!-- 콘텐츠 컴포넌트 -->
+        <div v-for="(data, index) in newArr" :key="index">
+          <contents-component
+            :contentsData="data"
+            v-if="!newArr[index].contents"
+          ></contents-component>
+          <!-- 콜렉션 컴포넌트 -->
+          <collection-component
+            v-if="newArr[index].contents"
+            :collectionData="data"
+          ></collection-component>
+        </div>
       </div>
     </div>
     <!-- 카테고리 수정 모달 컴포넌트 -->
@@ -54,7 +61,6 @@ import setting from "@/assets/icon/settings.svg";
 import ContentsComponent from "@/components/content/ContentsComponent.vue";
 import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
-import { fetchMyContents, fetchMyCollections } from "@/api/user";
 import { updateCategory, deleteCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
@@ -76,47 +82,30 @@ export default {
       categoryName: "",
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
-      contentsData: [],
-      collectionData: [],
       newArr: [],
     };
   },
   async created() {
     this.categoryId = this.$route.params.id;
-    await this.fetchContentsList();
+    this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
+    this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
+    // await this.$store.dispatch("SORT_DATA", this.$route.params.id);
+    // this.newArr = this.$store.getters.getLatestSortedData;
     await this.fetchCategoryName();
-    await this.fetchCollectionList();
-    // 콘텐츠 컴포넌트 최신순 정렬
-    this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+    this.newArr = sortLatestArr(
+      this.$store.getters.getContents,
+      this.$store.getters.getCollections
+    );
   },
   watch: {
     $route() {
-      this.fetchContentsList();
-      this.fetchCategoryName();
-      this.categoryId = this.$route.params.id;
+      // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
+      // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
+      this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      this.newArr = this.$store.getters.getLatestSortedData;
     },
   },
   methods: {
-    // 나의 콘텐츠 조회
-    async fetchContentsList() {
-      const categoryId = this.$route.params.id;
-      try {
-        const response = await fetchMyContents(categoryId);
-        this.contentsData = response.data.contents;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // 나의 콜렉션 조회
-    async fetchCollectionList() {
-      this.categoryId = this.$route.params.id;
-      try {
-        const response = await fetchMyCollections(this.categoryId);
-        this.collectionData = response.data.collections;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 카테고리 추가 모달 열기
     openCategoryModal() {
       this.isCategoryModalActive = true;
@@ -168,14 +157,23 @@ export default {
       }
     },
     // 정렬
-    sortData(filter) {
+    async sortData(filter) {
       // 최신순
       if (filter == "favorites") {
-        this.newArr = sortFavoritesArr(this.contentsData, this.collectionData);
+        this.newArr = sortFavoritesArr(
+          this.$store.getters.getContents,
+          this.$store.getters.getCollections
+        );
       } else if (filter == "latest") {
-        this.newArr = sortLatestArr(this.contentsData, this.collectionData);
+        this.newArr = sortLatestArr(
+          this.$store.getters.getContents,
+          this.$store.getters.getCollections
+        );
       } else if (filter == "expiry") {
-        this.newArr = sortDeadlineArr(this.contentsData, this.collectionData);
+        this.newArr = sortDeadlineArr(
+          this.$store.getters.getContents,
+          this.$store.getters.getCollections
+        );
         console.log(this.newArr);
       }
     },
