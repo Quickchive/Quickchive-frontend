@@ -54,7 +54,7 @@
       <span
         v-if="this.$store.getters.isLogin || this.$store.getters.isOauthLogin"
         class="burger-menu__nickname"
-        ><strong>{{ this.$store.state.nickname }}</strong
+        ><strong>{{ this.$store.state.authStore.nickname }}</strong
         >&nbsp;님
       </span>
       <ul>
