@@ -92,6 +92,7 @@ export default {
         const userData = {
           email: this.email,
           password: this.pw,
+          auto_login: this.stayLogin,
         };
         await this.$store.dispatch("LOGIN", userData);
         // 로그인 유지 여부 저장
