@@ -7,28 +7,28 @@ function findData(word, contents, collection) {
   // 1. 제목에 검색어가 있는 배열만 반환
   const findFromTitle = targetData.filter((data) =>
     // 검색 기준: 제목, 콘텐츠, 메모
-    data.title.includes(word)
+    data.title.toLowerCase().includes(word)
   );
 
   // // 2.1 메모 중 검색어가 있는 배열만 반환
   const containMemo = targetData.filter((data) => data.comment);
-  console.log("2-1", containMemo);
+  // console.log("2-1", containMemo);
 
   // 2.2 콘텐츠 || 콜렉션 메모가 존재하는 배열만 반환 (data.comment)
   const findFromMemo = containMemo.filter((data) =>
-    data.comment.includes(word)
+    data.comment.toLowerCase().includes(word)
   );
-  console.log("2-2", findFromMemo);
+  // console.log("2-2", findFromMemo);
 
   // 3-1. 콜렉션 - 콘텐츠 목록에 검색어가 있는 배열만 반환
   const containContents = collection.filter((data) => data.contents.length > 0);
-  console.log("3-1 콜렉션 - 콘텐츠가 존재하는 배열", containContents);
+  // console.log("3-1 콜렉션 - 콘텐츠가 존재하는 배열", containContents);
 
   let i = 0;
   const findFromContents = [];
   for (i = 0; i < containContents.length; i++) {
     const result = containContents[i].contents.filter((data) =>
-      data.title.includes(word)
+      data.title.toLowerCase().includes(word)
     );
     if (result.length > 0) {
       findFromContents.push(containContents[i]);
@@ -40,7 +40,7 @@ function findData(word, contents, collection) {
   const set = new Set(resultData);
   const uniqueArr = [...set];
 
-  console.log(uniqueArr);
+  // console.log(uniqueArr);
   return uniqueArr;
 }
 
