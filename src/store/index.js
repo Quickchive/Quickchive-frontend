@@ -126,8 +126,7 @@ export default new Vuex.Store({
         const refreshToken = {
           refresh_token: this.state.refreshToken,
         };
-        const { response } = await logoutUser(refreshToken);
-        console.log("로그아웃", response);
+        await logoutUser(refreshToken);
         commit("logoutUser");
       } catch (error) {
         console.log(error);
@@ -189,14 +188,12 @@ export default new Vuex.Store({
     STAY_LOGIN({ commit }, stayLoginState) {
       commit("setStayLoginState", stayLoginState);
       localStorage.setItem("stayLogin", stayLoginState);
-      console.log("로그인 유지 값 로컬스토리지에 세팅");
     },
 
     // 검색
     async SEARCH({ commit }, word) {
       // 콘텐츠 조회
       word = word.toLowerCase();
-      console.log("스토어", word);
 
       try {
         const contentsResponse = await fetchMyContents();
