@@ -9,6 +9,8 @@ import { loginUser } from "@/api/auth";
 import { fetchProfile } from "@/api/user";
 import { logoutUser } from "@/api/auth";
 import { googleLogin, kakaoLogin } from "@/api/oauth";
+import { findData } from "@/utils/search.js";
+import { fetchMyContents, fetchMyCollections } from "@/api/user";
 
 Vue.use(Vuex);
 
@@ -23,6 +25,7 @@ export default new Vuex.Store({
     oauthInfo: "" || localStorage.getItem("oauthInfo"),
     stayLoginState: false || localStorage.getItem("stayLogin"),
     searchWord: "",
+    searchResult: [],
   },
   getters: {
     // 로그인 여부 확인
@@ -38,6 +41,9 @@ export default new Vuex.Store({
     },
     getSearchWord(state) {
       return state.searchWord;
+    },
+    getSearchResult(state) {
+      return state.searchResult;
     },
   },
   mutations: {
@@ -76,6 +82,9 @@ export default new Vuex.Store({
     },
     setSearchWord(state, word) {
       state.searchWord = word;
+    },
+    setSearchResult(state, searchResult) {
+      state.searchResult = searchResult;
     },
   },
   actions: {
@@ -184,8 +193,25 @@ export default new Vuex.Store({
     },
 
     // 검색
-    SEARCH({ commit }, word) {
-      commit("setSearchWord", word);
+    async SEARCH({ commit }, word) {
+      // 콘텐츠 조회
+      word = word.toLowerCase();
+      console.log("스토어", word);
+
+      try {
+        const contentsResponse = await fetchMyContents();
+        const contents = contentsResponse.data.contents;
+        // console.log("스토어 검색 - 콘텐츠", contents);
+        const collectionsResponse = await fetchMyCollections();
+        const collections = collectionsResponse.data.collections;
+        // console.log("스토어 검색 - 콜렉션", collections);
+        const resultArr = findData(word, contents, collections);
+        console.log("스토어 - 검색 결과", resultArr);
+        commit("setSearchResult", resultArr);
+        commit("setSearchWord", word);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

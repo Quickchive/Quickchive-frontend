@@ -78,8 +78,6 @@ export default {
   created() {
     // 닉네임 조회
     this.$store.dispatch("FETCH_PROFILE");
-    // 카테고리 조회
-    // this.fetchCategoryList();
   },
   data() {
     return {
@@ -118,15 +116,9 @@ export default {
     },
     // 검색
     async searchData() {
-      if (this.$route.fullPath == "/search") {
-        this.$router.push("/search").catch(() => {});
-        console.log("현재경로가  /search");
-        this.$store.dispatch("SEARCH", this.data);
-      } else {
-        this.$store.dispatch("SEARCH", this.data);
-        this.$router.push("/search");
-      }
+      await this.$store.dispatch("SEARCH", this.data);
       await eventBus.$emit("search", this.data);
+      await this.$router.push("/search").catch(() => {});
     },
     // 로그아웃
     logoutUser() {
