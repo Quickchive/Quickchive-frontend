@@ -69,6 +69,7 @@
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
+      :contentsId="contentsId"
     ></memo-modal-component>
     <!-- 경고 모달 컴포넌트 -->
     <AlertModalComponent
@@ -110,6 +111,7 @@ export default {
       // 전달할 메모
       isMemoModalActive: false,
       memoContents: "",
+      contetnsId: 0,
       // 경고 모달
       isAlertModalActive: false,
       btnMessage: "네",
@@ -122,10 +124,21 @@ export default {
     };
   },
   props: {
-    contentsData: Object,
+    contentsData: {
+      comment: String,
+    },
+  },
+  watch: {
+    contentsData: {
+      handler() {
+        this.memoContents = this.contentsData.comment;
+      },
+      deep: true,
+    },
   },
   created() {
     this.memoContents = this.contentsData.comment;
+    this.contentsId = this.contentsData.id;
   },
   computed: {
     countDday() {

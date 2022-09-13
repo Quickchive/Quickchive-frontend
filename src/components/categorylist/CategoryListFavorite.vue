@@ -76,9 +76,6 @@
                 />
               </div>
               <div class="favorite-list__btn-wrapper">
-                <button class="btn--transparent" @click="openMemoModal(index)">
-                  <img :src="memo" />
-                </button>
                 <img :src="line_white" />
                 <!-- 즐겨찾기 -->
                 <button
@@ -89,10 +86,8 @@
                   <img v-if="!favorite.favorite" :src="star_gray" />
                 </button>
               </div>
-              <!-- 메모 -->
             </div>
           </div>
-          <!-- 2. wrapper -->
           <div class="favorite-list__wrapper-text">
             <!-- 제목 -->
             <p @click="toDetail(favorite.id)" class="favorite-list__title">
@@ -116,6 +111,7 @@
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
+      :contentsId="contentsId"
     ></memo-modal-component>
   </div>
 </template>
@@ -158,7 +154,7 @@ export default {
     // });
   },
   watch: {
-    isFavoriteListUpdated: function () {
+    isFavoriteListUpdated: function() {
       this.$store.dispatch("GET_FAVORITES");
       this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
@@ -187,9 +183,12 @@ export default {
       }
     },
     // 메모 모달 열기
-    openMemoModal(index) {
-      this.isMemoModalActive = true;
+    async openMemoModal(index) {
+      await this.$store.dispatch("GET_FAVORITES");
+      this.newArr = this.$store.getters.getLatestSortedFavorite;
       this.memoContents = this.newArr[index].comment;
+      this.contentsId = this.newArr[index].id;
+      this.isMemoModalActive = true;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

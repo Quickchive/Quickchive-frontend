@@ -31,6 +31,7 @@
 import ContentsComponent from "@/components/content/ContentsComponent.vue";
 import CollectionComponent from "@/components/collection/CollectionComponent.vue";
 import { sortDeadlineArr } from "@/utils/sort";
+import { eventBus } from "@/main";
 
 export default {
   components: {
@@ -47,11 +48,21 @@ export default {
       contentsData: [],
       collectionData: [],
       newArr: [],
+      memoEvent: 0,
     };
   },
   async created() {
     await this.$store.dispatch("GET_FAVORITES");
     this.newArr = this.$store.getters.getLatestSortedFavorite;
+    eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+  },
+
+  watch: {
+    async memoEvent() {
+      await this.$store.dispatch("GET_FAVORITES");
+      this.newArr = this.$store.getters.getLatestSortedFavorite;
+      eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    },
   },
   methods: {
     // 정렬

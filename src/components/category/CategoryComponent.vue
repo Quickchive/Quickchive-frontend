@@ -21,7 +21,7 @@
       <div
         v-if="
           !this.$store.getters.getContents &&
-          !this.$store.getters.getCollections
+            !this.$store.getters.getCollections
         "
       >
         <h2 class="alert">
@@ -64,6 +64,7 @@ import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vu
 import { updateCategory, deleteCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
+import { eventBus } from "@/main";
 
 export default {
   components: {
@@ -83,7 +84,25 @@ export default {
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
       newArr: [],
+      memoEvent: 0,
     };
+  },
+  watch: {
+    $route() {
+      // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
+      // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
+      this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      this.newArr = this.$store.getters.getLatestSortedData;
+    },
+    async memoEvent() {
+      await this.$store.dispatch("GET_CONTENTS");
+      await this.$store.dispatch("GET_COLLECTIONS");
+      // 콘텐츠 컴포넌트 최신순 정렬
+      this.newArr = sortLatestArr(
+        this.$store.getters.getContents,
+        this.$store.getters.getCollections
+      );
+    },
   },
   async created() {
     this.categoryId = this.$route.params.id;
@@ -96,14 +115,7 @@ export default {
       this.$store.getters.getContents,
       this.$store.getters.getCollections
     );
-  },
-  watch: {
-    $route() {
-      // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
-      // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
-      this.$store.dispatch("SORT_DATA", this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
-    },
+    eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
   },
   methods: {
     // 카테고리 추가 모달 열기
@@ -146,7 +158,7 @@ export default {
         if (categoryId == -1) {
           this.categoryName = "미분류";
         } else {
-          const categoryFilter = categories.filter(function (cate) {
+          const categoryFilter = categories.filter(function(cate) {
             return cate.id == categoryId;
           });
           console.log(categoryFilter);
