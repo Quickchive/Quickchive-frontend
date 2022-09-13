@@ -41,12 +41,14 @@
 <script>
 import closeBtn from "@/assets/icon/closeBtn.svg";
 import { updateContents } from "@/api/contents";
+import { eventBus } from "@/main";
 export default {
   name: "MemoModalComponent",
   data() {
     return {
       closeBtn,
       comment: "",
+      data: 1,
     };
   },
   props: {
@@ -74,6 +76,9 @@ export default {
         const response = await updateContents(contentsData);
         console.log(response);
         this.$emit("close-modal");
+        if (this.$route.fullpath != "/main") {
+          eventBus.$emit("memoEvent", this.data);
+        }
       } catch (error) {
         console.log(error);
       }
