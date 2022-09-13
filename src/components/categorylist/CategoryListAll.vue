@@ -11,40 +11,37 @@
     </header>
     <!-- 콘텐츠 목록 -->
     <div class="contents-lists" v-if="contentState && newArr.length > 0">
-      <div v-for="(content, index) in newArr" :key="index">
+      <div v-for="(data, index) in newArr" :key="index">
         <div class="contents-list" v-if="!data.contents">
-          <div class="contents-list__wrapper" @click="toLink(content.link)">
-            <button class="btn--transparent--img" @click="toLink(content.link)">
+          <div class="contents-list__wrapper" @click="toLink(data.link)">
+            <button class="btn--transparent--img" @click="toLink(data.link)">
               <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
-                {{ filterTitle(content.title) }}
+                {{ filterTitle(data.title) }}
               </span>
             </button>
           </div>
           <div class="contents-list__wrapper">
             <img :src="line" />
-            <span v-if="content.deadline" class="contents-list__expiry"
-              >D-{{ countDday(content.deadline) }}</span
+            <span v-if="data.deadline" class="contents-list__expiry"
+              >D-{{ countDday(data.deadline) }}</span
             >
             <button class="btn--transparent" @click="openMemoModal(index)">
               <img :src="memo" />
             </button>
             <button class="btn--transparent" @click="createFavorites(index)">
-              <img v-if="content.favorite" :src="star" />
-              <img v-if="!content.favorite" :src="star_gray" />
+              <img v-if="data.favorite" :src="star" />
+              <img v-if="!data.favorite" :src="star_gray" />
             </button>
           </div>
         </div>
         <div v-if="data.contents">
           <div class="contents-list">
             <div class="contents-list__wrapper">
-              <button
-                class="btn--transparent--img"
-                @click="toDetail(collection.id)"
-              >
+              <button class="btn--transparent--img" @click="toDetail(data.id)">
                 <span class="contents-list__icon"><img :src="web"/></span>
                 <span class="contents-list__title">
-                  {{ filterTitle(collection.title) }}
+                  {{ filterTitle(data.title) }}
                 </span>
               </button>
             </div>
@@ -54,8 +51,8 @@
                 class="btn--transparent"
                 @click="createFavoriteCollection(index)"
               >
-                <img v-if="collection.favorite" :src="star" />
-                <img v-if="!collection.favorite" :src="star_gray" />
+                <img v-if="data.favorite" :src="star" />
+                <img v-if="!data.favorite" :src="star_gray" />
               </button>
             </div>
           </div>
@@ -163,7 +160,7 @@ export default {
     },
     // 메모 모달 열기
     async openMemoModal(index) {
-      await this.$store.dispatch("SORT_DATA", this.categoryId);
+      await this.$store.dispatch("SORT_DATA");
       this.newArr = this.$store.getters.getLatestSortedData;
       this.memoContents = this.newArr[index].comment;
       this.contentsId = this.newArr[index].id;
