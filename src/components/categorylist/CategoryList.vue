@@ -12,7 +12,7 @@
     <!-- 콘텐츠 목록 -->
     <div class="contents-lists" v-if="contentState && newArr.length > 0">
       <div v-for="(data, index) in newArr" :key="index">
-        <div v-if="!data.contents" class="contents-list">
+        <div class="contents-list">
           <div class="contents-list__wrapper" @click="toLink(data.link)">
             <button class="btn--transparent--img" @click="toLink(data.link)">
               <span class="contents-list__icon"><img :src="web"/></span>
@@ -64,6 +64,7 @@
     <memo-modal-component
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
+      :contentsId="contentsId"
       :memoContents="memoContents"
     ></memo-modal-component>
   </div>
@@ -98,15 +99,16 @@ export default {
       isMemoModalActive: false,
       data: 1,
       isFavoriteListUpdated: 0,
-      // contentsData: [],
-      // collectionsData: [],
       newArr: [],
+      memoContents: "",
+      contentsId: 0,
     };
   },
   props: {
     categoryTitle: String,
     categoryId: Number,
   },
+
   async created() {
     // await this.$store.dispatch("GET_CONTENTS", this.categoryId);
     // await this.$store.dispatch("GET_COLLECTIONS", this.categoryId);
@@ -119,16 +121,12 @@ export default {
     // });
   },
   watch: {
-    isFavoriteListUpdated() {
-      // this.$store.dispatch("GET_CONTENTS", this.categoryId);
-      // this.$store.dispatch("GET_COLLECTIONS", this.categoryId);
-      this.$store.dispatch("SORT_DATA", this.categoryId);
-      this.newArr = this.$store.getters.getLatestSortedData;
-    },
-    newArr() {
-      this.$store.dispatch("SORT_DATA", this.categoryId);
-      this.newArr = this.$store.getters.getLatestSortedData;
-    },
+    // isFavoriteListUpdated() {
+    //   // this.$store.dispatch("GET_CONTENTS", this.categoryId);
+    //   // this.$store.dispatch("GET_COLLECTIONS", this.categoryId);
+    //   this.$store.dispatch("SORT_DATA", this.categoryId);
+    //   this.newArr = this.$store.getters.getLatestSortedData;
+    // },
   },
   methods: {
     async showContent() {
@@ -171,9 +169,12 @@ export default {
     },
 
     // 메모 모달 열기
-    openMemoModal(index) {
-      this.isMemoModalActive = true;
+    async openMemoModal(index) {
+      await this.$store.dispatch("SORT_DATA", this.categoryId);
+      this.newArr = this.$store.getters.getLatestSortedData;
       this.memoContents = this.newArr[index].comment;
+      this.contentsId = this.newArr[index].id;
+      this.isMemoModalActive = true;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

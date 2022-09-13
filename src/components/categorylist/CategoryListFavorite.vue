@@ -111,6 +111,7 @@
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
+      :contentsId="contentsId"
     ></memo-modal-component>
   </div>
 </template>
@@ -182,9 +183,12 @@ export default {
       }
     },
     // 메모 모달 열기
-    openMemoModal(index) {
-      this.isMemoModalActive = true;
+    async openMemoModal(index) {
+      await this.$store.dispatch("GET_FAVORITES");
+      this.newArr = this.$store.getters.getLatestSortedFavorite;
       this.memoContents = this.newArr[index].comment;
+      this.contentsId = this.newArr[index].id;
+      this.isMemoModalActive = true;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {
