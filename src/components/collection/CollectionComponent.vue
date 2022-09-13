@@ -37,9 +37,6 @@
           {{ collectionData.createdAt.substring(0, 10) }}
         </p>
         <div class="collection__btn-wrapper">
-          <button @click="openMemoModal()" class="btn--transparent">
-            <img :src="memo" />
-          </button>
           <img :src="category_line" />
           <button @click="createFavorites()" class="btn--transparent">
             <img :src="star" v-show="collectionData.favorite" /><img
@@ -65,12 +62,6 @@
         <img :src="edit" />
       </button>
     </div>
-    <!-- 메모 모달 컴포넌트 -->
-    <memo-modal-component
-      v-if="isMemoModalActive"
-      @close-modal="isMemoModalActive = false"
-      :memoContents="memoContents"
-    ></memo-modal-component>
     <!-- 콜렉션 수정 모달 -->
     <collection-edit-modal-component
       v-if="isCollectionModalActive"
@@ -93,14 +84,12 @@ import star from "@/assets/icon/star.svg";
 import star_border from "@/assets/icon/star_border.svg";
 import edit from "@/assets/icon/edit.svg";
 import category_line from "@/assets/icon/category_line.svg";
-import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavoriteCollection } from "@/api/collection";
 import CollectionEditModalComponent from "@/components/modal/CollectionEditModalComponent.vue";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
   components: {
-    MemoModalComponent,
     CollectionEditModalComponent,
     AlertModalComponent,
   },
@@ -111,9 +100,6 @@ export default {
       edit,
       star_border,
       category_line,
-      isMemoModalActive: false,
-      // 메모 모달
-      memoContents: "",
       // 콜렉션 모달
       isCollectionModalActive: false,
       collectionModalTitle: "콜렉션 수정",
@@ -129,10 +115,6 @@ export default {
     },
   },
   methods: {
-    openMemoModal() {
-      this.isMemoModalActive = true;
-      this.memoContents = this.collectionData.comment;
-    },
     // 즐겨찾기 생성
     async createFavorites() {
       this.collectionData.favorite = !this.collectionData.favorite;

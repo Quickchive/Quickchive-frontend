@@ -24,7 +24,7 @@
         >
           <div class="contents-list__wrapper" @click="toLink(content.link)">
             <button class="btn--transparent--img" @click="toLink(content.link)">
-              <span class="contents-list__icon"><img :src="web" /></span>
+              <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
                 {{ filterTitle(content.title) }}
               </span>
@@ -56,7 +56,7 @@
               class="btn--transparent--img"
               @click="toDetail(collection.id)"
             >
-              <span class="contents-list__icon"><img :src="web" /></span>
+              <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
                 {{ filterTitle(collection.title) }}
               </span>
@@ -64,9 +64,6 @@
           </div>
           <div class="contents-list__wrapper">
             <img :src="line" />
-            <button class="btn--transparent" @click="openMemoModal(index)">
-              <img :src="memo" />
-            </button>
             <button
               class="btn--transparent"
               @click="createFavoriteCollection(index)"
@@ -152,8 +149,8 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      this.$store.getters.getContents[index].favorite =
-        !this.$store.getters.getContents[index].favorite;
+      this.$store.getters.getContents[index].favorite = !this.$store.getters
+        .getContents[index].favorite;
       try {
         const contentId = this.$store.getters.getContents[index].id;
         const response = await addFavorite(contentId);
@@ -165,8 +162,8 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavoriteCollection(index) {
-      this.$store.getters.getCollections[index].favorite =
-        !this.$store.getters.getCollections[index].favorite;
+      this.$store.getters.getCollections[index].favorite = !this.$store.getters
+        .getCollections[index].favorite;
       try {
         const collectionId = this.$store.getters.getCollections[index].id;
         const response = await addFavoriteCollection(collectionId);

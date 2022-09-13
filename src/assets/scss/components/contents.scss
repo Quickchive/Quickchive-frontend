@@ -159,7 +159,9 @@
         gap: 5px;
         position: relative;
         bottom: 23px;
-        left: 110px;
+        right: 7px;
+        width: 100%;
+        justify-content: flex-end;
       }
       .favorite-list__title {
         @include font(14px, 400, $color-black-text);

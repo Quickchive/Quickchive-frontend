@@ -15,7 +15,7 @@
         <div v-if="!data.contents" class="contents-list">
           <div class="contents-list__wrapper" @click="toLink(data.link)">
             <button class="btn--transparent--img" @click="toLink(data.link)">
-              <span class="contents-list__icon"><img :src="web" /></span>
+              <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
                 {{ filterTitle(data.title) }}
               </span>
@@ -40,7 +40,7 @@
           <div v-if="data.contents" class="contents-list">
             <div class="contents-list__wrapper">
               <button class="btn--transparent--img" @click="toDetail(data.id)">
-                <span class="contents-list__icon"><img :src="web" /></span>
+                <span class="contents-list__icon"><img :src="web"/></span>
                 <span class="contents-list__title">
                   {{ filterTitle(data.title) }}
                 </span>
@@ -48,9 +48,7 @@
             </div>
             <div class="contents-list__wrapper">
               <img :src="line" />
-              <button class="btn--transparent" @click="openMemoModal(index)">
-                <img :src="memo" />
-              </button>
+
               <button
                 class="btn--transparent"
                 @click="createFavoriteCollection(index)"
@@ -156,8 +154,8 @@ export default {
     },
     // 즐겨찾기 생성 - 콜렉션
     async createFavoriteCollection(index) {
-      this.newArr[index].favorite =
-        !this.$store.getters.getCollections[index].favorite;
+      this.newArr[index].favorite = !this.$store.getters.getCollections[index]
+        .favorite;
       try {
         const collectionId = this.newArr[index].id;
         const response = await addFavoriteCollection(collectionId);
