@@ -136,6 +136,10 @@ export default {
     collectionData() {
       this.fetchCollectionsList();
     },
+    isCollectionModalActive() {
+      this.fetchCollectionsList();
+      console.log("콜렉션 수정 모달");
+    },
   },
   methods: {
     // 콜렉션 리스트 조회

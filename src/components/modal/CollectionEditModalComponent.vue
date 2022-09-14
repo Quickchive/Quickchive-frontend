@@ -14,18 +14,15 @@
       </div>
       <div class="modal-card__wrapper">
         <div class="flex-container modal-form__wrapper">
-          <div class="register-form__wrapper">
+          <div class="register-form__wrapper" v-if="collections.title">
             <label class="register-form__label">콜렉션 이름<em>*</em></label>
-            <input
-              v-model="collectionData.title"
-              placeholder="10자 이하 권장"
-            />
+            <input v-model="collections.title" placeholder="10자 이하 권장" />
           </div>
           <div class="register-form__wrapper category__wrapper">
             <label class="register-form__label">카테고리</label>
             <!-- 미분류 카테고리인 경우 -->
             <select
-              v-if="collectionData.category == null"
+              v-if="collections.category == null"
               v-model="categoryName"
               class="contents-modal__select"
             >
@@ -36,8 +33,8 @@
             </select>
             <!-- 미분류 카테고리 아닌 경우 -->
             <select
-              v-if="collectionData.category"
-              v-model="collectionData.category.name"
+              v-if="collections.category"
+              v-model="collections.category.name"
               class="contents-modal__select"
             >
               <option value="">미분류</option>
@@ -51,8 +48,8 @@
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-              <img v-show="!collectionData.favorite" :src="star_border" />
-              <img v-show="collectionData.favorite" :src="star" />
+              <img v-show="!collections.favorite" :src="star_border" />
+              <img v-show="collections.favorite" :src="star" />
             </button>
           </div>
         </div>
@@ -61,7 +58,7 @@
         <div class="register-form__wrapper">
           <label class="register-form__label">콜렉션 설명</label>
           <input
-            v-model="collectionData.comment"
+            v-model="collections.comment"
             placeholder="100자 이하"
             maxlength="100"
           />
@@ -73,12 +70,12 @@
           <div class="link__wrapper">
             <div
               class="link__wrapper-inner"
-              v-for="(content, index) in this.collectionData.contents"
+              v-for="(content, index) in this.collections.contents"
               :key="index"
             >
               <div class="link__index">{{ index + 1 }}</div>
               <input
-                v-model="collectionData.contents[index].link"
+                v-model="collections.contents[index].link"
                 placeholder="URL 입력"
               />
               <button
@@ -93,10 +90,10 @@
 
           <div
             class="flex-container-col modal-card__btn__wrapper"
-            v-if="collectionData.contents[0].link"
+            v-if="collections.contents[0].link"
           >
             <button
-              @click="createInput(collectionData.contents.length)"
+              @click="createInput(collections.contents.length)"
               class="btn--transparent btn--plus"
             >
               <img :src="add_link" />
@@ -118,9 +115,7 @@
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
           @click="editCollection()"
-          :disabled="
-            collectionData.contents.link == '' || !collectionData.title
-          "
+          :disabled="collections.contents.link == '' || !collections.title"
           class="btn--sm btnPrimary"
         >
           저장
@@ -178,6 +173,7 @@ export default {
       isDeleteModalActive: false,
       deleteModalContent: "해당 콜렉션을 \n삭제하시겠습니까?",
       categoryName: "",
+      collections: [],
     };
   },
   props: {
@@ -185,10 +181,11 @@ export default {
   },
   created() {
     this.getMyCategory();
+    this.collections = this.collectionData;
   },
   methods: {
     addFavorites() {
-      this.collectionData.favorite = !this.collectionData.favorite;
+      this.collections.favorite = !this.collections.favorite;
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
@@ -202,35 +199,35 @@ export default {
     // 인풋 추가 이벤트
     createInput(index) {
       const arr = { link: "" };
-      this.collectionData.contents.push(arr);
+      this.collections.contents.push(arr);
       console.log(index);
     },
     // 인풋 삭제 이벤트
     deleteInput(index) {
-      this.collectionData.contents.splice(index, 1);
+      this.collections.contents.splice(index, 1);
     },
     // 콜렉션 수정
     async editCollection() {
-      const linkList = this.collectionData.contents;
+      const linkList = this.collections.contents;
       const newLinkList = linkList.map((a) => a.link);
       console.log(newLinkList);
       console.log("콜렉션 수정 - 링크 목록");
       const collectionData = {
-        title: this.collectionData.title,
-        comment: this.collectionData.comment,
-        categoryName: this.categoryName || this.collectionData.category.name,
+        title: this.collections.title,
+        comment: this.collections.comment,
+        categoryName:
+          null || this.categoryName || this.collections.category.name,
         contentLinkList: newLinkList,
-        collectionId: this.collectionData.id,
+        collectionId: this.collections.id,
         // 즐겨찾기 추가됨
-        favorite: this.collectionData.favorite,
+        favorite: this.collections.favorite,
       };
       Object.keys(collectionData).forEach(
         (key) =>
           (collectionData[key] == "" || collectionData[key] == undefined) &&
           delete collectionData[key]
       );
-      console.log("콜렉션 모달", collectionData);
-      this.$emit("collectionEdit", collectionData);
+      // this.$emit("collectionEdit", collectionData);
       try {
         const response = await updateCollection(collectionData);
         console.log(response);
@@ -246,7 +243,7 @@ export default {
     async deleteCollection() {
       this.isDeleteModalActive = false;
       try {
-        const response = await deleteCollection(this.collectionData.id);
+        const response = await deleteCollection(this.collections.id);
         console.log(response);
         this.$emit("close-modal");
       } catch (error) {
