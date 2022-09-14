@@ -90,10 +90,12 @@ export default {
     };
   },
   watch: {
-    $route() {
+    async $route() {
       // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
       // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
-      this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      await this.fetchCategoryName();
+
+      await this.$store.dispatch("SORT_DATA", this.$route.params.id);
       this.newArr = this.$store.getters.getLatestSortedData;
     },
     async memoEvent() {
