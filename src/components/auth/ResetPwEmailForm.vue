@@ -54,6 +54,7 @@ export default {
       },
       errorMessage: "",
       message: {
+        message: "",
         btn: "인증",
       },
       errorEvent: false,
@@ -77,6 +78,7 @@ export default {
   methods: {
     // 이메일 전송
     async sendEmail() {
+      this.errorEvent = false;
       this.isTimerActive = true;
       try {
         if (this.emailDomain != "etc") {
@@ -84,6 +86,9 @@ export default {
           const response = await resetPw(email);
           console.log(response);
           if (response.data.statusCode == 200) {
+            // this.message.message = "인증메일을 확인해주세요.";
+
+            this.errorEvent = false;
             this.codeInputActive = true;
             this.btnMessage.email = "재전송";
             this.$refs.timer.resetTimer();
@@ -93,6 +98,9 @@ export default {
           const response = await resetPw(email);
           console.log(response);
           if (response.data.statusCode == 200) {
+            // this.message.message = "인증메일을 확인해주세요.";
+
+            this.errorEvent = false;
             this.isTimerActive = true;
             this.codeInputActive = true;
             this.btnMessage.email = "재전송";
@@ -100,10 +108,10 @@ export default {
           }
         }
       } catch (error) {
+        this.errorEvent = true;
         this.isTimerActive = false;
         console.log(error);
         this.errorMessage = error.response.data.message;
-        this.errorEvent = true;
       }
     },
     initForm() {
