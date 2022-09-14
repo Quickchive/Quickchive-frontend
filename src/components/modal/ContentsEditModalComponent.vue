@@ -195,11 +195,12 @@ export default {
             categoryName: this.categoryName,
             title: this.contentsData.title,
           };
-          Object.keys(contentsData).forEach(
-            (key) =>
+          Object.keys(contentsData).some((key) => {
+            if (key !== "favorite")
               (contentsData[key] == "" || contentsData[key] == undefined) &&
-              delete contentsData[key]
-          );
+                delete contentsData[key];
+          });
+          console.log("contentsData", contentsData);
           const response = await updateContents(contentsData);
           console.log(response);
           this.$emit("close-modal");

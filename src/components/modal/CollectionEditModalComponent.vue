@@ -218,15 +218,12 @@ export default {
         contentLinkList: newLinkList,
         collectionId: this.collections.id,
       };
-      console.log("걸러지기 전", collectionData);
 
-      Object.keys(collectionData).forEach(
-        (key) =>
+      Object.keys(collectionData).forEach((key) => {
+        if (key !== "favorite")
           (collectionData[key] == "" || collectionData[key] == undefined) &&
-          delete collectionData[key]
-      );
-      console.log("걸러짐", collectionData);
-      // this.$emit("collectionEdit", collectionData);
+            delete collectionData[key];
+      });
       try {
         const response = await updateCollection(collectionData);
         console.log(response);
