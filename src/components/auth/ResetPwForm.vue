@@ -45,7 +45,7 @@
             :disabled="!isValid"
             type="submit"
           >
-            비밀번호 재설정
+            수정 완료
           </button>
         </form>
       </div>

@@ -7,14 +7,21 @@
         <div class="register-form__email">
           <div class="register-form__wrapper">
             <label for="email" class="register-form__label">이메일</label>
-            <input type="text" v-model="email" id="email" />
+            <input
+              type="text"
+              v-model="email"
+              id="email"
+              placeholder="가입 시 사용한 이메일을 입력해주세요."
+            />
           </div>
           <span>@</span>
           <div class="register-form__wrapper" v-if="emailDomain == 'etc'">
             <input type="text" v-model="emailSelfInput" />
           </div>
           <select v-model="emailDomain">
-            <option value="">이메일 선택</option>
+            <option value="" id="reset-pw__select-placeholder"
+              >이메일 선택</option
+            >
             <option value="gmail.com">gmail.com</option>
             <option value="naver.com">naver.com</option>
             <option value="daum.com">daum.net</option>
@@ -86,8 +93,6 @@ export default {
           const response = await resetPw(email);
           console.log(response);
           if (response.data.statusCode == 200) {
-            // this.message.message = "인증메일을 확인해주세요.";
-
             this.errorEvent = false;
             this.codeInputActive = true;
             this.btnMessage.email = "재전송";
@@ -98,8 +103,6 @@ export default {
           const response = await resetPw(email);
           console.log(response);
           if (response.data.statusCode == 200) {
-            // this.message.message = "인증메일을 확인해주세요.";
-
             this.errorEvent = false;
             this.isTimerActive = true;
             this.codeInputActive = true;
