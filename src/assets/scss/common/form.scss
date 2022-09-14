@@ -17,7 +17,7 @@ form {
 
 // 회원가입 폼
 .register-wrapper {
-  max-width: 700px;
+  max-width: 824px;
 }
 
 // 회원가입 폼 - 이메일
@@ -25,7 +25,7 @@ form {
   @include layout(row, flex-end, space-between);
   gap: 8px;
   .register-form__wrapper {
-    width: 220px;
+    width: 254px;
   }
   button {
     margin-bottom: 4px;
@@ -33,7 +33,9 @@ form {
   select {
     margin-bottom: 4px;
     width: 170px;
+    @include font(15px, 400, $color-gray-7);
   }
+
   span {
     margin-bottom: 16px;
   }
