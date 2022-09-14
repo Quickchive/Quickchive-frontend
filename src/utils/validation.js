@@ -9,8 +9,7 @@ function validatePw(pw) {
 // http, https
 
 function validateLink(link) {
-  const re =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+  const re = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
   return re.test(String(link));
 }
 
@@ -39,7 +38,7 @@ function countDday(deadline) {
 
   const diff = today.getTime() - expiryDate.getTime();
   // 양수로 변환 후 밀리초로 나눔
-  return parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)));
+  return parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)) + 1);
 }
 
 export { validatePw, validateLink, linkCounter, countDday, filterLink };

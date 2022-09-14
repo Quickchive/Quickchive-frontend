@@ -13,7 +13,7 @@
         class="alert"
         v-if="
           !this.$store.getters.getContents &&
-          !this.$store.getters.getCollections
+            !this.$store.getters.getCollections
         "
       >
         <h2>(임시) 아직 콘텐츠&콜렉션이 없습니다😯</h2>
@@ -21,13 +21,13 @@
       <div v-else>
         <div v-for="(data, index) in newArr" :key="index">
           <contents-component
-            :contentsData="data"
+            :contents="data"
             v-if="!newArr[index].contents"
           ></contents-component>
           <!-- 콜렉션 컴포넌트 -->
           <collection-component
             v-if="newArr[index].contents"
-            :collectionData="data"
+            :collection="data"
           ></collection-component>
         </div>
       </div>
@@ -61,6 +61,7 @@ import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vu
 import { updateCategory, deleteCategory } from "@/api/category";
 import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { eventBus } from "@/main";
 
 export default {
   components: {
@@ -83,7 +84,39 @@ export default {
       isAlertModalActive: false,
       AlertModalContent: "",
       btnMessage: "네",
+      memoEvent: 0,
+      contentsModalEvent: 0,
+      collectionModalEvent: 0,
     };
+  },
+  watch: {
+    async memoEvent() {
+      await this.$store.dispatch("GET_CONTENTS");
+      await this.$store.dispatch("GET_COLLECTIONS");
+      // 콘텐츠 컴포넌트 최신순 정렬
+      this.newArr = sortLatestArr(
+        this.$store.getters.getContents,
+        this.$store.getters.getCollections
+      );
+    },
+    async contentsModalEvent() {
+      await this.$store.dispatch("GET_CONTENTS");
+      await this.$store.dispatch("GET_COLLECTIONS");
+      // 콘텐츠 컴포넌트 최신순 정렬
+      this.newArr = sortLatestArr(
+        this.$store.getters.getContents,
+        this.$store.getters.getCollections
+      );
+    },
+    async collectionModalEvent() {
+      await this.$store.dispatch("GET_CONTENTS");
+      await this.$store.dispatch("GET_COLLECTIONS");
+      // 콘텐츠 컴포넌트 최신순 정렬
+      this.newArr = sortLatestArr(
+        this.$store.getters.getContents,
+        this.$store.getters.getCollections
+      );
+    },
   },
   async created() {
     await this.$store.dispatch("GET_CONTENTS");
@@ -92,6 +125,15 @@ export default {
     this.newArr = sortLatestArr(
       this.$store.getters.getContents,
       this.$store.getters.getCollections
+    );
+    eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    eventBus.$on(
+      "contentsModalActive",
+      (data) => (this.contentsModalEvent += data)
+    );
+    eventBus.$on(
+      "collectionModalActive",
+      (data) => (this.collectionModalEvent += data)
     );
   },
   methods: {

@@ -10,70 +10,51 @@
       </button>
     </header>
     <!-- 콘텐츠 목록 -->
-    <div
-      class="contents-lists"
-      v-if="
-        contentState && (contentsData.length > 0 || collectionsData.length > 0)
-      "
-    >
-      <div>
-        <div
-          v-for="(content, index) in contentsData"
-          :key="index"
-          class="contents-list"
-        >
-          <div class="contents-list__wrapper" @click="toLink(content.link)">
-            <button class="btn--transparent--img" @click="toLink(content.link)">
-              <span class="contents-list__icon"><img :src="web" /></span>
+    <div class="contents-lists" v-if="contentState && newArr.length > 0">
+      <div v-for="(data, index) in newArr" :key="index">
+        <div class="contents-list" v-if="!data.contents">
+          <div class="contents-list__wrapper" @click="toLink(data.link)">
+            <button class="btn--transparent--img" @click="toLink(data.link)">
+              <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
-                {{ filterTitle(content.title) }}
+                {{ filterTitle(data.title) }}
               </span>
             </button>
           </div>
           <div class="contents-list__wrapper">
             <img :src="line" />
-            <span v-if="content.deadline" class="contents-list__expiry"
-              >D-{{ countDday(content.deadline) }}</span
+            <span v-if="data.deadline" class="contents-list__expiry"
+              >D-{{ countDday(data.deadline) }}</span
             >
             <button class="btn--transparent" @click="openMemoModal(index)">
               <img :src="memo" />
             </button>
             <button class="btn--transparent" @click="createFavorites(index)">
-              <img v-if="content.favorite" :src="star" />
-              <img v-if="!content.favorite" :src="star_gray" />
+              <img v-if="data.favorite" :src="star" />
+              <img v-if="!data.favorite" :src="star_gray" />
             </button>
           </div>
         </div>
-      </div>
-      <div>
-        <div
-          v-for="(collection, index) in collectionsData"
-          :key="index"
-          class="contents-list"
-        >
-          <div class="contents-list__wrapper">
-            <button
-              class="btn--transparent--img"
-              @click="toDetail(collection.id)"
-            >
-              <span class="contents-list__icon"><img :src="web" /></span>
-              <span class="contents-list__title">
-                {{ filterTitle(collection.title) }}
-              </span>
-            </button>
-          </div>
-          <div class="contents-list__wrapper">
-            <img :src="line" />
-            <button class="btn--transparent" @click="openMemoModal(index)">
-              <img :src="memo" />
-            </button>
-            <button
-              class="btn--transparent"
-              @click="createFavoriteCollection(index)"
-            >
-              <img v-if="collection.favorite" :src="star" />
-              <img v-if="!collection.favorite" :src="star_gray" />
-            </button>
+        <div v-if="data.contents">
+          <div class="contents-list">
+            <div class="contents-list__wrapper">
+              <button class="btn--transparent--img" @click="toDetail(data.id)">
+                <span class="contents-list__icon"><img :src="web"/></span>
+                <span class="contents-list__title">
+                  {{ filterTitle(data.title) }}
+                </span>
+              </button>
+            </div>
+            <div class="contents-list__wrapper">
+              <img :src="line" />
+              <button
+                class="btn--transparent"
+                @click="createFavoriteCollection(index)"
+              >
+                <img v-if="data.favorite" :src="star" />
+                <img v-if="!data.favorite" :src="star_gray" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -82,6 +63,7 @@
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
+      :contentsId="contentsId"
     ></memo-modal-component>
   </div>
 </template>
@@ -118,6 +100,7 @@ export default {
       isFavoriteListUpdated: 0,
       contentsData: [],
       collectionsData: [],
+      newArr: [],
     };
   },
   props: {
@@ -127,7 +110,6 @@ export default {
   async created() {
     // await this.$store.dispatch("GET_CONTENTS");
     // await this.$store.dispatch("GET_COLLECTIONS");
-
     eventBus.$on("fetchFavoritesList", (data) => {
       this.isFavoriteListUpdated += data;
       console.log(
@@ -144,34 +126,30 @@ export default {
   },
   methods: {
     async showContent() {
-      await this.$store.dispatch("GET_CONTENTS");
-      await this.$store.dispatch("GET_COLLECTIONS");
-      this.contentsData = this.$store.getters.getContents;
-      this.collectionsData = this.$store.getters.getCollections;
+      await this.$store.dispatch("SORT_DATA");
+      this.newArr = this.$store.getters.getLatestSortedData;
       this.contentState = !this.contentState;
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      this.$store.getters.getContents[index].favorite =
-        !this.$store.getters.getContents[index].favorite;
+      this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
-        const contentId = this.$store.getters.getContents[index].id;
+        const contentId = this.newArr[index].id;
         const response = await addFavorite(contentId);
         console.log(response);
-        eventBus.$emit("fetchFavoritesList", this.data);
+        // eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
       }
     },
     // 즐겨찾기 생성
     async createFavoriteCollection(index) {
-      this.$store.getters.getCollections[index].favorite =
-        !this.$store.getters.getCollections[index].favorite;
+      this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
-        const collectionId = this.$store.getters.getCollections[index].id;
+        const collectionId = this.newArr[index].id;
         const response = await addFavoriteCollection(collectionId);
         console.log(response);
-        eventBus.$emit("fetchFavoritesList", this.data);
+        // eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
       }
@@ -181,9 +159,14 @@ export default {
       this.$router.push("/category/all");
     },
     // 메모 모달 열기
-    openMemoModal(index) {
+    async openMemoModal(index) {
+      await this.$store.dispatch("SORT_DATA");
+      this.newArr = this.$store.getters.getLatestSortedData;
+      this.memoContents = this.newArr[index].comment;
+      this.contentsId = this.newArr[index].id;
       this.isMemoModalActive = true;
-      this.memoContents = this.$store.getters.getContents[index].comment;
+      // this.isMemoModalActive = true;
+      // this.memoContents = this.newArr[index].comment;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

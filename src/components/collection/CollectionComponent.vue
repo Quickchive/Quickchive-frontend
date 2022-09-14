@@ -1,19 +1,15 @@
 <template>
-  <div class="collection-component" v-if="collectionData">
+  <div class="collection-component" v-if="collection">
     <div class="collection__wrapper-col">
       <span class="collection-tag">Collection</span>
-      <p
-        class="collection__title"
-        v-if="collectionData.title"
-        @click="toDetail()"
-      >
-        {{ filterTitle(collectionData.title) }}
+      <p class="collection__title" v-if="collection.title" @click="toDetail()">
+        {{ filterTitle(collection.title) }}
       </p>
       <div class="collection__lists-wrapper">
-        <div v-if="collectionData.contents">
+        <div v-if="collection.contents">
           <ul class="collection__lists">
             <li
-              v-for="(list, index) in collectionData.contents"
+              v-for="(list, index) in collection.contents"
               :key="index"
               class="collection__list"
             >
@@ -22,9 +18,9 @@
           </ul>
         </div>
 
-        <div v-if="collectionData.contents">
+        <div v-if="collection.contents">
           <div
-            v-for="(list, index) in collectionData.contents"
+            v-for="(list, index) in collection.contents"
             :key="index"
             class="collection__list-num"
           >
@@ -32,19 +28,16 @@
           </div>
         </div>
       </div>
-      <div class="collection__inner" v-if="collectionData.createdAt">
+      <div class="collection__inner" v-if="collection.createdAt">
         <p class="collection__createdAt">
-          {{ collectionData.createdAt.substring(0, 10) }}
+          {{ collection.createdAt.substring(0, 10) }}
         </p>
         <div class="collection__btn-wrapper">
-          <button @click="openMemoModal()" class="btn--transparent">
-            <img :src="memo" />
-          </button>
           <img :src="category_line" />
           <button @click="createFavorites()" class="btn--transparent">
-            <img :src="star" v-show="collectionData.favorite" /><img
+            <img :src="star" v-show="collection.favorite" /><img
               :src="star_border"
-              v-show="!collectionData.favorite"
+              v-show="!collection.favorite"
             />
           </button>
         </div>
@@ -52,30 +45,24 @@
     </div>
     <div class="collection__wrapper">
       <!-- 이미지 -->
-      <div class="collection__img" v-if="collectionData.contents">
+      <div class="collection__img" v-if="collection.contents">
         <img
-          :src="collectionData.contents[0].coverImg"
+          :src="collection.contents[0].coverImg"
           onerror="this.style.display='none'"
         />
-        <div v-if="collectionData.contents" class="collection__num">
-          +{{ collectionData.contents.length }}
+        <div v-if="collection.contents" class="collection__num">
+          +{{ collection.contents.length }}
         </div>
       </div>
       <button class="btn--transparent" @click="openEditModal()">
         <img :src="edit" />
       </button>
     </div>
-    <!-- 메모 모달 컴포넌트 -->
-    <memo-modal-component
-      v-if="isMemoModalActive"
-      @close-modal="isMemoModalActive = false"
-      :memoContents="memoContents"
-    ></memo-modal-component>
     <!-- 콜렉션 수정 모달 -->
     <collection-edit-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      :collectionData="collectionData"
+      :collectionId="collectionId"
     ></collection-edit-modal-component>
     <!-- 에러 모달 -->
     <alert-modal-component
@@ -93,14 +80,13 @@ import star from "@/assets/icon/star.svg";
 import star_border from "@/assets/icon/star_border.svg";
 import edit from "@/assets/icon/edit.svg";
 import category_line from "@/assets/icon/category_line.svg";
-import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavoriteCollection } from "@/api/collection";
 import CollectionEditModalComponent from "@/components/modal/CollectionEditModalComponent.vue";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { eventBus } from "../../main";
 
 export default {
   components: {
-    MemoModalComponent,
     CollectionEditModalComponent,
     AlertModalComponent,
   },
@@ -111,33 +97,43 @@ export default {
       edit,
       star_border,
       category_line,
-      isMemoModalActive: false,
-      // 메모 모달
-      memoContents: "",
       // 콜렉션 모달
       isCollectionModalActive: false,
-      collectionModalTitle: "콜렉션 수정",
       // 경고 모달 메시지
       alertModalContent: "",
       btnMessage: "네",
       isAlertModalActive: false,
+      collectionId: 0,
     };
   },
   props: {
-    collectionData: {
+    collection: {
       type: Object,
     },
   },
-  methods: {
-    openMemoModal() {
-      this.isMemoModalActive = true;
-      this.memoContents = this.collectionData.comment;
+  watch: {
+    contents: {
+      handler() {
+        this.memoContents = this.contents.comment;
+      },
+      deep: true,
     },
+    isCollectionModalActive: {
+      handler() {
+        eventBus.$emit("collectionModalActive", 1);
+      },
+      deep: true,
+    },
+  },
+  created() {
+    this.collectionId = this.collection.id;
+  },
+  methods: {
     // 즐겨찾기 생성
     async createFavorites() {
-      this.collectionData.favorite = !this.collectionData.favorite;
+      this.collection.favorite = !this.collection.favorite;
       try {
-        const contentId = this.collectionData.id;
+        const contentId = this.collection.id;
         const response = await addFavoriteCollection(contentId);
         console.log(response);
       } catch (error) {
@@ -158,7 +154,7 @@ export default {
     },
     // 콜렉션 상세 페이지로 이동
     toDetail() {
-      this.$router.push(`/collection/${this.collectionData.id}`);
+      this.$router.push(`/collection/${this.collection.id}`);
     },
   },
 };

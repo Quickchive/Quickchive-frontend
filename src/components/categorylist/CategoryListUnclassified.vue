@@ -15,7 +15,7 @@
         <div v-if="!data.contents" class="contents-list">
           <div class="contents-list__wrapper" @click="toLink(data.link)">
             <button class="btn--transparent--img" @click="toLink(data.link)">
-              <span class="contents-list__icon"><img :src="web" /></span>
+              <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
                 {{ filterTitle(data.title) }}
               </span>
@@ -40,7 +40,7 @@
           <div v-if="data.contents" class="contents-list">
             <div class="contents-list__wrapper">
               <button class="btn--transparent--img" @click="toDetail(data.id)">
-                <span class="contents-list__icon"><img :src="web" /></span>
+                <span class="contents-list__icon"><img :src="web"/></span>
                 <span class="contents-list__title">
                   {{ filterTitle(data.title) }}
                 </span>
@@ -48,9 +48,6 @@
             </div>
             <div class="contents-list__wrapper">
               <img :src="line" />
-              <button class="btn--transparent" @click="openMemoModal(index)">
-                <img :src="memo" />
-              </button>
               <button
                 class="btn--transparent"
                 @click="createFavoriteCollection(index)"
@@ -67,6 +64,7 @@
       v-if="isMemoModalActive"
       @close-modal="isMemoModalActive = false"
       :memoContents="memoContents"
+      :contentsId="contentsId"
     ></memo-modal-component>
   </div>
 </template>
@@ -118,7 +116,7 @@ export default {
   //   // });
   // },
   watch: {
-    isFavoriteListUpdated: function () {
+    isFavoriteListUpdated: function() {
       this.$store.dispatch("SORT_DATA", this.categoryId);
       this.newArr = this.$store.getters.getLatestSortedData;
     },
@@ -160,9 +158,14 @@ export default {
       this.$emit("toCategoryPage");
     },
     // 메모 모달 열기
-    openMemoModal(index) {
-      this.isMemoModalActive = true;
+    async openMemoModal(index) {
+      await this.$store.dispatch("SORT_DATA", -1);
+      this.newArr = this.$store.getters.getLatestSortedData;
       this.memoContents = this.newArr[index].comment;
+      this.contentsId = this.newArr[index].id;
+      this.isMemoModalActive = true;
+      // this.isMemoModalActive = true;
+      // this.memoContents = this.newArr[index].comment;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

@@ -11,13 +11,13 @@
         <!-- 콘텐츠 컴포넌트 -->
         <div v-for="(data, index) in resultArr" :key="index">
           <contents-component
-            :contentsData="data"
+            :contents="data"
             v-if="!resultArr[index].contents"
           ></contents-component>
           <!-- 콜렉션 컴포넌트 -->
           <collection-component
             v-if="resultArr[index].contents"
-            :collectionData="data"
+            :collection="data"
           ></collection-component>
         </div>
 

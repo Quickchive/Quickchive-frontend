@@ -21,7 +21,7 @@
       <div
         v-if="
           !this.$store.getters.getContents &&
-          !this.$store.getters.getCollections
+            !this.$store.getters.getCollections
         "
       >
         <h2 class="alert">
@@ -32,13 +32,13 @@
         <!-- 콘텐츠 컴포넌트 -->
         <div v-for="(data, index) in newArr" :key="index">
           <contents-component
-            :contentsData="data"
+            :contents="data"
             v-if="!newArr[index].contents"
           ></contents-component>
           <!-- 콜렉션 컴포넌트 -->
           <collection-component
             v-if="newArr[index].contents"
-            :collectionData="data"
+            :collection="data"
           ></collection-component>
         </div>
       </div>
@@ -64,6 +64,7 @@ import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vu
 import { updateCategory, deleteCategory } from "@/api/category";
 import { fetchMyCategory } from "@/api/user";
 import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
+import { eventBus } from "@/main";
 
 export default {
   components: {
@@ -83,27 +84,53 @@ export default {
       newCategoryName: "",
       deleteBtn: "카테고리 삭제",
       newArr: [],
+      memoEvent: 0,
+      contentsModalEvent: 0,
+      collectionModalEvent: 0,
     };
+  },
+  watch: {
+    async $route() {
+      // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
+      // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
+      await this.fetchCategoryName();
+
+      await this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      this.newArr = this.$store.getters.getLatestSortedData;
+    },
+    async memoEvent() {
+      await this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      this.newArr = this.$store.getters.getLatestSortedData;
+    },
+    async contentsModalEvent() {
+      await this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      this.newArr = this.$store.getters.getLatestSortedData;
+    },
+    async collectionModalEvent() {
+      await this.$store.dispatch("SORT_DATA", this.$route.params.id);
+      this.newArr = this.$store.getters.getLatestSortedData;
+    },
   },
   async created() {
     this.categoryId = this.$route.params.id;
-    this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
-    this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
+    await this.$store.dispatch("SORT_DATA", this.$route.params.id);
+    this.newArr = this.$store.getters.getLatestSortedData;
     // await this.$store.dispatch("SORT_DATA", this.$route.params.id);
     // this.newArr = this.$store.getters.getLatestSortedData;
     await this.fetchCategoryName();
-    this.newArr = sortLatestArr(
-      this.$store.getters.getContents,
-      this.$store.getters.getCollections
+    // this.newArr = sortLatestArr(
+    //   this.$store.getters.getContents,
+    //   this.$store.getters.getCollections
+    // );
+    eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    eventBus.$on(
+      "contentsModalActive",
+      (data) => (this.contentsModalEvent += data)
     );
-  },
-  watch: {
-    $route() {
-      // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
-      // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
-      this.$store.dispatch("SORT_DATA", this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
-    },
+    eventBus.$on(
+      "collectionModalActive",
+      (data) => (this.collectionModalEvent += data)
+    );
   },
   methods: {
     // 카테고리 추가 모달 열기
@@ -146,7 +173,7 @@ export default {
         if (categoryId == -1) {
           this.categoryName = "미분류";
         } else {
-          const categoryFilter = categories.filter(function (cate) {
+          const categoryFilter = categories.filter(function(cate) {
             return cate.id == categoryId;
           });
           console.log(categoryFilter);

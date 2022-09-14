@@ -112,8 +112,14 @@
   }
 }
 
-.favorite-lists {
+.favoriteDefault {
   height: 180px;
+}
+.favoriteExtend {
+  height: 100%;
+  max-height: 540px;
+}
+.favorite-lists {
   width: 100%;
   background-color: $color-gray-1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.13);
@@ -126,6 +132,7 @@
   @include layout(row, flex-start, flex-start);
   gap: 18px;
   top: -10px;
+
   .favorite-list {
     height: 170px;
     .favorite-list__wrapper {
@@ -159,7 +166,9 @@
         gap: 5px;
         position: relative;
         bottom: 23px;
-        left: 110px;
+        right: 7px;
+        width: 100%;
+        justify-content: flex-end;
       }
       .favorite-list__title {
         @include font(14px, 400, $color-black-text);

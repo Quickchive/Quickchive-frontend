@@ -18,6 +18,7 @@ const authStore = {
     accessToken: "" || getAuthFromCookie("accessToken"),
     refreshToken: "" || localStorage.getItem("refreshToken"),
     oauthInfo: false || localStorage.getItem("oauthInfo"),
+    oauthName: "" || localStorage.getItem("oauthInfo"),
     stayLoginState: false || localStorage.getItem("stayLogin"),
   },
   getters: {
@@ -31,6 +32,13 @@ const authStore = {
     },
     isUserStayLogin(state) {
       return state.stayLoginState;
+    },
+    // 소셜 정보 가져옴
+    getOauthName(state) {
+      return state.oauthName;
+    },
+    getNickname(state) {
+      return state.nickname;
     },
   },
   mutations: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="error-msg__wrapper">
-      <div class="error-msg">{{ message }}</div>
+      <div class="error-msg">{{ this.message }}</div>
       <div class="error-msg">({{ minutes }} : {{ seconds }})</div>
     </div>
   </div>
@@ -13,8 +13,14 @@ export default {
     return {
       timer: null,
       totalTime: 5 * 60,
-      message: "인증메일을 확인해주세요.",
+      // message: "인증메일을 확인해주세요.",
     };
+  },
+  props: {
+    message: {
+      default: "인증메일을 확인해주세요.",
+      type: String,
+    },
   },
   mounted() {
     this.startTimer();
@@ -25,7 +31,7 @@ export default {
       clearInterval(this.timer);
       this.timer = null;
       this.timer = setInterval(() => this.countdown(), 1000);
-      this.message = "인증메일을 확인해주세요.";
+      // this.message = "인증메일을 확인해주세요.";
     },
     resetTimer() {
       this.totalTime = 5 * 60;

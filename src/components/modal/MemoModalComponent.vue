@@ -7,7 +7,7 @@
         <button
           type="button"
           class="btn--transparent btn__close"
-          @click="$emit('close-modal')"
+          @click="editMemo()"
         >
           <img :src="closeBtn" />
         </button>
@@ -15,10 +15,11 @@
       <div class="modal-card__wrapper">
         <div class="flex-container modal-form__wrapper">
           <textarea
-            v-model="memoContents"
+            v-model="comment"
             placeholder=""
             class="modal-form__textarea"
             rows="5"
+            maxlength="500"
           />
         </div>
       </div>
@@ -39,25 +40,49 @@
 
 <script>
 import closeBtn from "@/assets/icon/closeBtn.svg";
+import { updateContents } from "@/api/contents";
+import { eventBus } from "@/main";
 export default {
-  name: "ModalComponent",
+  name: "MemoModalComponent",
   data() {
     return {
       closeBtn,
-      categoryName: "",
+      comment: "",
+      data: 1,
     };
   },
   props: {
-    categoryModalTitle: String,
-    deleteBtn: String,
     memoContents: String,
+    contentsId: Number,
   },
+  created() {
+    this.comment = this.memoContents;
+    this.id = this.contentsId;
+  },
+
   methods: {
-    categoryEvent() {
-      let categoryName = this.categoryName;
-      this.$emit("categoryEvent", categoryName);
+    // 메모 수정
+    async editMemo() {
+      try {
+        const contentsData = {
+          id: this.id,
+          comment: this.comment,
+        };
+        Object.keys(contentsData).forEach(
+          (key) =>
+            (contentsData[key] == "" || contentsData[key] == undefined) &&
+            delete contentsData[key]
+        );
+        const response = await updateContents(contentsData);
+        console.log(response);
+        this.$emit("close-modal");
+        if (this.$route.fullpath != "/main") {
+          eventBus.$emit("memoEvent", this.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
-    // 메모 조회
   },
 };
 </script>

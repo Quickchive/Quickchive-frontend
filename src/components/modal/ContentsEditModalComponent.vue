@@ -34,24 +34,8 @@
           <div class="flex-container modal-form__wrapper">
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
-              <!-- 미분류 카테고리인 경우 -->
-              <select
-                v-if="contentsData.category == null"
-                v-model="categoryName"
-                class="contents-modal__select"
-              >
+              <select v-model="categoryName" class="contents-modal__select">
                 <option value="">미분류</option>
-                <option v-for="(category, index) in myCategories" :key="index">
-                  {{ category.name }}
-                </option>
-              </select>
-              <!-- 미분류 카테고리 아닌 경우 -->
-              <select
-                v-if="contentsData.category"
-                v-model="contentsData.category.name"
-                class="contents-modal__select"
-              >
-                <option value="">미분류s</option>
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
                 </option>
@@ -143,15 +127,28 @@ export default {
       deleteModalContent: "해당 콘텐츠를 삭제할까요?",
       isDeleteModalActive: false,
       categoryName: "",
+      contentsData: {},
     };
   },
   props: {
-    contentsData: Object,
+    contentsId: Number,
   },
-  mounted() {
+  async created() {
     this.getMyCategory();
+    // this.contentsData = this.contents;
+    await this.$store.dispatch("GET_CONTENTS");
+    this.contentsData = this.$store.getters.getContents.filter(
+      (data) => data.id == this.contentsId
+    );
+    this.contentsData = this.contentsData[0];
+
     if (this.contentsData.deadline !== null) {
       this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
+    }
+    if (this.contentsData.category == null) {
+      this.categoryName = "";
+    } else if (this.contentsData.category !== null) {
+      this.categoryName = this.contentsData.category.name;
     }
   },
   computed: {
@@ -195,22 +192,22 @@ export default {
             favorite: this.contentsData.favorite,
             comment: this.contentsData.comment,
             deadline: this.contentsData.deadline,
-            categoryName: this.categoryName || this.contentsData.category.name,
+            categoryName: this.categoryName,
             title: this.contentsData.title,
           };
-          Object.keys(contentsData).forEach(
-            (key) =>
+          Object.keys(contentsData).some((key) => {
+            if (key !== "favorite")
               (contentsData[key] == "" || contentsData[key] == undefined) &&
-              delete contentsData[key]
-          );
+                delete contentsData[key];
+          });
+          console.log("contentsData", contentsData);
           const response = await updateContents(contentsData);
           console.log(response);
           this.$emit("close-modal");
-          this.$router.go();
         }
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.data.message;
+        this.alertModalContent = error.response;
         this.isAlertModalActive = true;
       }
     },
