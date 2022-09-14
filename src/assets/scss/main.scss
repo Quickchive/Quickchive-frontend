@@ -3,7 +3,7 @@
 .main {
   box-sizing: border-box;
   padding: 57px 177px;
-  height: 100vh;
+  height: 100%;
 
   .main-btn__wrapper {
     @include layout(row, center, flex-end);
