@@ -3,7 +3,7 @@
 .collection-view {
   @include layout(column, center, flex-start);
   width: 100%;
-  height: 100vh;
+  height: 100%;
 
   padding: 90px 0;
 }
