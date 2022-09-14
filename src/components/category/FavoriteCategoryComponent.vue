@@ -14,13 +14,13 @@
       <!-- 콘텐츠 컴포넌트 -->
       <div v-for="(data, index) in newArr" :key="index">
         <contents-component
-          :contentsData="data"
+          :contents="data"
           v-if="!data.contents"
         ></contents-component>
         <!-- 콜렉션 컴포넌트 -->
         <collection-component
           v-if="data.contents"
-          :collectionData="data"
+          :collection="data"
         ></collection-component>
       </div>
     </div>
@@ -49,12 +49,22 @@ export default {
       collectionData: [],
       newArr: [],
       memoEvent: 0,
+      contentsModalEvent: 0,
+      collectionModalEvent: 0,
     };
   },
   async created() {
     await this.$store.dispatch("GET_FAVORITES");
     this.newArr = this.$store.getters.getLatestSortedFavorite;
     eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    eventBus.$on(
+      "contentsModalActive",
+      (data) => (this.contentsModalEvent += data)
+    );
+    eventBus.$on(
+      "collectionModalActive",
+      (data) => (this.collectionModalEvent += data)
+    );
   },
 
   watch: {
@@ -62,6 +72,14 @@ export default {
       await this.$store.dispatch("GET_FAVORITES");
       this.newArr = this.$store.getters.getLatestSortedFavorite;
       eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    },
+    async contentsModalEvent() {
+      await this.$store.dispatch("GET_FAVORITES");
+      this.newArr = this.$store.getters.getLatestSortedFavorite;
+    },
+    async collectionModalEvent() {
+      await this.$store.dispatch("GET_FAVORITES");
+      this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
   },
   methods: {

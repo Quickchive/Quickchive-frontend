@@ -143,13 +143,21 @@ export default {
       deleteModalContent: "해당 콘텐츠를 삭제할까요?",
       isDeleteModalActive: false,
       categoryName: "",
+      contentsData: {},
     };
   },
   props: {
-    contentsData: Object,
+    contentsId: Number,
   },
-  mounted() {
+  async created() {
     this.getMyCategory();
+    // this.contentsData = this.contents;
+    await this.$store.dispatch("GET_CONTENTS");
+    this.contentsData = this.$store.getters.getContents.filter(
+      (data) => data.id == this.contentsId
+    );
+    this.contentsData = this.contentsData[0];
+
     if (this.contentsData.deadline !== null) {
       this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
     }
@@ -195,7 +203,8 @@ export default {
             favorite: this.contentsData.favorite,
             comment: this.contentsData.comment,
             deadline: this.contentsData.deadline,
-            categoryName: this.categoryName || this.contentsData.category.name,
+            categoryName:
+              null || this.categoryName || this.contentsData.category.name,
             title: this.contentsData.title,
           };
           Object.keys(contentsData).forEach(
@@ -206,7 +215,7 @@ export default {
           const response = await updateContents(contentsData);
           console.log(response);
           this.$emit("close-modal");
-          this.$router.go();
+          // this.$router.go();
         }
       } catch (error) {
         console.log(error);
