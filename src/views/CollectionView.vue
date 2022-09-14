@@ -92,7 +92,7 @@
     <collection-edit-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
-      :collectionData="collectionData"
+      :collectionId="collectionId"
     ></collection-edit-modal-component>
     <!-- 에러 모달 -->
     <alert-modal-component
@@ -127,10 +127,12 @@ export default {
       alertModalContent: "",
       btnMessage: "네",
       isAlertModalActive: false,
+      collectionId: 0,
     };
   },
   created() {
     this.fetchCollectionsList();
+    this.collectionId = parseInt(this.$route.params.id);
   },
   watch: {
     collectionData() {

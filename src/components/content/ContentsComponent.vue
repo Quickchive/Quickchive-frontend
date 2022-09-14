@@ -3,31 +3,28 @@
   <div class="contents-component">
     <div class="contents__wrapper-col">
       <div class="flex-container">
-        <p class="contents__title" @click="toLink(contentsData.link)">
-          {{ filterTitle(contentsData.title) }}
+        <p class="contents__title" @click="toLink(contents.link)">
+          {{ filterTitle(contents.title) }}
         </p>
         <!-- readflag -->
-        <div v-if="contentsData.readFlag" class="contents__readflag"></div>
+        <div v-if="contents.readFlag" class="contents__readflag"></div>
       </div>
       <p class="contents__contents">
-        <span v-if="contentsData.description">{{
-          filterDescript(contentsData.description)
+        <span v-if="contents.description">{{
+          filterDescript(contents.description)
         }}</span>
       </p>
 
       <div class="contents__inner">
         <!-- 사이트 네임 있는 경우 -->
-        <p class="contents__domain" v-if="contentsData.siteName">
-          {{ contentsData.siteName }} |
-          {{ contentsData.createdAt.substring(0, 10) }}
+        <p class="contents__domain" v-if="contents.siteName">
+          {{ contents.siteName }} |
+          {{ contents.createdAt.substring(0, 10) }}
         </p>
         <!-- 사이트 네임 없는 경우 -->
-        <p
-          class="contents__domain"
-          v-if="!contentsData.siteName && contentsData.link"
-        >
-          {{ filterDomain(contentsData.link) }} |
-          {{ contentsData.createdAt.substring(0, 10) }}
+        <p class="contents__domain" v-if="!contents.siteName && contents.link">
+          {{ filterDomain(contents.link) }} |
+          {{ contents.createdAt.substring(0, 10) }}
         </p>
         <div class="contents__btn-wrapper">
           <button class="btn--transparent" @click="openMemoModal()">
@@ -35,9 +32,9 @@
           </button>
           <img :src="category_line" />
           <button @click="createFavorites()" class="btn--transparent">
-            <img :src="star" v-show="contentsData.favorite" /><img
+            <img :src="star" v-show="contents.favorite" /><img
               :src="star_border"
-              v-show="!contentsData.favorite"
+              v-show="!contents.favorite"
             />
           </button>
         </div>
@@ -46,8 +43,8 @@
     <div class="contents__wrapper">
       <!-- 이미지 -->
       <div class="contents__img">
-        <img :src="contentsData.coverImg" onerror="this.style.display='none'" />
-        <div v-if="contentsData.deadline" class="contents__expiryDate">
+        <img :src="contents.coverImg" onerror="this.style.display='none'" />
+        <div v-if="contents.deadline" class="contents__expiryDate">
           D-{{ countDday }}
         </div>
       </div>
@@ -62,7 +59,7 @@
     <contents-edit-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
-      :contentsData="contentsData"
+      :contentsId="contentsId"
     ></contents-edit-modal-component>
     <!-- 메모 모달 컴포넌트 -->
     <memo-modal-component
@@ -93,6 +90,7 @@ import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComp
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavorite, postReadFlag } from "@/api/contents";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { eventBus } from "../../main";
 
 export default {
   components: {
@@ -124,30 +122,36 @@ export default {
     };
   },
   props: {
-    contentsData: {
+    contents: {
       comment: String,
     },
   },
   watch: {
-    contentsData: {
+    contents: {
       handler() {
-        this.memoContents = this.contentsData.comment;
+        this.memoContents = this.contents.comment;
+      },
+      deep: true,
+    },
+    isModalActive: {
+      handler() {
+        eventBus.$emit("contentsModalActive", 1);
       },
       deep: true,
     },
   },
   created() {
-    this.memoContents = this.contentsData.comment;
-    this.contentsId = this.contentsData.id;
+    this.memoContents = this.contents.comment;
+    this.contentsId = this.contents.id;
   },
   computed: {
     countDday() {
-      return countDday(this.contentsData.deadline);
+      return countDday(this.contents.deadline);
     },
     // 링크 여부 확인
     isTextLink() {
-      if (this.contentsData.link != "") {
-        return validateLink(this.contentsData.link);
+      if (this.contents.link != "") {
+        return validateLink(this.contents.link);
       } else {
         return null;
       }
@@ -155,7 +159,7 @@ export default {
     // 링크 개수 확인
     countLink() {
       if (this.link != "") {
-        return linkCounter(this.contentsData.link);
+        return linkCounter(this.contents.link);
       } else {
         return null;
       }
@@ -167,7 +171,7 @@ export default {
       window.open(link, "_blank");
       // 읽었음 표시
       try {
-        const response = await postReadFlag(this.contentsData.id);
+        const response = await postReadFlag(this.contents.id);
         console.log(response);
       } catch (error) {
         console.log(error);
@@ -216,9 +220,9 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavorites() {
-      this.contentsData.favorite = !this.contentsData.favorite;
+      this.contents.favorite = !this.contents.favorite;
       try {
-        const contentId = this.contentsData.id;
+        const contentId = this.contents.id;
         const response = await addFavorite(contentId);
         console.log(response);
       } catch (error) {

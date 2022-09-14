@@ -14,7 +14,7 @@
       </div>
       <div class="modal-card__wrapper">
         <div class="flex-container modal-form__wrapper">
-          <div class="register-form__wrapper" v-if="collections.title">
+          <div class="register-form__wrapper">
             <label class="register-form__label">콜렉션 이름<em>*</em></label>
             <input v-model="collections.title" placeholder="10자 이하 권장" />
           </div>
@@ -90,7 +90,7 @@
 
           <div
             class="flex-container-col modal-card__btn__wrapper"
-            v-if="collections.contents[0].link"
+            v-if="collections.contents"
           >
             <button
               @click="createInput(collections.contents.length)"
@@ -115,7 +115,7 @@
       <div class="flex-container-col modal-card__btn__wrapper">
         <button
           @click="editCollection()"
-          :disabled="collections.contents.link == '' || !collections.title"
+          :disabled="collections.contents == '' || !collections.title"
           class="btn--sm btnPrimary"
         >
           저장
@@ -173,15 +173,21 @@ export default {
       isDeleteModalActive: false,
       deleteModalContent: "해당 콜렉션을 \n삭제하시겠습니까?",
       categoryName: "",
-      collections: [],
+      collections: {},
     };
   },
   props: {
-    collectionData: [],
+    // collectionData: [],
+    collectionId: Number,
   },
-  created() {
+  async created() {
     this.getMyCategory();
-    this.collections = this.collectionData;
+    // this.collections = this.collectionData;
+    await this.$store.dispatch("GET_COLLECTIONS");
+    this.collections = this.$store.getters.getCollections.filter(
+      (data) => data.id == this.collectionId
+    );
+    this.collections = this.collections[0];
   },
   methods: {
     addFavorites() {
@@ -215,18 +221,20 @@ export default {
       const collectionData = {
         title: this.collections.title,
         comment: this.collections.comment,
+        favorite: this.collections.favorite,
         categoryName:
           null || this.categoryName || this.collections.category.name,
         contentLinkList: newLinkList,
         collectionId: this.collections.id,
-        // 즐겨찾기 추가됨
-        favorite: this.collections.favorite,
       };
+      console.log("걸러지기 전", collectionData);
+
       Object.keys(collectionData).forEach(
         (key) =>
           (collectionData[key] == "" || collectionData[key] == undefined) &&
           delete collectionData[key]
       );
+      console.log("걸러짐", collectionData);
       // this.$emit("collectionEdit", collectionData);
       try {
         const response = await updateCollection(collectionData);
