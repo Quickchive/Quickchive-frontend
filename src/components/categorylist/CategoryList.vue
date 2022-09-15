@@ -14,7 +14,7 @@
       <div v-for="(data, index) in newArr" :key="index">
         <div class="contents-list">
           <div class="contents-list__wrapper" @click="toLink(data.link)">
-            <button class="btn--transparent--img" @click="toLink(data.link)">
+            <button class="btn--transparent--img">
               <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
                 {{ filterTitle(data.title) }}
