@@ -69,7 +69,7 @@
         >
           {{ filterTitle(category.name) }}
         </li>
-        <li @click="toUnclassiCategoryPage()">미분류</li>
+        <!-- <li @click="toUnclassiCategoryPage()">미분류</li> -->
       </ul>
     </div>
   </header>

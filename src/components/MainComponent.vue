@@ -14,9 +14,9 @@
         :categoryTitle="category.name"
         :categoryId="category.id"
       ></category-list>
-      <category-list-unclassified
+      <!-- <category-list-unclassified
         @toCategoryPage="toCategoryPage(-1)"
-      ></category-list-unclassified>
+      ></category-list-unclassified> -->
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
@@ -77,7 +77,7 @@
 <script>
 import CategoryListFavorite from "@/components/categorylist/CategoryListFavorite.vue";
 import CategoryListAll from "@/components/categorylist/CategoryListAll.vue";
-import CategoryListUnclassified from "@/components/categorylist/CategoryListUnclassified.vue";
+// import CategoryListUnclassified from "@/components/categorylist/CategoryListUnclassified.vue";
 import CategoryList from "@/components/categorylist/CategoryList.vue";
 import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
 import plusBtn from "@/assets/icon/plusBtn.svg";
@@ -95,7 +95,7 @@ export default {
     CategoryListAll,
     CategoryList,
     ContentsModalComponent,
-    CategoryListUnclassified,
+    // CategoryListUnclassified,
     CategoryModalComponent,
     ConfirmModalComponent,
     AlertModalComponent,
