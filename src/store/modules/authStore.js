@@ -13,7 +13,7 @@ const authStore = {
   state: {
     nickname: "",
     email: "",
-    loginState: false || localStorage.getItem("refreshToken"),
+    loginState: false || localStorage.getItem("accessToken"),
     oauthLoginState: false,
     accessToken: "" || getAuthFromCookie("accessToken"),
     refreshToken: "" || localStorage.getItem("refreshToken"),
@@ -113,7 +113,7 @@ const authStore = {
     async LOGOUT({ commit }) {
       try {
         const refreshToken = {
-          refresh_token: this.state.authStore.refreshToken,
+          refresh_token: localStorage.getItem("refreshToken"),
         };
         await logoutUser(refreshToken);
         commit("logoutUser");
@@ -134,6 +134,7 @@ const authStore = {
           commit("setEmail", response.data.email);
           commit("setOauthLoginState", true);
           commit("setLoginState", false);
+          commit("setRefreshToken", response.data.refresh_token);
         }
       } catch (error) {
         console.log(error);
@@ -154,6 +155,7 @@ const authStore = {
           commit("setEmail", response.data.email);
           commit("setOauthLoginState", true);
           commit("setLoginState", false);
+          commit("setRefreshToken", response.data.refresh_token);
         }
       } catch (error) {
         console.log(error);
