@@ -136,23 +136,29 @@ export default {
     // 카테고리 조회
     const path = this.$route.path;
     const loginInfo = path.slice(6);
+    console.log(path);
+    console.log(loginInfo);
     if (
       loginInfo == "google/redirect" &&
       localStorage.getItem("oauthInfo") !== "google"
     ) {
+      console.log("구글 로그인 시도");
       await this.getGoogleLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "google");
+      await this.$store.dispatch("GET_CATEGORIES");
+      this.myCategories = this.$store.getters.getCategories;
     } else if (
       loginInfo == "kakao/redirect" &&
       localStorage.getItem("oauthInfo") !== "kakao"
     ) {
+      console.log("카카오 로그인 시도");
       await this.getKakaoLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "kakao");
+      await this.$store.dispatch("GET_CATEGORIES");
+      this.myCategories = this.$store.getters.getCategories;
     }
-    await this.$store.dispatch("GET_CATEGORIES");
-    this.myCategories = this.$store.getters.getCategories;
   },
   computed: {
     isUserLogin() {
