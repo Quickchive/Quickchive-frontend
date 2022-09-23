@@ -113,7 +113,7 @@ const authStore = {
     async LOGOUT({ commit }) {
       try {
         const refreshToken = {
-          refresh_token: this.state.authStore.refreshToken,
+          refresh_token: localStorage.getItem("refreshToken"),
         };
         await logoutUser(refreshToken);
         commit("logoutUser");
