@@ -3,6 +3,8 @@
 .category-view {
   box-sizing: border-box;
   padding: 91px 0;
+  height: 100%;
+
   @include layout(column, center, flex-start);
 
   .page-header {

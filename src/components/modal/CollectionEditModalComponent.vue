@@ -20,23 +20,9 @@
           </div>
           <div class="register-form__wrapper category__wrapper">
             <label class="register-form__label">카테고리</label>
-            <!-- 미분류 카테고리인 경우 -->
-            <select
-              v-if="collections.category == null"
-              v-model="categoryName"
-              class="contents-modal__select"
-            >
-              <option value="">미분류</option>
-              <option v-for="(category, index) in myCategories" :key="index">
-                {{ category.name }}
-              </option>
-            </select>
+
             <!-- 미분류 카테고리 아닌 경우 -->
-            <select
-              v-if="collections.category"
-              v-model="collections.category.name"
-              class="contents-modal__select"
-            >
+            <select v-model="categoryName" class="contents-modal__select">
               <option value="">미분류</option>
               <option v-for="(category, index) in myCategories" :key="index">
                 {{ category.name }}
@@ -188,6 +174,11 @@ export default {
       (data) => data.id == this.collectionId
     );
     this.collections = this.collections[0];
+    if (this.collections.category == null) {
+      this.categoryName = "";
+    } else if (this.collections.category !== null) {
+      this.categoryName = this.collections.category.name;
+    }
   },
   methods: {
     addFavorites() {
@@ -227,15 +218,12 @@ export default {
         contentLinkList: newLinkList,
         collectionId: this.collections.id,
       };
-      console.log("걸러지기 전", collectionData);
 
-      Object.keys(collectionData).forEach(
-        (key) =>
+      Object.keys(collectionData).forEach((key) => {
+        if (key !== "favorite")
           (collectionData[key] == "" || collectionData[key] == undefined) &&
-          delete collectionData[key]
-      );
-      console.log("걸러짐", collectionData);
-      // this.$emit("collectionEdit", collectionData);
+            delete collectionData[key];
+      });
       try {
         const response = await updateCollection(collectionData);
         console.log(response);

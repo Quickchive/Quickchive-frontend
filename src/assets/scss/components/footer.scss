@@ -1,5 +1,13 @@
 .footer {
   background-color: $color-gray-footer;
   height: 233px;
+  position: relative;
+  bottom: 0;
+  left: 0;
   color: $color-gray-1;
+  padding: 50px 177px;
+  box-sizing: border-box;
+  button {
+    text-shadow: none;
+  }
 }

@@ -11,7 +11,11 @@
       </button>
     </header>
     <!-- 즐겨찾기 콘텐츠 목록 -->
-    <div v-if="contentState && newArr.length > 0" class="favorite-lists">
+    <div
+      v-if="newArr.length > 0"
+      class="favorite-lists"
+      :class="[contentState ? 'favoriteExtend' : 'favoriteDefault']"
+    >
       <div v-for="(favorite, index) in newArr" :key="index">
         <div class="favorite-list" v-if="!favorite.contents">
           <!-- 1. wrapper -->
@@ -147,11 +151,13 @@ export default {
       newArr: [],
     };
   },
-  created() {
+  async created() {
     // eventBus.$on("fetchFavoritesList", (data) => {
     //   this.isFavoriteListUpdated += data;
     //   console.log("이벤트 버스 도착", this.isFavoriteListUpdated);
     // });
+    await this.$store.dispatch("GET_FAVORITES");
+    this.newArr = this.$store.getters.getLatestSortedFavorite;
   },
   watch: {
     isFavoriteListUpdated: function() {
