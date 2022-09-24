@@ -158,6 +158,9 @@ export default {
       localStorage.setItem("oauthInfo", "kakao");
       await this.$store.dispatch("GET_CATEGORIES");
       this.myCategories = this.$store.getters.getCategories;
+    } else {
+      await this.$store.dispatch("GET_CATEGORIES");
+      this.myCategories = this.$store.getters.getCategories;
     }
   },
   computed: {
