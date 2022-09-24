@@ -132,9 +132,9 @@ export default {
       await this.$router.push("/search").catch(() => {});
     },
     // 로그아웃
-    logoutUser() {
-      this.$store.dispatch("LOGOUT");
-      this.$router.push("/");
+    async logoutUser() {
+      await this.$store.dispatch("LOGOUT");
+      await this.$router.push("/");
     },
     // 로고 클릭 시 로그인 상태면 main으로, 로그인 전이면 온보딩으로
     clickLogo() {

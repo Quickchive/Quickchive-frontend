@@ -7,7 +7,7 @@
           {{ filterTitle(contents.title) }}
         </p>
         <!-- readflag -->
-        <div v-if="contents.readFlag" class="contents__readflag"></div>
+        <div v-if="!readFlag" class="contents__readflag"></div>
       </div>
       <p class="contents__contents">
         <span v-if="contents.description">{{
@@ -119,6 +119,7 @@ export default {
       deadline: "",
       comment: "",
       categoryName: "미분류",
+      readFlag: null,
     };
   },
   props: {
@@ -130,6 +131,7 @@ export default {
     contents: {
       handler() {
         this.memoContents = this.contents.comment;
+        this.readFlag = this.contents.readFlag;
       },
       deep: true,
     },
@@ -143,6 +145,7 @@ export default {
   created() {
     this.memoContents = this.contents.comment;
     this.contentsId = this.contents.id;
+    this.readFlag = this.contents.readFlag;
   },
   computed: {
     countDday() {
@@ -170,11 +173,16 @@ export default {
       // 해당 링크로 이동
       window.open(link, "_blank");
       // 읽었음 표시
-      try {
-        const response = await postReadFlag(this.contents.id);
-        console.log(response);
-      } catch (error) {
-        console.log(error);
+      this.readFlag = true;
+      // eventBus.$emit("contentsModalActive", 1);
+      if (this.contents.readFlag == false) {
+        console.log("readflag 표시");
+        try {
+          const response = await postReadFlag(this.contents.id);
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
     // 콘텐츠 수정 모달 오픈

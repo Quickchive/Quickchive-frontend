@@ -8,13 +8,11 @@
       <div class="collection__lists-wrapper">
         <div v-if="collection.contents">
           <ul class="collection__lists">
-            <li
-              v-for="(list, index) in collection.contents"
-              :key="index"
-              class="collection__list"
-            >
-              <span v-if="list.title">{{ filterTitle(list.title) }}</span>
-            </li>
+            <div v-for="(list, index) in collection.contents" :key="index">
+              <li v-if="index < 4" class="collection__list">
+                <span>{{ filterTitle(list.title) }}</span>
+              </li>
+            </div>
           </ul>
         </div>
 
@@ -24,7 +22,9 @@
             :key="index"
             class="collection__list-num"
           >
-            <span v-if="index == 4">&nbsp;외 {{ list.length - index }}개</span>
+            <span v-if="index == 4"
+              >&nbsp;외 {{ collection.contents.length - index }}개</span
+            >
           </div>
         </div>
       </div>
@@ -112,21 +112,23 @@ export default {
     },
   },
   watch: {
-    contents: {
-      handler() {
-        this.memoContents = this.contents.comment;
-      },
-      deep: true,
-    },
+    // contents: {
+    //   handler() {
+    //     this.memoContents = this.contents.comment;
+    //   },
+    //   deep: true,
+    // },
     isCollectionModalActive: {
       handler() {
         eventBus.$emit("collectionModalActive", 1);
+        console.log("eventBus-콜렉션");
       },
       deep: true,
     },
   },
   created() {
     this.collectionId = this.collection.id;
+    eventBus.$on();
   },
   methods: {
     // 즐겨찾기 생성
