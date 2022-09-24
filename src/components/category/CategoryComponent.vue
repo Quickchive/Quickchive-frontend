@@ -18,14 +18,9 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <div
-        v-if="
-          !this.$store.getters.getContents &&
-            !this.$store.getters.getCollections
-        "
-      >
-        <h2 class="alert">
-          (임시) 해당 카테고리에 속하는 콘텐츠&콜렉션이 없습니다😯
+      <div class="alert" v-if="this.newArr.length == 0">
+        <h2>
+          해당 카테고리에 속하는 콘텐츠&콜렉션이 없습니다😯
         </h2>
       </div>
       <div v-else>

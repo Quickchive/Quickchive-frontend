@@ -9,7 +9,7 @@
         </select>
       </div>
       <div class="alert" v-if="newArr.length == 0">
-        <h2>(임시) 아직 콘텐츠&콜렉션이 없습니다😯</h2>
+        <h2>아직 콘텐츠&콜렉션이 없습니다😯</h2>
       </div>
       <!-- 콘텐츠 컴포넌트 -->
       <div v-for="(data, index) in newArr" :key="index">
