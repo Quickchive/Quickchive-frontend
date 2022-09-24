@@ -88,7 +88,7 @@ export default {
     // 프로필 조회
     await this.$store.dispatch("FETCH_PROFILE");
     this.nickname = this.$store.getters.getNickname;
-    this.oauthName = this.$store.getters.getOauthName;
+    this.oauthName = localStorage.getItem("oauthInfo");
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
