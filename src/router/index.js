@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import { getAuthFromCookie } from "@/utils/cookies";
 
 Vue.use(VueRouter);
 
@@ -8,6 +9,15 @@ const routes = [
   {
     path: "/",
     component: () => import("@/views/OnBoardingView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (getAuthFromCookie("accessToken")) {
+        next("/main");
+        console.log("로그인 함");
+      } else {
+        next();
+        console.log("로그인 안 했음");
+      }
+    },
   },
   {
     path: "/login",
