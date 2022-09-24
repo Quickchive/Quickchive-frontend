@@ -16,7 +16,7 @@
             !this.$store.getters.getCollections
         "
       >
-        <h2>(임시) 아직 콘텐츠&콜렉션이 없습니다😯</h2>
+        <h2 class="page-message">아직 콘텐츠&콜렉션이 없습니다😯</h2>
       </div>
       <div v-else>
         <div v-for="(data, index) in newArr" :key="index">
