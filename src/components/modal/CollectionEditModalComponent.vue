@@ -20,10 +20,10 @@
           </div>
           <div class="register-form__wrapper category__wrapper">
             <label class="register-form__label">카테고리</label>
-
-            <!-- 미분류 카테고리 아닌 경우 -->
             <select v-model="categoryName" class="contents-modal__select">
-              <option value="">미분류</option>
+              <option value="" v-if="this.collections.category == null"
+                >카테고리 선택</option
+              >
               <option v-for="(category, index) in myCategories" :key="index">
                 {{ category.name }}
               </option>
@@ -213,8 +213,7 @@ export default {
         title: this.collections.title,
         comment: this.collections.comment,
         favorite: this.collections.favorite,
-        categoryName:
-          null || this.categoryName || this.collections.category.name,
+        categoryName: this.categoryName,
         contentLinkList: newLinkList,
         collectionId: this.collections.id,
       };

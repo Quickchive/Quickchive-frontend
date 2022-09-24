@@ -35,7 +35,9 @@
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
               <select v-model="categoryName" class="contents-modal__select">
-                <option value="">미분류</option>
+                <option v-if="contentsData.category == null" value=""
+                  >카테고리 선택</option
+                >
                 <option v-for="(category, index) in myCategories" :key="index">
                   {{ category.name }}
                 </option>
