@@ -13,7 +13,7 @@
     <div class="contents-lists" v-if="contentState && newArr.length > 0">
       <div v-for="(data, index) in newArr" :key="index">
         <div class="contents-list" v-if="!data.contents">
-          <div class="contents-list__wrapper" @click="toLink(data.link)">
+          <div class="contents-list__wrapper">
             <button class="btn--transparent--img" @click="toLink(data.link)">
               <span class="contents-list__icon"><img :src="web"/></span>
               <span class="contents-list__title">
