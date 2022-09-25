@@ -15,9 +15,14 @@ function fetchProfile() {
   return authInstance.get("users/me");
 }
 
-// 자신의 아티클 조회
-function fetchMyArticle(categoryId) {
-  return instance.get(`users/load-contents?categoryId=${categoryId}`);
+// 자신의 콘텐츠 조회
+function fetchMyContents(categoryId) {
+  return authInstance.get(`users/load-contents?categoryId=${categoryId}`);
+}
+
+// 자신의 콜렉션 조회
+function fetchMyCollections(categoryId) {
+  return authInstance.get(`users/load-collections?categoryId=${categoryId}`);
 }
 
 // 자신의 카테고리 목록 조회
@@ -25,4 +30,17 @@ function fetchMyCategory() {
   return authInstance.get("users/load-categories");
 }
 
-export { editProfile, resetPw, fetchProfile, fetchMyArticle, fetchMyCategory };
+// 자신의 즐겨찾기 조회
+function fetchMyFavorites() {
+  return authInstance.get("users/load-favorites");
+}
+
+export {
+  editProfile,
+  resetPw,
+  fetchProfile,
+  fetchMyContents,
+  fetchMyCategory,
+  fetchMyCollections,
+  fetchMyFavorites,
+};

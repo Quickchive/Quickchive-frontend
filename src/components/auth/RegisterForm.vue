@@ -214,8 +214,9 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
-        alert("인증되지 않은 이메일 입니다. 이메일 인증을 다시 시도해주세요.");
         this.$router.push("/register/email");
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
       }
     },
     // 회원가입

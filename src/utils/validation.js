@@ -1,8 +1,7 @@
 // 비밀번호 검사
 // 최소 8 자, 하나 이상의 문자와 하나의 숫자로 구성
-
 function validatePw(pw) {
-  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}/;
+  const re = /^(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
   return re.test(String(pw.toLowerCase()));
 }
 
@@ -10,8 +9,7 @@ function validatePw(pw) {
 // http, https
 
 function validateLink(link) {
-  const re =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+  const re = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
   return re.test(String(link));
 }
 
@@ -27,4 +25,20 @@ function linkCounter(text) {
   return count;
 }
 
-export { validatePw, validateLink, linkCounter };
+// 링크 추출
+function filterLink(text) {
+  let linkList = text.split(" ");
+  return linkList;
+}
+
+// 기한 계산
+function countDday(deadline) {
+  const today = new Date();
+  const expiryDate = new Date(deadline);
+
+  const diff = today.getTime() - expiryDate.getTime();
+  // 양수로 변환 후 밀리초로 나눔
+  return parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)) + 1);
+}
+
+export { validatePw, validateLink, linkCounter, countDday, filterLink };

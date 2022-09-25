@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="alert-modal">
     <div class="overlay"></div>
     <div class="alert-modal-card">
       <div class="modal-card__header">
@@ -8,7 +8,6 @@
       <div class="modal-card__button-wrapper">
         <button @click="$emit('confirmBtn')">
           <p v-html="handleNewLine(this.btnMessage)"></p>
-          <!-- {{ btnMessage }} -->
         </button>
       </div>
     </div>

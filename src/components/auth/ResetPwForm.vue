@@ -45,7 +45,7 @@
             :disabled="!isValid"
             type="submit"
           >
-            비밀번호 재설정
+            수정 완료
           </button>
         </form>
       </div>
@@ -112,7 +112,7 @@ export default {
     // 비밀번호 재설정
     async submitForm() {
       try {
-        const code = this.$route.query.code;
+        const code = this.$route.params.code;
         const pwData = {
           password: this.pw,
           code: code,

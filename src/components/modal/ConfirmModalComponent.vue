@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="confirm-modal">
     <div class="overlay"></div>
     <div class="confirm-modal-card">
       <div class="modal-card__header">

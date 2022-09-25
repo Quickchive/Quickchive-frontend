@@ -9,16 +9,24 @@
   nav {
     height: 100%;
     @include layout(row, center, space-between);
-    .nav__wrapper {
+    width: 100%;
+    .nav__wrapper--left {
       @include layout(row, center, flex-start);
+      width: auto;
+    }
+    .nav__wrapper--right {
+      @include layout(row, center, flex-end);
+      width: 100%;
       .input__search__wrapper {
         position: relative;
-        width: 531px;
+        // max-width: 800px;
+        width: 100%;
         margin-right: 28px;
+        @include layout(row, center, flex-end);
         .btn__search {
           position: absolute;
           z-index: 10;
-          right: 21px;
+          right: 15px;
           top: 5px;
           background-color: transparent;
         }
@@ -31,31 +39,38 @@
     left: 0;
     top: 0;
     height: 100vh;
-    width: 230px;
+    width: 240px;
     background-color: $color-gray-1;
-    z-index: 50;
+    z-index: 30;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     box-sizing: border-box;
-    padding: 60px 52px;
+    padding: 60px 24px;
+    overflow-y: scroll;
+    .burger-menu__nickname {
+      @include font(20px, 400, $color-black-text);
+      margin-top: 30px;
+      box-sizing: border-box;
+      text-align: center;
+      display: block;
+    }
     ul {
-      padding-top: 60px;
       list-style: none;
       margin: 0;
-      padding: 60px 0 0 0;
+      padding: 0;
       #burger-menu__nav-category {
-        margin-bottom: 20px;
-        margin-left: 0;
-        a {
-          @include layout(row, center, flex-start);
-          img {
-            margin-right: 8px;
-            width: 15px;
-          }
+        cursor: auto;
+        margin: 40px 0 20px 0;
+        img {
+          margin-right: 10px;
+          width: 15px;
         }
       }
       li {
-        margin-left: 20px;
+        margin-left: 18px;
         line-height: 40px;
+        @include font(20px, 400, $color-black-text);
+        @include layout(row, center, flex-start);
+        cursor: pointer;
         a {
           @include font(20px, 400, $color-black-text);
         }

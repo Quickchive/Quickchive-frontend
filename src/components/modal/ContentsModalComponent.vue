@@ -1,3 +1,4 @@
+<!-- 콘텐츠 추가 모달 -->
 <template>
   <div class="modal">
     <div class="overlay"></div>
@@ -16,18 +17,17 @@
         <div class="register-form__wrapper">
           <label class="register-form__label">링크<em>*</em></label>
           <div class="flex-container modal-form__wrapper">
-            <input v-model="link" placeholder="URL 입력" />
+            <input
+              v-model="link"
+              placeholder="URL 입력"
+              oninput="this.value = this.value.replace(/ +/g, ' ')"
+            />
             <button
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-              <img v-show="!isActive" :src="star_border" />
-              <img v-show="isActive" :src="star" />
-
-              <!-- <i
-                class="fa-regular fa-star fa-2x"
-                :class="{ active: isActive }"
-              ></i> -->
+              <img v-show="!favorite" :src="star_border" />
+              <img v-show="favorite" :src="star" />
             </button>
           </div>
         </div>
@@ -43,17 +43,17 @@
         <!-- 세부 설정 선택 시 나오는 인풋 -->
         <div v-show="isDetailSettingActive">
           <div class="register-form__wrapper">
-            <label class="register-form__label">이름<em>*</em></label>
+            <label class="register-form__label">이름</label>
             <input v-model="title" placeholder="30자 이하 권장" />
           </div>
           <div class="flex-container modal-form__wrapper">
             <div class="register-form__wrapper">
               <label class="register-form__label">카테고리</label>
               <select v-model="categoryName" class="contents-modal__select">
-                <option>미분류</option>
-                <div v-for="(category, index) in myCategories" :key="index">
-                  <option>{{ category.name }}</option>
-                </div>
+                <option value="" selected>카테고리 선택</option>
+                <option v-for="(category, index) in myCategories" :key="index">
+                  {{ category.name }}
+                </option>
               </select>
             </div>
             <div class="register-form__wrapper">
@@ -79,13 +79,16 @@
           ><img :src="alert_circle" />여러 링크들을 묶어서 저장하고
           싶다면?</span
         >
-        <button class="btn--transparent btn__collection">
+        <button
+          @click="openCollectionModal()"
+          class="btn--transparent btn__collection"
+        >
           콜렉션으로 저장하기 >>
         </button>
       </div>
       <div class="flex-container-col">
         <button
-          :disabled="!link || !title"
+          :disabled="!link"
           @click="createContent()"
           class="btn--sm btnPrimary"
         >
@@ -93,6 +96,12 @@
         </button>
       </div>
     </div>
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -103,10 +112,11 @@ import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import { addContents } from "@/api/contents";
 import { fetchMyCategory } from "@/api/user";
-import { validateLink, linkCounter } from "@/utils/validation";
+import { validateLink, linkCounter, filterLink } from "@/utils/validation";
+import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
 export default {
-  name: "ModalComponent",
+  components: { AlertModalComponent },
   data() {
     return {
       closeBtn,
@@ -114,7 +124,6 @@ export default {
       star,
       alert_circle,
       isDetailSettingActive: false,
-      isActive: false,
       // 내 카테고리 목록
       myCategories: {},
       // 폼 항목
@@ -123,10 +132,25 @@ export default {
       deadline: "",
       comment: "",
       categoryName: "",
+      favorite: false,
+      data: {},
+      linkList: [],
+      // 경고 모달
+      isAlertModalActive: false,
+      AlertModalContent: "",
+      btnMessage: "네",
     };
   },
   mounted() {
     this.getMyCategory();
+  },
+  props: {
+    contentsData: Object,
+  },
+  watch: {
+    link: function() {
+      this.linkList = filterLink(this.link);
+    },
   },
   computed: {
     // 링크 여부 확인
@@ -151,14 +175,13 @@ export default {
       this.isDetailSettingActive = true;
     },
     addFavorites() {
-      this.isActive = !this.isActive;
+      this.favorite = !this.favorite;
     },
     // 자신의 카테고리 조회
     async getMyCategory() {
       try {
         const response = await fetchMyCategory();
-        console.log(response);
-        this.myCategories = response.categories;
+        this.myCategories = response.data.categories;
       } catch (error) {
         console.log(error);
       }
@@ -167,25 +190,41 @@ export default {
     async createContent() {
       // 링크가 1개인 경우
       if (this.countLink == 1) {
-        try {
-          this.$emit("close-modal");
-          const contentsData = {
-            link: this.link,
-            title: this.title,
-            deadline: this.deadline,
-            comment: this.comment,
-            categoryName: this.categoryName,
-          };
-          const response = await addContents(contentsData);
-          console.log(response);
-        } catch (error) {
-          console.log(error);
+        const contentsData = {
+          link: this.link,
+          favorite: this.favorite,
+          comment: this.comment,
+          deadline: this.deadline,
+          categoryName: this.categoryName,
+          title: this.title,
+        };
+        Object.keys(contentsData).forEach(
+          (key) =>
+            (contentsData[key] == "" || contentsData[key] == undefined) &&
+            delete contentsData[key]
+        );
+        console.log(contentsData);
+        {
+          try {
+            const response = await addContents(contentsData);
+            console.log(response);
+            this.$emit("close-modal");
+          } catch (error) {
+            console.log(error);
+            this.alertModalContent = error.response.data.message;
+            this.isAlertModalActive = true;
+          }
         }
       }
       // 링크가 2개 이상인 경우
       else if (this.countLink >= 2) {
-        this.$emit("isLinkNotSingle");
+        const linkList = this.linkList;
+        this.$emit("isLinkNotSingle", linkList);
       }
+    },
+    openCollectionModal() {
+      const linkList = this.linkList;
+      this.$emit("openCollectionModal", linkList);
     },
   },
 };

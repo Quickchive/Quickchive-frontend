@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import { getAuthFromCookie } from "@/utils/cookies";
 
 Vue.use(VueRouter);
 
@@ -8,6 +9,15 @@ const routes = [
   {
     path: "/",
     component: () => import("@/views/OnBoardingView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (getAuthFromCookie("accessToken")) {
+        next("/main");
+        console.log("로그인 함");
+      } else {
+        next();
+        console.log("로그인 안 했음");
+      }
+    },
   },
   {
     path: "/login",
@@ -59,7 +69,7 @@ const routes = [
       },
       // step2: 비밀번호 재설정
       {
-        path: "/resetpw",
+        path: "/resetpw/:code",
         component: () => import("@/components/auth/ResetPwForm.vue"),
       },
     ],
@@ -83,6 +93,32 @@ const routes = [
   {
     path: "/category",
     component: () => import("@/views/CategoryView.vue"),
+    children: [
+      {
+        path: "/category/all",
+        component: () =>
+          import("@/components/category/AllCategoryComponent.vue"),
+      },
+      {
+        path: "/category/favorite",
+        component: () =>
+          import("@/components/category/FavoriteCategoryComponent.vue"),
+      },
+      {
+        path: "/category/:id",
+        component: () => import("@/components/category/CategoryComponent.vue"),
+      },
+    ],
+  },
+  // 콜렉션 상세 페이지
+  {
+    path: "/collection/:id",
+    component: () => import("@/views/CollectionView.vue"),
+  },
+  // 검색 결과 페이지
+  {
+    path: "/search",
+    component: () => import("@/views/SearchView.vue"),
   },
   // 404 에러 페이지
   {
