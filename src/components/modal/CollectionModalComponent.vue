@@ -199,6 +199,12 @@ export default {
         console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
+      } finally {
+        this.collectionData.title = "";
+        this.collectionData.comment = "";
+        this.collectionData.contentsLinkList = "";
+        this.collectionData.categoryName = "";
+        this.collectionData.favorite = false;
       }
     },
   },
