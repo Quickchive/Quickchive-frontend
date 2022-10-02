@@ -257,7 +257,7 @@ export default {
       try {
         const response = await summarizeContents(this.contents.id);
         console.log(response);
-        this.summaryContents = response.data;
+        this.summaryContents = response.data.summary;
       } catch (error) {
         console.log(error);
         this.summaryContents = error.response.data.message;
