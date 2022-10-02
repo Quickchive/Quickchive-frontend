@@ -30,6 +30,11 @@ function postReadFlag(contentId) {
   return authInstance.patch(`contents/read/${contentId}`);
 }
 
+// 문서 요약
+function summarizeContents(contentId) {
+  return authInstance.get(`contents/summarize/${contentId}`);
+}
+
 export {
   addContents,
   updateContents,
@@ -37,4 +42,5 @@ export {
   addMultipleContents,
   addFavorite,
   postReadFlag,
+  summarizeContents,
 };
