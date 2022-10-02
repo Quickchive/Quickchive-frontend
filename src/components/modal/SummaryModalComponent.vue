@@ -14,7 +14,7 @@
       </div>
       <div class="modal-card__wrapper">
         <div class="flex-container modal-form__wrapper">
-          <p>{{ summaryContents }}</p>
+          <p v-html="handleNewLine(this.summaryContents)"></p>
         </div>
       </div>
     </div>
@@ -32,6 +32,11 @@ export default {
   },
   props: {
     summaryContents: String,
+  },
+  methods: {
+    handleNewLine(str) {
+      return String(str).replace(/(?:\r\n|\r|\n)/g, "</br>");
+    },
   },
 };
 </script>
