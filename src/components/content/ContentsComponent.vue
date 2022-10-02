@@ -3,6 +3,10 @@
   <div class="contents-component">
     <div class="contents__wrapper-col">
       <div class="flex-container">
+        <!-- [test] 문서 요약 api test -->
+        <button @click="getSummary()" class="btn__summarize">
+          요약
+        </button>
         <p class="contents__title" @click="toLink(contents.link)">
           {{ filterTitle(contents.title) }}
         </p>
@@ -75,6 +79,12 @@
       :btnMessage="btnMessage"
       @confirmBtn="this.isAlertModalActive == false"
     ></AlertModalComponent>
+    <!-- 문서 요약 모달 컴포넌트 -->
+    <summary-modal-component
+      v-if="isSummarizeModalActive"
+      @close-modal="isSummarizeModalActive = false"
+      :summaryContents="summaryContents"
+    ></summary-modal-component>
   </div>
 </template>
 
@@ -88,15 +98,17 @@ import { countDday } from "@/utils/validation";
 import { validateLink, linkCounter } from "@/utils/validation";
 import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComponent.vue";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { addFavorite, postReadFlag } from "@/api/contents";
+import { addFavorite, postReadFlag, summarizeContents } from "@/api/contents";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { eventBus } from "../../main";
+import SummaryModalComponent from "@/components/modal/SummaryModalComponent.vue";
 
 export default {
   components: {
     ContentsEditModalComponent,
     MemoModalComponent,
     AlertModalComponent,
+    SummaryModalComponent,
   },
   data() {
     return {
@@ -110,6 +122,9 @@ export default {
       isMemoModalActive: false,
       memoContents: "",
       contetnsId: 0,
+      // 문서 요약 메모
+      isSummarizeModalActive: false,
+      summaryContents: "",
       // 경고 모달
       isAlertModalActive: false,
       btnMessage: "네",
@@ -235,6 +250,19 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+      }
+    },
+    // 문서 요약 api test
+    async getSummary() {
+      try {
+        const response = await summarizeContents(this.contents.id);
+        console.log(response);
+        this.summaryContents = response.data;
+      } catch (error) {
+        console.log(error);
+        this.summaryContents = error.response.data.message;
+      } finally {
+        this.isSummarizeModalActive = true;
       }
     },
   },
