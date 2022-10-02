@@ -65,7 +65,7 @@
                 placeholder="URL 입력"
               />
               <button
-                v-if="index > 0"
+                v-if="collections.contents.length != 1"
                 @click="deleteInput(index)"
                 class="btn--transparent btn__deleteLink"
               >

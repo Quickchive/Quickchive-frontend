@@ -159,3 +159,13 @@ button {
   @include font(28px, 600, $color-gray-1);
   text-shadow: 2px 2px 1px rgb(123, 122, 122);
 }
+
+// 요약 버튼
+.btn__summarize {
+  padding: 3px 8px;
+  margin-right: 8px;
+  background-color: $color-gray-4;
+  border: 1px solid $color-gray-2;
+  border-radius: 5px;
+  color: rgb(23, 22, 22);
+}
