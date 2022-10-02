@@ -66,7 +66,7 @@
                 placeholder="URL 입력"
               />
               <button
-                v-if="index > 0"
+                v-if="collectionData.contentLinkList.length != 1"
                 @click="deleteInput(index)"
                 class="btn--transparent btn__deleteLink"
               >
@@ -143,10 +143,14 @@ export default {
     };
   },
   props: {
-    collectionData: Object,
+    collectionData: {
+      type: Object,
+      default: () => ({ contentLinkList: ["1", "2"] }),
+    },
   },
   created() {
     this.getMyCategory();
+    this.collectionData.contentLinkList[0] = "";
   },
   methods: {
     addFavorites() {
@@ -195,6 +199,12 @@ export default {
         console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
+      } finally {
+        this.collectionData.title = "";
+        this.collectionData.comment = "";
+        this.collectionData.contentsLinkList = "";
+        this.collectionData.categoryName = "";
+        this.collectionData.favorite = false;
       }
     },
   },
