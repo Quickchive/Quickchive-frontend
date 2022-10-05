@@ -47,7 +47,12 @@
     <div class="contents__wrapper">
       <!-- 이미지 -->
       <div class="contents__img">
-        <img :src="contents.coverImg" onerror="this.style.display='none'" />
+        <img
+          :src="contents.coverImg"
+          onerror="this.style.display='none'"
+          v-if="contents.coverImg.length > 0"
+        />
+        <img :src="defaultImg" v-else />
         <div v-if="contents.deadline" class="contents__expiryDate">
           D-{{ countDday }}
         </div>
@@ -102,6 +107,7 @@ import { addFavorite, postReadFlag, summarizeContents } from "@/api/contents";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { eventBus } from "../../main";
 import SummaryModalComponent from "@/components/modal/SummaryModalComponent.vue";
+import defaultImg from "@/assets/img/default.png";
 
 export default {
   components: {
@@ -115,6 +121,7 @@ export default {
       memo,
       star,
       edit,
+      defaultImg,
       category_line,
       star_border,
       isModalActive: false,

@@ -26,7 +26,10 @@
                 <img
                   :src="favorite.coverImg"
                   onerror="this.style.display='none'"
+                  v-if="favorite.coverImg.length > 0"
                 />
+                <img :src="defaultImg" v-else class="defaultImg" />
+
                 <span v-if="favorite.deadline" class="favorite-list__expiry"
                   >D-{{ countDday(favorite.deadline) }}</span
                 >
@@ -77,7 +80,9 @@
                 <img
                   :src="favorite.contents[0].coverImg"
                   onerror="this.style.display='none'"
+                  v-if="favorite.contents[0].coverImg.length > 0"
                 />
+                <img :src="defaultImg" v-else />
               </div>
               <div class="favorite-list__btn-wrapper">
                 <img :src="line_white" />
@@ -132,6 +137,7 @@ import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavorite } from "@/api/contents";
 import { countDday } from "@/utils/validation";
 // import { eventBus } from "@/main.js";
+import defaultImg from "@/assets/img/default.png";
 
 export default {
   components: { MemoModalComponent },
@@ -142,6 +148,7 @@ export default {
       line,
       line_white,
       memo,
+      defaultImg,
       star,
       star_gray,
       contentState: false,
