@@ -86,7 +86,7 @@ import { addFavoriteCollection } from "@/api/collection";
 import CollectionEditModalComponent from "@/components/modal/CollectionEditModalComponent.vue";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { eventBus } from "../../main";
-import defaultImg from "@/assets/img/default.png";
+import defaultImg from "@/assets/img/categoryDefaultImg.svg";
 
 export default {
   components: {
