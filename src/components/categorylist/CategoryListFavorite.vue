@@ -137,7 +137,7 @@ import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavorite } from "@/api/contents";
 import { countDday } from "@/utils/validation";
 // import { eventBus } from "@/main.js";
-import defaultImg from "@/assets/img/default.png";
+import defaultImg from "@/assets/img/favoriteDefault.svg";
 
 export default {
   components: { MemoModalComponent },
