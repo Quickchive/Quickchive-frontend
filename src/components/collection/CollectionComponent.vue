@@ -49,7 +49,9 @@
         <img
           :src="collection.contents[0].coverImg"
           onerror="this.style.display='none'"
+          v-if="collection.contents[0].coverImg.length > 0"
         />
+        <img :src="defaultImg" v-else />
         <div v-if="collection.contents" class="collection__num">
           +{{ collection.contents.length }}
         </div>
@@ -84,6 +86,7 @@ import { addFavoriteCollection } from "@/api/collection";
 import CollectionEditModalComponent from "@/components/modal/CollectionEditModalComponent.vue";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { eventBus } from "../../main";
+import defaultImg from "@/assets/img/categoryDefaultImg.svg";
 
 export default {
   components: {
@@ -95,6 +98,7 @@ export default {
       memo,
       star,
       edit,
+      defaultImg,
       star_border,
       category_line,
       // 콜렉션 모달

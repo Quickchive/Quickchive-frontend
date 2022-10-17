@@ -3,6 +3,21 @@
     <the-header></the-header>
     <router-view></router-view>
     <the-footer></the-footer>
+    <!-- swyg 위젯 -->
+    <a
+      target="_blank"
+      rel="noreferrer"
+      href="https://www.swygbro.com?utm_source=ygb&utm_medium=widget
+&utm_campaign=all_time"
+      class="swyg-widget"
+    >
+      <img
+        alt="widget logo"
+        src="https://assets.swygbro.com/img/logo/single/logo_7.png"
+        width="32"
+        height="32"
+      />
+    </a>
   </div>
 </template>
 
@@ -41,4 +56,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.swyg-widget {
+  box-sizing: border-box;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 9999rem;
+  background-color: white;
+  filter: drop-shadow(2px 4px 15px rgba(0, 0, 0, 0.2));
+  border: 0;
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
