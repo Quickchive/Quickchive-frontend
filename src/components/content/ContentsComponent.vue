@@ -107,7 +107,7 @@ import { addFavorite, postReadFlag, summarizeContents } from "@/api/contents";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { eventBus } from "../../main";
 import SummaryModalComponent from "@/components/modal/SummaryModalComponent.vue";
-import defaultImg from "@/assets/img/default.png";
+import defaultImg from "@/assets/img/categoryDefaultImg.svg";
 
 export default {
   components: {
