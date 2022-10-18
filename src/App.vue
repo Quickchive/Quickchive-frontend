@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div class="wrap">
     <the-header></the-header>
-    <router-view></router-view>
+    <div id="content-wrap">
+      <router-view></router-view>
+    </div>
     <the-footer></the-footer>
+
     <!-- swyg 위젯 -->
     <a
       target="_blank"
@@ -72,5 +75,13 @@ export default {
   border: 0;
   cursor: pointer;
   z-index: 9999;
+}
+
+.wrap {
+  position: relative;
+  min-height: 100vh;
+}
+#content-wrap {
+  padding-bottom: 233px;
 }
 </style>
