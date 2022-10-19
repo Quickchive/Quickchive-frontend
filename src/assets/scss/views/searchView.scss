@@ -4,6 +4,7 @@
   box-sizing: border-box;
   padding: 113px 0px;
   @include layout(column, center, flex-start);
+  height: 100%;
   .search__wrapper {
     @include font(16px, 400, $color-black-text);
     line-height: 30px;
