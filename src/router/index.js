@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import { getAuthFromCookie } from "@/utils/cookies";
+// import authStore from "@/store/modules/authStore";
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,15 @@ const routes = [
   {
     path: "/main",
     component: () => import("@/views/MainView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!getAuthFromCookie("accessToken")) {
+        next("/");
+        console.log("로그인 안 함");
+      } else {
+        next();
+        console.log("로그인 함");
+      }
+    },
     children: [
       // 카카오
       {
@@ -77,6 +87,15 @@ const routes = [
   {
     path: "/mypage",
     component: () => import("@/views/MypageView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!getAuthFromCookie("accessToken")) {
+        alert("로그인이 필요한 페이지입니다.");
+        next("/");
+      } else {
+        next();
+        console.log("로그인 함");
+      }
+    },
     children: [
       // 기본 회원가입
       {
@@ -93,6 +112,15 @@ const routes = [
   {
     path: "/category",
     component: () => import("@/views/CategoryView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!getAuthFromCookie("accessToken")) {
+        alert("로그인이 필요한 페이지입니다.");
+        next("/");
+      } else {
+        next();
+        console.log("로그인 함");
+      }
+    },
     children: [
       {
         path: "/category/all",
@@ -114,11 +142,29 @@ const routes = [
   {
     path: "/collection/:id",
     component: () => import("@/views/CollectionView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!getAuthFromCookie("accessToken")) {
+        alert("로그인이 필요한 페이지입니다.");
+        next("/");
+      } else {
+        next();
+        console.log("로그인 함");
+      }
+    },
   },
   // 검색 결과 페이지
   {
     path: "/search",
     component: () => import("@/views/SearchView.vue"),
+    beforeEnter: (to, from, next) => {
+      if (!getAuthFromCookie("accessToken")) {
+        alert("로그인이 필요한 페이지입니다.");
+        next("/");
+      } else {
+        next();
+        console.log("로그인 함");
+      }
+    },
   },
   // 404 에러 페이지
   {

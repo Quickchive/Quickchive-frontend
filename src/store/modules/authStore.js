@@ -88,7 +88,6 @@ const authStore = {
       commit("setEmail", response.data.email);
       commit("setLoginState", true);
       commit("setOauthLoginState", false);
-      return data;
     },
     // 프로필 조회이자 로그인 여부 확인
     async FETCH_PROFILE({ commit }) {
