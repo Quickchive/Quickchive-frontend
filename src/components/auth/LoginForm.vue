@@ -97,10 +97,10 @@ export default {
         await this.$store.dispatch("LOGIN", userData);
         // 로그인 유지 여부 저장
         this.$store.dispatch("STAY_LOGIN", this.stayLogin);
-        this.$router.push("/main");
+        await this.$router.push("/main").catch(() => {});
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response.data.message;
+        this.alertModalContent = error.response;
         this.isAlertModalActive = true;
       }
     },

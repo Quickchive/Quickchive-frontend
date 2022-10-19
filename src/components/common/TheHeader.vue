@@ -134,17 +134,21 @@ export default {
     // 로그아웃
     async logoutUser() {
       await this.$store.dispatch("LOGOUT");
-      await this.$router.push("/");
+      await this.$router.push("/").catch(() => {});
     },
     // 로고 클릭 시 로그인 상태면 main으로, 로그인 전이면 온보딩으로
     clickLogo() {
-      if (this.$store.getters.isLogin || this.$store.getters.isOauthLogin) {
-        this.$router.push("/main");
+      if (
+        this.$store.getters.isLogin == true ||
+        this.$store.getters.isOauthLogin == true
+      ) {
+        this.$router.push("/main").catch(() => {});
+        console.log("로그인");
       } else if (
         !this.$store.getters.isLogin ||
         !this.$store.getters.isOauthLogin
       ) {
-        this.$router.push("/");
+        this.$router.push("/").catch(() => {});
       }
     },
     // 카테고리 목록 조회
