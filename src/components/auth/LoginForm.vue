@@ -100,7 +100,7 @@ export default {
         await this.$router.push("/main").catch(() => {});
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
