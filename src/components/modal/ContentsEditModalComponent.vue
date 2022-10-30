@@ -1,103 +1,171 @@
 <template>
+
   <div class="modal">
+
     <div class="overlay"></div>
+
     <div class="contents-modal-card">
+
       <div class="modal-card__header">
+
         <h1>콘텐츠 수정</h1>
+
         <button
           type="button"
           class="btn--transparent btn__close"
           @click="$emit('close-modal')"
         >
+
           <img :src="closeBtn" />
+
         </button>
+
       </div>
+
       <div class="modal-card__wrapper">
+
         <div class="register-form__wrapper">
-          <label class="register-form__label">링크<em>*</em></label>
+
+          <label class="register-form__label">
+             링크
+            <em>*</em>
+
+          </label>
+
           <div class="flex-container modal-form__wrapper">
+
             <input v-model="contentsData.link" placeholder="URL 입력" />
+
             <button
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
+
               <img v-show="!contentsData.favorite" :src="star_border" />
+
               <img v-show="contentsData.favorite" :src="star" />
+
             </button>
+
           </div>
+
         </div>
+
         <div>
+
           <div class="register-form__wrapper">
+
             <label class="register-form__label">이름</label>
+
             <input v-model="contentsData.title" placeholder="30자 이하 권장" />
+
           </div>
+
           <div class="flex-container modal-form__wrapper">
+
             <div class="register-form__wrapper">
+
               <label class="register-form__label">카테고리</label>
+
               <select v-model="categoryName" class="contents-modal__select">
-                <option v-if="contentsData.category == null" value=""
-                  >카테고리 선택</option
-                >
-                <option v-for="(category, index) in myCategories" :key="index">
-                  {{ category.name }}
+
+                <option v-if="contentsData.category == null" value="">
+                   카테고리 선택
                 </option>
+
+                <option v-for="(category, index) in myCategories" :key="index">
+                   {{ category.name }}
+                </option>
+
               </select>
+
             </div>
+
             <div class="register-form__wrapper">
+
               <label class="register-form__label">읽을 기한</label>
+
               <div class="flex-container modal-form__wrapper">
+
                 <input v-model="contentsData.deadline" type="date" />
-                <span class="contents-modal__date-description"
-                  >D-DAY에 알림을 보내드립니다</span
-                >
+
+                <span class="contents-modal__date-description">
+                   D-DAY에 알림을 보내드립니다
+                </span>
+
               </div>
+
             </div>
+
           </div>
+
           <div class="register-form__wrapper">
+
             <label class="register-form__label">메모</label>
+
             <input
               v-model="contentsData.comment"
               placeholder="500자 이하"
               maxlength="500"
             />
+
           </div>
+
         </div>
+
       </div>
+
       <div class="modal-card__btn__wrapper">
+
         <div class="flex-container">
+
           <button
             @click="isDeleteModalActive = true"
             class="btn--transparent login-form__link-register"
           >
-            콘텐츠 삭제
+             콘텐츠 삭제
           </button>
+
         </div>
+
       </div>
+
       <div class="flex-container-col modal-card__btn__wrapper">
+
         <button
           :disabled="!contentsData.link"
           @click="editContent()"
           class="btn--sm btnPrimary"
         >
-          저장
+           저장
         </button>
+
       </div>
+
     </div>
+
     <!-- 삭제 확인 모달 컴포넌트 -->
-    <AlertModalComponent
+
+    <ConfirmModalComponent
       v-if="isDeleteModalActive == true"
-      :alertModalContent="deleteModalContent"
-      :btnMessage="btnMessage"
-      @confirmBtn="deleteContent()"
-    ></AlertModalComponent>
+      :confirmModalContent="confirmModalContent"
+      :leftBtnMessage="leftBtnMessage"
+      :rightBtnMessage="rightBtnMessage"
+      @leftBtn="deleteContent()"
+      @rightBtn="isDeleteModalActive = false"
+    ></ConfirmModalComponent>
+
     <!-- 에러 모달 -->
+
     <AlertModalComponent
       v-if="isAlertModalActive == true"
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
       @confirmBtn="isAlertModalActive = false"
     ></AlertModalComponent>
+
   </div>
+
 </template>
 
 <script>
@@ -110,9 +178,10 @@ import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter } from "@/utils/validation";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { deleteContents } from "@/api/contents";
+import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
 
 export default {
-  components: { AlertModalComponent },
+  components: { AlertModalComponent, ConfirmModalComponent },
   data() {
     return {
       closeBtn,
@@ -126,7 +195,10 @@ export default {
       isAlertModalActive: false,
       AlertModalContent: "",
       btnMessage: "네",
-      deleteModalContent: "해당 콘텐츠를 삭제할까요?",
+      // 삭제 모달
+      leftBtnMessage: "네",
+      rightBtnMessage: "아니요",
+      confirmModalContent: "해당 콘텐츠를 삭제할까요?",
       isDeleteModalActive: false,
       categoryName: "",
       contentsData: {},
@@ -209,7 +281,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        this.alertModalContent = error.response;
+        this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
@@ -232,3 +304,4 @@ export default {
 </script>
 
 <style></style>
+
