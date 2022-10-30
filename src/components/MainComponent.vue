@@ -1,28 +1,37 @@
 <template>
+
   <div>
+
     <category-list-favorite
       @toCategoryPage="toFavoriteCategoryPage()"
     ></category-list-favorite>
+
     <div class="contents__wrapper-wrap">
+
       <category-list-all
         @toCategoryPage="toCategoryPage()"
         :categoryTitle="categoryAll"
       ></category-list-all>
+
       <category-list
         v-for="(category, index) in myCategories"
         :key="index"
         :categoryTitle="category.name"
         :categoryId="category.id"
       ></category-list>
+
       <!-- <category-list-unclassified
         @toCategoryPage="toCategoryPage(-1)"
       ></category-list-unclassified> -->
+
       <button @click="openCategoryModal" class="btn__addCategory">
-        + Add category
+         + Add category
       </button>
+
     </div>
 
     <!-- 카테고리 추가 모달 컴포넌트 -->
+
     <category-modal-component
       v-show="isCategoryModalActive"
       @close-modal="isCategoryModalActive = false"
@@ -32,14 +41,23 @@
     ></category-modal-component>
 
     <div class="main-btn__wrapper-col">
+
       <button @click="backToTop()" class="btn--transparent btn__top">
+
         <img :src="topBtn" />
+
       </button>
+
       <button @click="isModalActive = true" class="btn__addContents">
+
         <img :src="plusBtn" />
+
       </button>
+
     </div>
+
     <!-- 콘텐츠 추가 모달 컴포넌트 -->
+
     <contents-modal-component
       v-if="isModalActive"
       @close-modal="isModalActive = false"
@@ -47,31 +65,42 @@
       :linkList="linkList"
       @openCollectionModal="openCollectionModal"
     ></contents-modal-component>
+
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
+
     <confirm-modal-component
       v-if="isConfirmModalActive"
       @rightBtn="addMultipleContents()"
       @leftBtn="openCollectionModal(linkList)"
+      @close-modal="isConfirmModalActive = false"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
+      :isCloseBtnShow="isClosBtnShow"
       :linkList="linkList"
     ></confirm-modal-component>
+
     <!-- 중복 링크일 경우 모달 컴포넌트 -->
+
     <alert-modal-component
       v-if="isAlertModalActive"
       @confirmBtn="isAlertModalActive = false"
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
     >
+
     </alert-modal-component>
+
     <!-- 콜렉션으로 저장 모달 -->
+
     <collection-modal-component
       v-if="isCollectionModalActive"
       @close-modal="isCollectionModalActive = false"
       :collectionData="collectionData"
     ></collection-modal-component>
+
   </div>
+
 </template>
 
 <script>
@@ -114,6 +143,7 @@ export default {
       confirmModalContent: "URL이 2개 이상이네요! \n 저장방식을 선택해주세요",
       leftBtnMessage: "콜렉션으로 저장",
       rightBtnMessage: "각각 콘텐츠로 저장",
+      isClosBtnShow: true,
       // alert 모달 메시지
       alertModalContent: "같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.",
       btnMessage: "네",
@@ -261,3 +291,4 @@ export default {
 </script>
 
 <style></style>
+
