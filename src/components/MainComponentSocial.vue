@@ -148,8 +148,46 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch("GET_CATEGORIES");
-    this.myCategories = this.$store.getters.getCategories;
+    // 카테고리 조회
+    const path = this.$route.path;
+    const loginInfo = path.slice(6);
+    console.log(loginInfo);
+    if (loginInfo == "google/redirect") {
+      console.log("maincomponent에서 구글 로그인 감지");
+      // localStorage.removeItem("oauthInfo");
+      localStorage.setItem("oauthInfo", "google");
+      try {
+        const code = this.$route.query.code;
+        await this.$store.dispatch("GOOGLE_LOGIN", code);
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
+      } finally {
+        await this.$store.dispatch("GET_CATEGORIES");
+        this.myCategories = this.$store.getters.getCategories;
+      }
+      // await this.getGoogleLogin();
+    } else if (loginInfo == "kakao/redirect") {
+      console.log("maincomponent에서 카카오 로그인 감지");
+      // localStorage.removeItem("oauthInfo");
+      localStorage.setItem("oauthInfo", "kakao");
+      try {
+        const code = this.$route.query.code;
+        await this.$store.dispatch("KAKAO_LOGIN", code);
+      } catch (error) {
+        console.log(error);
+        this.alertModalContent = error.response.data.message;
+        this.isAlertModalActive = true;
+      } finally {
+        await this.$store.dispatch("GET_CATEGORIES");
+        this.myCategories = this.$store.getters.getCategories;
+      }
+      // await this.getKakaoLogin();
+    } else {
+      await this.$store.dispatch("GET_CATEGORIES");
+      this.myCategories = this.$store.getters.getCategories;
+    }
   },
   computed: {
     isUserLogin() {
@@ -157,6 +195,28 @@ export default {
     },
   },
   methods: {
+    // 카카오 로그인 요청
+    // async getKakaoLogin() {
+    //   try {
+    //     const code = this.$route.query.code;
+    //     await this.$store.dispatch("KAKAO_LOGIN", code);
+    //   } catch (error) {
+    //     console.log(error);
+    //     this.alertModalContent = error.response.data.message;
+    //     this.isAlertModalActive = true;
+    //   }
+    // },
+    // // 구글 로그인 요청
+    // async getGoogleLogin() {
+    //   try {
+    //     const code = this.$route.query.code;
+    //     await this.$store.dispatch("GOOGLE_LOGIN", code);
+    //   } catch (error) {
+    //     console.log(error);
+    //     this.alertModalContent = error.response.data.message;
+    //     this.isAlertModalActive = true;
+    //   }
+    // },
     // 카테고리 추가 모달 열기
     openCategoryModal() {
       this.isCategoryModalActive = true;
