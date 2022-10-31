@@ -1,13 +1,10 @@
 <template>
-
   <div>
-
     <category-list-favorite
       @toCategoryPage="toFavoriteCategoryPage()"
     ></category-list-favorite>
 
     <div class="contents__wrapper-wrap">
-
       <category-list-all
         @toCategoryPage="toCategoryPage()"
         :categoryTitle="categoryAll"
@@ -25,9 +22,8 @@
       ></category-list-unclassified> -->
 
       <button @click="openCategoryModal" class="btn__addCategory">
-         + Add category
+        + Add category
       </button>
-
     </div>
 
     <!-- 카테고리 추가 모달 컴포넌트 -->
@@ -41,19 +37,13 @@
     ></category-modal-component>
 
     <div class="main-btn__wrapper-col">
-
       <button @click="backToTop()" class="btn--transparent btn__top">
-
         <img :src="topBtn" />
-
       </button>
 
       <button @click="isModalActive = true" class="btn__addContents">
-
         <img :src="plusBtn" />
-
       </button>
-
     </div>
 
     <!-- 콘텐츠 추가 모달 컴포넌트 -->
@@ -88,7 +78,6 @@
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
     >
-
     </alert-modal-component>
 
     <!-- 콜렉션으로 저장 모달 -->
@@ -98,9 +87,7 @@
       @close-modal="isCollectionModalActive = false"
       :collectionData="collectionData"
     ></collection-modal-component>
-
   </div>
-
 </template>
 
 <script>
@@ -168,20 +155,14 @@ export default {
     const loginInfo = path.slice(6);
     console.log(path);
     console.log(loginInfo);
-    if (
-      loginInfo == "google/redirect" &&
-      localStorage.getItem("oauthInfo") !== "google"
-    ) {
+    if (loginInfo == "google/redirect") {
       console.log("구글 로그인 시도");
       await this.getGoogleLogin();
       localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "google");
       await this.$store.dispatch("GET_CATEGORIES");
       this.myCategories = this.$store.getters.getCategories;
-    } else if (
-      loginInfo == "kakao/redirect" &&
-      localStorage.getItem("oauthInfo") !== "kakao"
-    ) {
+    } else if (loginInfo == "kakao/redirect") {
       console.log("카카오 로그인 시도");
       await this.getKakaoLogin();
       localStorage.removeItem("oauthInfo");
@@ -291,4 +272,3 @@ export default {
 </script>
 
 <style></style>
-
