@@ -28,8 +28,19 @@ const routes = [
   {
     path: "/main",
     component: () => import("@/views/MainView.vue"),
+
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie("accessToken")) {
+      const path = this.$route.path;
+      // 소셜 로그인인 경우 토큰 없어도 통과
+      if (
+        !getAuthFromCookie(
+          "accessToken" &&
+            (path.slice(6) == "google/redirect" ||
+              path.splie(6) == "kakao/redirect")
+        )
+      ) {
+        next();
+      } else if (!getAuthFromCookie("accessToken")) {
         next("/");
         console.log("로그인 안 함");
       } else {
