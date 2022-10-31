@@ -124,7 +124,7 @@ const authStore = {
     async GOOGLE_LOGIN({ commit }, code) {
       try {
         const response = await googleLogin(code);
-        console.log(response);
+        console.log("authstore에서 구글 로그인 요청", response);
         if (response.data.statusCode == 200) {
           console.log("구글 로그인 성공");
           localStorage.setItem("refreshToken", response.data.refresh_token);
@@ -145,7 +145,7 @@ const authStore = {
     async KAKAO_LOGIN({ commit }, code) {
       try {
         const response = await kakaoLogin(code);
-        console.log(response);
+        console.log("authstore에서 카카오 로그인 요청", response);
         if (response.data.statusCode == 200) {
           console.log("카카오 로그인 성공");
           localStorage.setItem("refreshToken", response.data.refresh_token);
