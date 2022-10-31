@@ -28,25 +28,30 @@ const routes = [
   {
     path: "/main",
     component: () => import("@/views/MainView.vue"),
-    beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie("accessToken")) {
-        next("/");
-        console.log("로그인 안 함");
-      } else {
-        next();
-        console.log("로그인 함");
-      }
-    },
     children: [
+      // 기본 메인
+      {
+        path: "/main",
+        component: () => import("@/components/MainComponent.vue"),
+        beforeEnter: (to, from, next) => {
+          if (!getAuthFromCookie("accessToken")) {
+            next("/");
+            console.log("로그인 안 함");
+          } else {
+            next();
+            console.log("로그인 함");
+          }
+        },
+      },
       // 카카오
       {
         path: "/main/kakao/redirect",
-        component: () => import("@/views/MainView.vue"),
+        component: () => import("@/components/MainComponentSocial.vue"),
       },
       // 구글
       {
         path: "/main/google/redirect",
-        component: () => import("@/views/MainView.vue"),
+        component: () => import("@/components/MainComponentSocial.vue"),
       },
     ],
   },
