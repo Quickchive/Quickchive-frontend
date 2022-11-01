@@ -127,11 +127,9 @@ export default {
           password: this.pw,
           oldPassword: this.oldPw,
         };
-        const response = await editProfile(userData);
-        console.log(response);
+        await editProfile(userData);
         this.$router.push("/login");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -140,12 +138,10 @@ export default {
     async deleteMembership() {
       try {
         this.isModalActive = false;
-        const response = await deleteUser();
-        console.log(response);
+        await deleteUser();
         this.$store.commit("logoutUser");
         this.$router.push("/");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

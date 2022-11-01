@@ -86,8 +86,6 @@ export default {
   },
   watch: {
     async $route() {
-      // this.$store.dispatch("GET_CONTENTS", this.$route.params.id);
-      // this.$store.dispatch("GET_COLLECTIONS", this.$route.params.id);
       await this.fetchCategoryName();
 
       await this.$store.dispatch("SORT_DATA", this.$route.params.id);
@@ -110,13 +108,7 @@ export default {
     this.categoryId = this.$route.params.id;
     await this.$store.dispatch("SORT_DATA", this.$route.params.id);
     this.newArr = this.$store.getters.getLatestSortedData;
-    // await this.$store.dispatch("SORT_DATA", this.$route.params.id);
-    // this.newArr = this.$store.getters.getLatestSortedData;
     await this.fetchCategoryName();
-    // this.newArr = sortLatestArr(
-    //   this.$store.getters.getContents,
-    //   this.$store.getters.getCollections
-    // );
     eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
     eventBus.$on(
       "contentsModalActive",
@@ -140,8 +132,7 @@ export default {
           name: this.newCategoryName,
           originalName: this.categoryName,
         };
-        const response = await updateCategory(categoryData);
-        console.log(response);
+        await updateCategory(categoryData);
         this.categoryName = this.newCategoryName;
         this.isCategoryModalActive = false;
       } catch (error) {
@@ -151,8 +142,7 @@ export default {
     // 카테고리 삭제
     async deleteCategory() {
       try {
-        const response = await deleteCategory(this.categoryId);
-        console.log(response);
+        await deleteCategory(this.categoryId);
         this.isCategoryModalActive = false;
         this.$router.push("/category/all");
       } catch (error) {
@@ -171,7 +161,6 @@ export default {
           const categoryFilter = categories.filter(function(cate) {
             return cate.id == categoryId;
           });
-          console.log(categoryFilter);
           this.categoryName = categoryFilter[0].name;
         }
       } catch (error) {
@@ -196,7 +185,6 @@ export default {
           this.$store.getters.getContents,
           this.$store.getters.getCollections
         );
-        console.log(this.newArr);
       }
     },
   },

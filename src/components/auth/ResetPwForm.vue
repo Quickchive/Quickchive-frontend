@@ -117,13 +117,11 @@ export default {
           password: this.pw,
           code: code,
         };
-        const response = await resetPw(pwData);
-        console.log(response);
+        await resetPw(pwData);
         this.alertModalContent = "비밀번호 재설정에 성공하였습니다.";
         this.isAlertModalActive = true;
         this.$router.push("/login");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

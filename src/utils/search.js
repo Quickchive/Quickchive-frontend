@@ -12,17 +12,14 @@ function findData(word, contents, collection) {
 
   // // 2.1 메모 중 검색어가 있는 배열만 반환
   const containMemo = targetData.filter((data) => data.comment);
-  // console.log("2-1", containMemo);
 
   // 2.2 콘텐츠 || 콜렉션 메모가 존재하는 배열만 반환 (data.comment)
   const findFromMemo = containMemo.filter((data) =>
     data.comment.toLowerCase().includes(word)
   );
-  // console.log("2-2", findFromMemo);
 
   // 3-1. 콜렉션 - 콘텐츠 목록에 검색어가 있는 배열만 반환
   const containContents = collection.filter((data) => data.contents.length > 0);
-  // console.log("3-1 콜렉션 - 콘텐츠가 존재하는 배열", containContents);
 
   let i = 0;
   const findFromContents = [];
@@ -40,7 +37,6 @@ function findData(word, contents, collection) {
   const set = new Set(resultData);
   const uniqueArr = [...set];
 
-  // console.log(uniqueArr);
   return uniqueArr;
 }
 

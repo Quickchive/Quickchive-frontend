@@ -82,7 +82,6 @@ import { addFavoriteCollection } from "@/api/collection";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { countDday } from "@/utils/validation";
 import { addFavorite } from "@/api/contents";
-// import { eventBus } from "@/main.js";
 
 export default {
   components: { MemoModalComponent },
@@ -108,32 +107,8 @@ export default {
     categoryTitle: String,
     categoryId: Number,
   },
-
-  async created() {
-    // await this.$store.dispatch("GET_CONTENTS", this.categoryId);
-    // await this.$store.dispatch("GET_COLLECTIONS", this.categoryId);
-    // eventBus.$on("fetchFavoritesList", (data) => {
-    //   this.isFavoriteListUpdated += data;
-    //   console.log(
-    //     "CategoryList에 이벤트 버스 도착",
-    //     this.isFavoriteListUpdated
-    //   );
-    // });
-  },
-  watch: {
-    // isFavoriteListUpdated() {
-    //   // this.$store.dispatch("GET_CONTENTS", this.categoryId);
-    //   // this.$store.dispatch("GET_COLLECTIONS", this.categoryId);
-    //   this.$store.dispatch("SORT_DATA", this.categoryId);
-    //   this.newArr = this.$store.getters.getLatestSortedData;
-    // },
-  },
   methods: {
     async showContent() {
-      // await this.$store.dispatch("GET_CONTENTS", this.categoryId);
-      // await this.$store.dispatch("GET_COLLECTIONS", this.categoryId);
-      // this.contentsData = this.$store.getters.getContents;
-      // this.collectionsData = this.$store.getters.getCollections;
       await this.$store.dispatch("SORT_DATA", this.categoryId);
       this.newArr = this.$store.getters.getLatestSortedData;
       this.contentState = !this.contentState;
@@ -143,9 +118,7 @@ export default {
       this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
         const contentId = this.newArr[index].id;
-        const response = await addFavorite(contentId);
-        console.log(response);
-        // eventBus.$emit("fetchFavoritesList", this.data);
+        await addFavorite(contentId);
       } catch (error) {
         console.log(error);
       }
@@ -156,9 +129,7 @@ export default {
         .favorite;
       try {
         const collectionId = this.newArr[index].id;
-        const response = await addFavoriteCollection(collectionId);
-        console.log(response);
-        // eventBus.$emit("fetchFavoritesList", this.data);
+        await addFavoriteCollection(collectionId);
       } catch (error) {
         console.log(error);
       }

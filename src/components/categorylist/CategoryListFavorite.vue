@@ -136,7 +136,6 @@ import star_gray from "@/assets/icon/star_gray.svg";
 import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
 import { addFavorite } from "@/api/contents";
 import { countDday } from "@/utils/validation";
-// import { eventBus } from "@/main.js";
 import defaultImg from "@/assets/img/favoriteDefault.svg";
 
 export default {
@@ -159,10 +158,6 @@ export default {
     };
   },
   async created() {
-    // eventBus.$on("fetchFavoritesList", (data) => {
-    //   this.isFavoriteListUpdated += data;
-    //   console.log("이벤트 버스 도착", this.isFavoriteListUpdated);
-    // });
     await this.$store.dispatch("GET_FAVORITES");
     this.newArr = this.$store.getters.getLatestSortedFavorite;
   },
@@ -180,17 +175,13 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      console.log("인덱스", index);
       this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
         const contentId = this.newArr[index].id;
-        const response = await addFavorite(contentId);
-        console.log(response);
+        await addFavorite(contentId);
         // 즐겨찾기 리스트 갱신
         this.$store.dispatch("GET_FAVORITES");
         this.newArr = this.$store.getters.getLatestSortedFavorite;
-
-        // eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
       }
@@ -219,19 +210,16 @@ export default {
     },
     // 도메인 추출
     filterDomain(link) {
-      // let link = this.favoritesList[index].link;
       let domain;
       if (link.includes("www") == true) {
         let domain1 = link.split(".");
         domain1 = domain1[1];
         domain = domain1;
       } else {
-        // domain = domain[1];
         let pos1 = link.indexOf("//");
         let pos2 = link.substring(pos1 + 2);
         domain = pos2.split(".");
         domain = domain[0];
-        // console.log(domain[1]);
       }
       return domain;
     },

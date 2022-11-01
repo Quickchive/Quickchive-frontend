@@ -1,15 +1,10 @@
 <template>
-
   <div class="flex-container-col">
-
     <h1 class="page-header">로그인</h1>
 
     <div class="login-wrapper">
-
       <form class="login-form">
-
         <div>
-
           <label id="email" class="login-form__label">이메일</label>
 
           <input
@@ -18,11 +13,9 @@
             id="email"
             @keyup.enter="submitForm()"
           />
-
         </div>
 
         <div>
-
           <label id="pw" class="login-form__label">비밀번호</label>
 
           <input
@@ -31,9 +24,7 @@
             id="pw"
             @keyup.enter="submitForm()"
           />
-
         </div>
-
       </form>
 
       <button
@@ -42,13 +33,11 @@
         @click="submitForm()"
         class="btn__login"
       >
-         로그인
+        로그인
       </button>
-
     </div>
 
     <div class="register-form__agree">
-
       <input
         type="checkbox"
         v-model="stayLogin"
@@ -59,45 +48,32 @@
       <label for="checkbox" class="register-form__checkbox-label"></label>
 
       <p class="login-form__checkbox-label">로그인 상태 유지</p>
-
     </div>
 
     <div>
-
       <router-link to="/register/email" class="login-form__link-register">
-         회원가입 하기
+        회원가입 하기
       </router-link>
-       &nbsp;&nbsp;
+      &nbsp;&nbsp;
       <router-link to="/resetpw/email" class="login-form__link-register">
-         비밀번호 재설정
+        비밀번호 재설정
       </router-link>
-
     </div>
 
     <span class="login-form__or">OR</span>
 
     <div class="oauth-btn__wrapper">
-
       <button @click="setStayLogin()" class="btn--transparent">
-
         <a href="https://api.hou27.shop/api/oauth/kakao-auth" target="_blank">
-
           <img :src="kakaoBtn" />
-
         </a>
-
       </button>
 
       <button @click="setStayLogin()" class="btn--transparent">
-
         <a href="https://api.hou27.shop/api/oauth/google-auth" target="_blank">
-
           <img :src="googleBtn" />
-
         </a>
-
       </button>
-
     </div>
 
     <alert-modal-component
@@ -106,9 +82,7 @@
       :alertModalContent="alertModalContent"
       :btnMessage="btnMessage"
     ></alert-modal-component>
-
   </div>
-
 </template>
 
 <script>
@@ -146,7 +120,6 @@ export default {
         this.$store.dispatch("STAY_LOGIN", this.stayLogin);
         await this.$router.push("/main").catch(() => {});
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -159,4 +132,3 @@ export default {
 </script>
 
 <style></style>
-
