@@ -41,8 +41,6 @@ function sortFavoritesArr(contentsData, collectionData) {
 
 // 3. 읽을 기한 순(
 function sortDeadlineArr(contentsData, collectionData) {
-  // const newArr = [...contentsData, ...collectionData];
-
   // 기한이 있는 것만 분류
   const deadlineContentArr = contentsData.filter((data) => data.deadline);
   // 기한이 없는 것만 분류

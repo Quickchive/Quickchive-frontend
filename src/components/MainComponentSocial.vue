@@ -147,16 +147,12 @@ export default {
     // 카테고리 조회
     const path = this.$route.path;
     const loginInfo = path.slice(6);
-    console.log(loginInfo);
     if (loginInfo == "google/redirect") {
-      console.log("maincomponent에서 구글 로그인 감지");
-      // localStorage.removeItem("oauthInfo");
       localStorage.setItem("oauthInfo", "google");
       try {
         const code = this.$route.query.code;
         await this.$store.dispatch("GOOGLE_LOGIN", code);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       } finally {
@@ -164,13 +160,11 @@ export default {
         this.myCategories = this.$store.getters.getCategories;
       }
     } else if (loginInfo == "kakao/redirect") {
-      console.log("maincomponent에서 카카오 로그인 감지");
       localStorage.setItem("oauthInfo", "kakao");
       try {
         const code = this.$route.query.code;
         await this.$store.dispatch("KAKAO_LOGIN", code);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       } finally {
@@ -200,12 +194,10 @@ export default {
         const data = {
           categoryName: this.categoryName,
         };
-        const response = await addCategory(data);
+        await addCategory(data);
         await this.$store.dispatch("GET_CATEGORIES");
         this.myCategories = this.$store.getters.getCategories;
-        console.log(response);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -222,7 +214,6 @@ export default {
       this.linkList = linkList;
       this.isModalActive = false;
       this.isConfirmModalActive = true;
-      console.log("메인컴포넌트", this.linkList);
     },
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {
@@ -231,10 +222,8 @@ export default {
         contentLinks: this.linkList,
       };
       try {
-        const response = await addMultipleContents(contentsData);
-        console.log(response);
+        await addMultipleContents(contentsData);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

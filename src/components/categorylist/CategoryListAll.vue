@@ -108,14 +108,8 @@ export default {
     categoryId: Number,
   },
   async created() {
-    // await this.$store.dispatch("GET_CONTENTS");
-    // await this.$store.dispatch("GET_COLLECTIONS");
     eventBus.$on("fetchFavoritesList", (data) => {
       this.isFavoriteListUpdated += data;
-      console.log(
-        "CategoryList에 이벤트 버스 도착",
-        this.isFavoriteListUpdated
-      );
     });
   },
   watch: {
@@ -135,9 +129,7 @@ export default {
       this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
         const contentId = this.newArr[index].id;
-        const response = await addFavorite(contentId);
-        console.log(response);
-        // eventBus.$emit("fetchFavoritesList", this.data);
+        await addFavorite(contentId);
       } catch (error) {
         console.log(error);
       }
@@ -147,9 +139,7 @@ export default {
       this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
         const collectionId = this.newArr[index].id;
-        const response = await addFavoriteCollection(collectionId);
-        console.log(response);
-        // eventBus.$emit("fetchFavoritesList", this.data);
+        await addFavoriteCollection(collectionId);
       } catch (error) {
         console.log(error);
       }
@@ -165,8 +155,6 @@ export default {
       this.memoContents = this.newArr[index].comment;
       this.contentsId = this.newArr[index].id;
       this.isMemoModalActive = true;
-      // this.isMemoModalActive = true;
-      // this.memoContents = this.newArr[index].comment;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

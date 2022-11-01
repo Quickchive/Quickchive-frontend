@@ -195,14 +195,11 @@ export default {
             (contentsData[key] == "" || contentsData[key] == undefined) &&
             delete contentsData[key]
         );
-        console.log(contentsData);
         {
           try {
-            const response = await addContents(contentsData);
-            console.log(response);
+            await addContents(contentsData);
             this.$emit("close-modal");
           } catch (error) {
-            console.log(error);
             this.alertModalContent = error.response.data.message;
             this.isAlertModalActive = true;
           }

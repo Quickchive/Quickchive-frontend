@@ -224,13 +224,10 @@ export default {
               (contentsData[key] == "" || contentsData[key] == undefined) &&
                 delete contentsData[key];
           });
-          console.log("contentsData", contentsData);
-          const response = await updateContents(contentsData);
-          console.log(response);
+          await updateContents(contentsData);
           this.$emit("close-modal");
         }
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -240,11 +237,9 @@ export default {
       this.isDeleteModalActive = false;
       try {
         const contentId = this.contentsData.id;
-        const response = await deleteContents(contentId);
-        console.log(response);
+        await deleteContents(contentId);
         this.$emit("close-modal");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

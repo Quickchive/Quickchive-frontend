@@ -218,10 +218,9 @@ export default {
       this.collections.favorite = !this.collections.favorite;
     },
     // 인풋 추가 이벤트
-    createInput(index) {
+    createInput() {
       const arr = { link: "" };
       this.collections.contents.push(arr);
-      console.log(index);
     },
     // 인풋 삭제 이벤트
     deleteInput(index) {
@@ -231,8 +230,6 @@ export default {
     async editCollection() {
       const linkList = this.collections.contents;
       const newLinkList = linkList.map((a) => a.link);
-      console.log(newLinkList);
-      console.log("콜렉션 수정 - 링크 목록");
       const collectionData = {
         title: this.collections.title,
         comment: this.collections.comment,
@@ -248,12 +245,9 @@ export default {
             delete collectionData[key];
       });
       try {
-        const response = await updateCollection(collectionData);
-        console.log(response);
+        await updateCollection(collectionData);
         this.$emit("close-modal");
-        console.log(" 최종 보낼 값", collectionData);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -262,11 +256,9 @@ export default {
     async deleteCollection() {
       this.isDeleteModalActive = false;
       try {
-        const response = await deleteCollection(this.collections.id);
-        console.log(response);
+        await deleteCollection(this.collections.id);
         this.$emit("close-modal");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

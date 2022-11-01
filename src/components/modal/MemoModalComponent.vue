@@ -73,8 +73,7 @@ export default {
             (contentsData[key] == "" || contentsData[key] == undefined) &&
             delete contentsData[key]
         );
-        const response = await updateContents(contentsData);
-        console.log(response);
+        await updateContents(contentsData);
         this.$emit("close-modal");
         if (this.$route.fullpath != "/main") {
           eventBus.$emit("memoEvent", this.data);
