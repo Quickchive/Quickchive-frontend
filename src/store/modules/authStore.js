@@ -95,14 +95,12 @@ const authStore = {
         const { data } = await fetchProfile();
         commit("setNickname", data.name);
         commit("setEmail", data.email);
-        console.log("vuex에서 로그인 여부 확인중", data);
         if (data.statusCode == 201) {
           commit("setLoginState", true);
         } else if (data.statusCode == 200) {
           commit("setLoginState", true);
         }
       } catch (error) {
-        console.log(error);
         if (error.statusCode == 401) {
           commit("setLoginState", false);
         }
@@ -124,9 +122,7 @@ const authStore = {
     async GOOGLE_LOGIN({ commit }, code) {
       try {
         const response = await googleLogin(code);
-        console.log("authstore에서 구글 로그인 요청", response);
         if (response.data.statusCode == 200) {
-          console.log("구글 로그인 성공");
           localStorage.setItem("refreshToken", response.data.refresh_token);
           saveAuthToCookie(response.data.access_token);
           commit("setNickname", response.data.name);
@@ -136,7 +132,6 @@ const authStore = {
           commit("setRefreshToken", response.data.refresh_token);
         }
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -145,9 +140,7 @@ const authStore = {
     async KAKAO_LOGIN({ commit }, code) {
       try {
         const response = await kakaoLogin(code);
-        console.log("authstore에서 카카오 로그인 요청", response);
         if (response.data.statusCode == 200) {
-          console.log("카카오 로그인 성공");
           localStorage.setItem("refreshToken", response.data.refresh_token);
           saveAuthToCookie(response.data.access_token);
           commit("setNickname", response.data.name);
@@ -157,7 +150,6 @@ const authStore = {
           commit("setRefreshToken", response.data.refresh_token);
         }
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -166,13 +158,11 @@ const authStore = {
     RENEW_TOKEN({ commit }, accessToken) {
       commit("setAccessToken", accessToken);
       saveAuthToCookie(accessToken);
-      console.log("여긴 vuex, access 토큰값 갱신함");
     },
     // 리프레시 토큰 갱신
     RENEW_REFRESH_TOKEN({ commit }, refreshToken) {
       commit("setRefreshToken", refreshToken);
       localStorage.setItem("refreshToken", refreshToken);
-      console.log("여긴 vuex, refrest 토큰값 갱신함");
     },
     // 로그인 유지
     STAY_LOGIN({ commit }, stayLoginState) {

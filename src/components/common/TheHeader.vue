@@ -143,7 +143,6 @@ export default {
         this.$store.getters.isOauthLogin == true
       ) {
         this.$router.push("/main").catch(() => {});
-        console.log("로그인");
       } else if (
         !this.$store.getters.isLogin ||
         !this.$store.getters.isOauthLogin
@@ -163,7 +162,6 @@ export default {
     // 카테고리 페이지로 이동
     async toCategoryPage(index) {
       this.menuActive = false;
-      console.log(this.categories[index].id, "로 이동");
       this.$router.push(`/category/${this.categories[index].id}`);
     },
     // 전체 카테고리 페이지로 이동

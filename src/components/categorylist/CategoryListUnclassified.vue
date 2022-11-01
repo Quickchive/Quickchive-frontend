@@ -104,17 +104,6 @@ export default {
       newArr: [],
     };
   },
-  // async created() {
-  //   // await this.$store.dispatch("GET_CONTENTS", -1);
-  //   // await this.$store.dispatch("GET_COLLECTIONS", -1);
-  //   // eventBus.$on("fetchFavoritesList", (data) => {
-  //   //   this.isFavoriteListUpdated += data;
-  //   //   console.log(
-  //   //     "CategoryList에 이벤트 버스 도착",
-  //   //     this.isFavoriteListUpdated
-  //   //   );
-  //   // });
-  // },
   watch: {
     isFavoriteListUpdated: function() {
       this.$store.dispatch("SORT_DATA", this.categoryId);
@@ -129,12 +118,10 @@ export default {
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      console.log("인덱스", index);
       this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
         const contentId = this.newArr[index].id;
-        const response = await addFavorite(contentId);
-        console.log(response);
+        await addFavorite(contentId);
         eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
@@ -145,9 +132,7 @@ export default {
       this.newArr[index].favorite = !this.newArr[index].favorite;
       try {
         const collectionId = this.newArr[index].id;
-
-        const response = await addFavoriteCollection(collectionId);
-        console.log(response);
+        await addFavoriteCollection(collectionId);
         eventBus.$emit("fetchFavoritesList", this.data);
       } catch (error) {
         console.log(error);
@@ -164,8 +149,6 @@ export default {
       this.memoContents = this.newArr[index].comment;
       this.contentsId = this.newArr[index].id;
       this.isMemoModalActive = true;
-      // this.isMemoModalActive = true;
-      // this.memoContents = this.newArr[index].comment;
     },
     // 제목 글자수 30자 이상
     filterTitle(title) {

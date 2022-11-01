@@ -17,10 +17,6 @@
         :categoryId="category.id"
       ></category-list>
 
-      <!-- <category-list-unclassified
-        @toCategoryPage="toCategoryPage(-1)"
-      ></category-list-unclassified> -->
-
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
@@ -169,15 +165,15 @@ export default {
         const data = {
           categoryName: this.categoryName,
         };
-        const response = await addCategory(data);
-        this.getMyCategory();
-        console.log(response);
+        await addCategory(data);
+        await this.$store.dispatch("GET_CATEGORIES");
+        this.myCategories = this.$store.getters.getCategories;
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
     },
+
     // 콘텐츠 추가 모달 열기
     addContents() {
       this.isModalActive = true;
@@ -190,7 +186,6 @@ export default {
       this.linkList = linkList;
       this.isModalActive = false;
       this.isConfirmModalActive = true;
-      console.log("메인컴포넌트", this.linkList);
     },
     // 다수의 콘텐츠 추가 메소드
     async addMultipleContents() {
@@ -199,10 +194,8 @@ export default {
         contentLinks: this.linkList,
       };
       try {
-        const response = await addMultipleContents(contentsData);
-        console.log(response);
+        await addMultipleContents(contentsData);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

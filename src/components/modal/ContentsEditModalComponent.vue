@@ -1,13 +1,9 @@
 <template>
-
   <div class="modal">
-
     <div class="overlay"></div>
 
     <div class="contents-modal-card">
-
       <div class="modal-card__header">
-
         <h1>콘텐츠 수정</h1>
 
         <button
@@ -15,92 +11,67 @@
           class="btn--transparent btn__close"
           @click="$emit('close-modal')"
         >
-
           <img :src="closeBtn" />
-
         </button>
-
       </div>
 
       <div class="modal-card__wrapper">
-
         <div class="register-form__wrapper">
-
           <label class="register-form__label">
-             링크
+            링크
             <em>*</em>
-
           </label>
 
           <div class="flex-container modal-form__wrapper">
-
             <input v-model="contentsData.link" placeholder="URL 입력" />
 
             <button
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-
               <img v-show="!contentsData.favorite" :src="star_border" />
 
               <img v-show="contentsData.favorite" :src="star" />
-
             </button>
-
           </div>
-
         </div>
 
         <div>
-
           <div class="register-form__wrapper">
-
             <label class="register-form__label">이름</label>
 
             <input v-model="contentsData.title" placeholder="30자 이하 권장" />
-
           </div>
 
           <div class="flex-container modal-form__wrapper">
-
             <div class="register-form__wrapper">
-
               <label class="register-form__label">카테고리</label>
 
               <select v-model="categoryName" class="contents-modal__select">
-
                 <option v-if="contentsData.category == null" value="">
-                   카테고리 선택
+                  카테고리 선택
                 </option>
 
                 <option v-for="(category, index) in myCategories" :key="index">
-                   {{ category.name }}
+                  {{ category.name }}
                 </option>
-
               </select>
-
             </div>
 
             <div class="register-form__wrapper">
-
               <label class="register-form__label">읽을 기한</label>
 
               <div class="flex-container modal-form__wrapper">
-
                 <input v-model="contentsData.deadline" type="date" />
 
                 <span class="contents-modal__date-description">
-                   D-DAY에 알림을 보내드립니다
+                  D-DAY에 알림을 보내드립니다
                 </span>
-
               </div>
-
             </div>
-
           </div>
 
           <div class="register-form__wrapper">
-
             <label class="register-form__label">메모</label>
 
             <input
@@ -108,40 +79,30 @@
               placeholder="500자 이하"
               maxlength="500"
             />
-
           </div>
-
         </div>
-
       </div>
 
       <div class="modal-card__btn__wrapper">
-
         <div class="flex-container">
-
           <button
             @click="isDeleteModalActive = true"
             class="btn--transparent login-form__link-register"
           >
-             콘텐츠 삭제
+            콘텐츠 삭제
           </button>
-
         </div>
-
       </div>
 
       <div class="flex-container-col modal-card__btn__wrapper">
-
         <button
           :disabled="!contentsData.link"
           @click="editContent()"
           class="btn--sm btnPrimary"
         >
-           저장
+          저장
         </button>
-
       </div>
-
     </div>
 
     <!-- 삭제 확인 모달 컴포넌트 -->
@@ -163,9 +124,7 @@
       :btnMessage="btnMessage"
       @confirmBtn="isAlertModalActive = false"
     ></AlertModalComponent>
-
   </div>
-
 </template>
 
 <script>
@@ -174,7 +133,6 @@ import star_border from "@/assets/icon/star_border.svg";
 import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import { updateContents } from "@/api/contents";
-import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter } from "@/utils/validation";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { deleteContents } from "@/api/contents";
@@ -208,8 +166,8 @@ export default {
     contentsId: Number,
   },
   async created() {
-    this.getMyCategory();
-    // this.contentsData = this.contents;
+    await this.$store.dispatch("GET_CATEGORIES");
+    this.myCategories = this.$store.getters.getCategories;
     await this.$store.dispatch("GET_CONTENTS");
     this.contentsData = this.$store.getters.getContents.filter(
       (data) => data.id == this.contentsId
@@ -247,15 +205,7 @@ export default {
     addFavorites() {
       this.contentsData.favorite = !this.contentsData.favorite;
     },
-    // 자신의 카테고리 조회
-    async getMyCategory() {
-      try {
-        const response = await fetchMyCategory();
-        this.myCategories = response.data.categories;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     // 콘텐츠 수정
     async editContent() {
       try {
@@ -274,13 +224,10 @@ export default {
               (contentsData[key] == "" || contentsData[key] == undefined) &&
                 delete contentsData[key];
           });
-          console.log("contentsData", contentsData);
-          const response = await updateContents(contentsData);
-          console.log(response);
+          await updateContents(contentsData);
           this.$emit("close-modal");
         }
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -290,11 +237,9 @@ export default {
       this.isDeleteModalActive = false;
       try {
         const contentId = this.contentsData.id;
-        const response = await deleteContents(contentId);
-        console.log(response);
+        await deleteContents(contentId);
         this.$emit("close-modal");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -304,4 +249,3 @@ export default {
 </script>
 
 <style></style>
-

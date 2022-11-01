@@ -91,7 +91,6 @@ export default {
         if (this.emailDomain != "etc") {
           const email = `${this.email}@${this.emailDomain}`;
           const response = await resetPw(email);
-          console.log(response);
           if (response.data.statusCode == 200) {
             this.errorEvent = false;
             this.codeInputActive = true;
@@ -101,7 +100,6 @@ export default {
         } else if (this.emailDomain == "etc") {
           const email = `${this.email}@${this.emailSelfInput}`;
           const response = await resetPw(email);
-          console.log(response);
           if (response.data.statusCode == 200) {
             this.errorEvent = false;
             this.isTimerActive = true;
@@ -113,7 +111,6 @@ export default {
       } catch (error) {
         this.errorEvent = true;
         this.isTimerActive = false;
-        console.log(error);
         this.errorMessage = error.response.data.message;
       }
     },

@@ -116,16 +116,9 @@ export default {
     },
   },
   watch: {
-    // contents: {
-    //   handler() {
-    //     this.memoContents = this.contents.comment;
-    //   },
-    //   deep: true,
-    // },
     isCollectionModalActive: {
       handler() {
         eventBus.$emit("collectionModalActive", 1);
-        console.log("eventBus-콜렉션");
       },
       deep: true,
     },
@@ -140,8 +133,7 @@ export default {
       this.collection.favorite = !this.collection.favorite;
       try {
         const contentId = this.collection.id;
-        const response = await addFavoriteCollection(contentId);
-        console.log(response);
+        await addFavoriteCollection(contentId);
       } catch (error) {
         console.log(error);
       }

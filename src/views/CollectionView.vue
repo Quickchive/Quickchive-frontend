@@ -140,7 +140,6 @@ export default {
     },
     isCollectionModalActive() {
       this.fetchCollectionsList();
-      console.log("콜렉션 수정 모달");
     },
   },
   methods: {
@@ -167,19 +166,16 @@ export default {
     },
     // 도메인 추출
     filterDomain(link) {
-      // let link = this.favoritesList[index].link;
       let domain;
       if (link.includes("www") == true) {
         let domain1 = link.split(".");
         domain1 = domain1[1];
         domain = domain1;
       } else {
-        // domain = domain[1];
         let pos1 = link.indexOf("//");
         let pos2 = link.substring(pos1 + 2);
         domain = pos2.split(".");
         domain = domain[0];
-        // console.log(domain[1]);
       }
       return domain;
     },
@@ -187,8 +183,7 @@ export default {
     async createFavorites() {
       this.collectionData.favorite = !this.collectionData.favorite;
       try {
-        const response = await addFavoriteCollection(this.$route.params.id);
-        console.log(response);
+        await addFavoriteCollection(this.$route.params.id);
         // 즐겨찾기 리스트 갱신
       } catch (error) {
         console.log(error);
