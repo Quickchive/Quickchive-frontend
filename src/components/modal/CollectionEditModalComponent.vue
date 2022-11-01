@@ -1,13 +1,9 @@
 <template>
-
   <div class="modal">
-
     <div class="overlay"></div>
 
     <div class="collection-modal-card">
-
       <div class="modal-card__header">
-
         <h1>콜렉션 수정</h1>
 
         <button
@@ -15,68 +11,50 @@
           class="btn--transparent btn__close"
           @click="$emit('close-modal')"
         >
-
           <img :src="closeBtn" />
-
         </button>
-
       </div>
 
       <div class="modal-card__wrapper">
-
         <div class="flex-container modal-form__wrapper">
-
           <div class="register-form__wrapper">
-
             <label class="register-form__label">
-               콜렉션 이름
+              콜렉션 이름
               <em>*</em>
-
             </label>
 
             <input v-model="collections.title" placeholder="10자 이하 권장" />
-
           </div>
 
           <div class="register-form__wrapper category__wrapper">
-
             <label class="register-form__label">카테고리</label>
 
             <select v-model="categoryName" class="contents-modal__select">
-
               <option value="" v-if="this.collections.category == null">
-                 카테고리 선택
+                카테고리 선택
               </option>
 
               <option v-for="(category, index) in myCategories" :key="index">
-                 {{ category.name }}
+                {{ category.name }}
               </option>
-
             </select>
-
           </div>
 
           <div class="flex-container favorite__wrapper">
-
             <button
               @click="addFavorites()"
               class="btn--transparent btn__favorites"
             >
-
               <img v-show="!collections.favorite" :src="star_border" />
 
               <img v-show="collections.favorite" :src="star" />
-
             </button>
-
           </div>
-
         </div>
 
         <!-- 콜렉션 설명 -->
 
         <div class="register-form__wrapper">
-
           <label class="register-form__label">콜렉션 설명</label>
 
           <input
@@ -84,27 +62,22 @@
             placeholder="100자 이하"
             maxlength="100"
           />
-
         </div>
 
         <!-- 링크 -->
 
         <div class="register-form__wrapper">
-
           <label class="register-form__label">
-             링크
+            링크
             <em>*</em>
-
           </label>
 
           <div class="link__wrapper">
-
             <div
               class="link__wrapper-inner"
               v-for="(content, index) in this.collections.contents"
               :key="index"
             >
-
               <div class="link__index">{{ index + 1 }}</div>
 
               <input
@@ -117,64 +90,47 @@
                 @click="deleteInput(index)"
                 class="btn--transparent btn__deleteLink"
               >
-
                 <img :src="minus" />
-
               </button>
-
             </div>
-
           </div>
 
           <div
             class="flex-container-col modal-card__btn__wrapper"
             v-if="collections.contents"
           >
-
             <button
               @click="createInput(collections.contents.length)"
               class="btn--transparent btn--plus"
             >
-
               <img :src="add_link" />
-
             </button>
-
           </div>
-
         </div>
-
       </div>
 
       <div class="modal-card__btn__wrapper">
-
         <div class="flex-container">
-
           <button
             @click="isDeleteModalActive = true"
             class="btn--transparent login-form__link-register"
           >
-             콜렉션 삭제
+            콜렉션 삭제
           </button>
-
         </div>
-
       </div>
 
       <!-- 버튼 -->
 
       <div class="flex-container-col modal-card__btn__wrapper">
-
         <button
           @click="editCollection()"
           :disabled="collections.contents == '' || !collections.title"
           class="btn--sm btnPrimary"
         >
-           저장
+          저장
         </button>
-
       </div>
-
     </div>
 
     <!-- 삭제 확인용 모달 -->
@@ -196,9 +152,7 @@
       :btnMessage="btnMessage"
       @confirmBtn="isAlertModalActive = false"
     ></AlertModalComponent>
-
   </div>
-
 </template>
 
 <script>
@@ -208,7 +162,6 @@ import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
-import { fetchMyCategory } from "@/api/user";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { deleteCollection } from "@/api/collection";
 import { updateCollection } from "@/api/collection";
@@ -246,7 +199,8 @@ export default {
     collectionId: Number,
   },
   async created() {
-    this.getMyCategory();
+    await this.$store.dispatch("GET_CATEGORIES");
+    this.myCategories = this.$store.getters.getCategories;
     // this.collections = this.collectionData;
     await this.$store.dispatch("GET_COLLECTIONS");
     this.collections = this.$store.getters.getCollections.filter(
@@ -262,15 +216,6 @@ export default {
   methods: {
     addFavorites() {
       this.collections.favorite = !this.collections.favorite;
-    },
-    // 자신의 카테고리 조회
-    async getMyCategory() {
-      try {
-        const response = await fetchMyCategory();
-        this.myCategories = response.data.categories;
-      } catch (error) {
-        console.log(error);
-      }
     },
     // 인풋 추가 이벤트
     createInput(index) {
@@ -331,4 +276,3 @@ export default {
 </script>
 
 <style></style>
-

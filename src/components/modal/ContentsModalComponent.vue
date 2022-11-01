@@ -111,7 +111,6 @@ import star_border from "@/assets/icon/star_border.svg";
 import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import { addContents } from "@/api/contents";
-import { fetchMyCategory } from "@/api/user";
 import { validateLink, linkCounter, filterLink } from "@/utils/validation";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 
@@ -141,8 +140,9 @@ export default {
       btnMessage: "네",
     };
   },
-  mounted() {
-    this.getMyCategory();
+  async created() {
+    await this.$store.dispatch("GET_CATEGORIES");
+    this.myCategories = this.$store.getters.getCategories;
   },
   props: {
     contentsData: Object,
@@ -177,15 +177,7 @@ export default {
     addFavorites() {
       this.favorite = !this.favorite;
     },
-    // 자신의 카테고리 조회
-    async getMyCategory() {
-      try {
-        const response = await fetchMyCategory();
-        this.myCategories = response.data.categories;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     // 콘텐츠 추가 요청
     async createContent() {
       // 링크가 1개인 경우

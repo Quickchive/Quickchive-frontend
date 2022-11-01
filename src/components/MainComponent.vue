@@ -17,10 +17,6 @@
         :categoryId="category.id"
       ></category-list>
 
-      <!-- <category-list-unclassified
-        @toCategoryPage="toCategoryPage(-1)"
-      ></category-list-unclassified> -->
-
       <button @click="openCategoryModal" class="btn__addCategory">
         + Add category
       </button>
@@ -170,7 +166,8 @@ export default {
           categoryName: this.categoryName,
         };
         const response = await addCategory(data);
-        this.getMyCategory();
+        await this.$store.dispatch("GET_CATEGORIES");
+        this.myCategories = this.$store.getters.getCategories;
         console.log(response);
       } catch (error) {
         console.log(error);
@@ -178,6 +175,7 @@ export default {
         this.isAlertModalActive = true;
       }
     },
+
     // 콘텐츠 추가 모달 열기
     addContents() {
       this.isModalActive = true;
