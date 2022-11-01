@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import { getAuthFromCookie } from "@/utils/cookies";
-// import authStore from "@/store/modules/authStore";
 
 Vue.use(VueRouter);
 
@@ -13,10 +12,8 @@ const routes = [
     beforeEnter: (to, from, next) => {
       if (getAuthFromCookie("accessToken")) {
         next("/main");
-        console.log("로그인 함");
       } else {
         next();
-        console.log("로그인 안 했음");
       }
     },
   },
@@ -36,10 +33,8 @@ const routes = [
         beforeEnter: (to, from, next) => {
           if (!getAuthFromCookie("accessToken")) {
             next("/");
-            console.log("로그인 안 함");
           } else {
             next();
-            console.log("로그인 함");
           }
         },
       },
@@ -98,7 +93,6 @@ const routes = [
         next("/");
       } else {
         next();
-        console.log("로그인 함");
       }
     },
     children: [
@@ -123,7 +117,6 @@ const routes = [
         next("/");
       } else {
         next();
-        console.log("로그인 함");
       }
     },
     children: [
@@ -153,7 +146,6 @@ const routes = [
         next("/");
       } else {
         next();
-        console.log("로그인 함");
       }
     },
   },
@@ -167,7 +159,6 @@ const routes = [
         next("/");
       } else {
         next();
-        console.log("로그인 함");
       }
     },
   },

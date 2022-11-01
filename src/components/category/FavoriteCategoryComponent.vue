@@ -44,7 +44,6 @@ export default {
       isCategoryModalActive: false,
       categoryFilter: "latest",
       categoryId: "",
-      // 즐겨찾기 더미 데이터
       contentsData: [],
       collectionData: [],
       newArr: [],
@@ -94,7 +93,6 @@ export default {
           this.$store.getters.getFavoriteContents,
           this.$store.getters.getFavoriteCollections
         );
-        console.log(this.newArr);
       }
     },
   },

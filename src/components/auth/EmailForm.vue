@@ -97,7 +97,6 @@ export default {
         this.errorEvent = false;
         if (this.emailDomain != "etc") {
           const response = await sendEmail(`${this.email}@${this.emailDomain}`);
-          console.log("응답", response);
           if (response.data.statusCode == 200) {
             this.codeInputActive = true;
             this.btnMessage.email = "재전송";
@@ -107,7 +106,6 @@ export default {
           const response = await sendEmail(
             `${this.email}@${this.emailSelfInput}`
           );
-          console.log("응답", response);
           if (response.data.statusCode == 200) {
             this.codeInputActive = true;
             this.btnMessage.email = "재전송";
@@ -115,7 +113,6 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error);
         // 이미 사용중인 이메일 주소일 경우 or 이미 인증된 메일
         if (error.response.data.statusCode == 409) {
           this.errorMessage = error.response.data.message;

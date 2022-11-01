@@ -113,7 +113,6 @@ import star from "@/assets/icon/star.svg";
 import alert_circle from "@/assets/icon/alert-circle.svg";
 import add_link from "@/assets/icon/addLink.svg";
 import minus from "@/assets/icon/minus.svg";
-import { fetchMyCategory } from "@/api/user";
 import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
 import { addCollection } from "@/api/collection";
 
@@ -148,23 +147,16 @@ export default {
       default: () => ({ contentLinkList: ["1", "2"] }),
     },
   },
-  created() {
-    this.getMyCategory();
+  async created() {
+    await this.$store.dispatch("GET_CATEGORIES");
+    this.myCategories = this.$store.getters.getCategories;
     this.collectionData.contentLinkList[0] = "";
   },
   methods: {
     addFavorites() {
       this.collectionData.favorite = !this.collectionData.favorite;
     },
-    // 자신의 카테고리 조회
-    async getMyCategory() {
-      try {
-        const response = await fetchMyCategory();
-        this.myCategories = response.data.categories;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     // 인풋 추가 이벤트
     createInput() {
       this.collectionData.contentLinkList.push("");

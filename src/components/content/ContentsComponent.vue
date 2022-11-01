@@ -196,12 +196,9 @@ export default {
       window.open(link, "_blank");
       // 읽었음 표시
       this.readFlag = true;
-      // eventBus.$emit("contentsModalActive", 1);
       if (this.contents.readFlag == false) {
-        console.log("readflag 표시");
         try {
-          const response = await postReadFlag(this.contents.id);
-          console.log(response);
+          await postReadFlag(this.contents.id);
         } catch (error) {
           console.log(error);
         }
@@ -239,12 +236,10 @@ export default {
         domain1 = domain1[1];
         domain = domain1;
       } else {
-        // domain = domain[1];
         let pos1 = link.indexOf("//");
         let pos2 = link.substring(pos1 + 2);
         domain = pos2.split(".");
         domain = domain[0];
-        // console.log(domain[1]);
       }
       return domain;
     },
@@ -253,8 +248,7 @@ export default {
       this.contents.favorite = !this.contents.favorite;
       try {
         const contentId = this.contents.id;
-        const response = await addFavorite(contentId);
-        console.log(response);
+        await addFavorite(contentId);
       } catch (error) {
         console.log(error);
       }
@@ -263,10 +257,8 @@ export default {
     async getSummary() {
       try {
         const response = await summarizeContents(this.contents.id);
-        console.log(response);
         this.summaryContents = response.data.summary;
       } catch (error) {
-        console.log(error);
         this.summaryContents = error.response.data.message;
       } finally {
         this.isSummarizeModalActive = true;

@@ -5,7 +5,6 @@ import { sortLatestArr } from "@/utils/sort";
 import { fetchMyCategory } from "@/api/user";
 
 const postStore = {
-  // namespaced: true,
   state: {
     searchWord: "",
     searchResult: [],
@@ -94,7 +93,6 @@ const postStore = {
         const collectionsResponse = await fetchMyCollections();
         const collections = collectionsResponse.data.collections;
         const resultArr = findData(word, contents, collections);
-        console.log("스토어 - 검색 결과", resultArr);
         commit("setSearchResult", resultArr);
         commit("setSearchWord", word);
       } catch (error) {

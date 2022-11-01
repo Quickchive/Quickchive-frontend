@@ -149,10 +149,8 @@ export default {
           name: this.newCategoryName,
           originalName: this.categoryName,
         };
-        const response = await updateCategory(categoryData);
-        console.log(response);
+        await updateCategory(categoryData);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -160,10 +158,8 @@ export default {
     // 카테고리 삭제
     async deleteCategory() {
       try {
-        const response = await deleteCategory(this.categoryId);
-        console.log(response);
+        await deleteCategory(this.categoryId);
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -186,7 +182,6 @@ export default {
           this.$store.getters.getContents,
           this.$store.getters.getCollections
         );
-        console.log(this.newArr);
       }
     },
   },

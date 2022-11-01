@@ -211,9 +211,7 @@ export default {
         const response = await verifyEmail(code);
         this.email = response.data.email;
         this.emailStatus = response.data.statusCode;
-        console.log(response);
       } catch (error) {
-        console.log(error);
         this.$router.push("/register/email");
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
@@ -227,13 +225,11 @@ export default {
           name: this.nickname,
           password: this.pw,
         };
-        const response = await registerUser(userData);
-        console.log(response);
+        await registerUser(userData);
         this.alertModalContent = "회원가입에 성공하였습니다.";
         this.isAlertModalActive = true;
         this.$router.push("/login");
       } catch (error) {
-        console.log(error);
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }

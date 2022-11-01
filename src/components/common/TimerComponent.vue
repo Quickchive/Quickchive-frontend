@@ -13,7 +13,6 @@ export default {
     return {
       timer: null,
       totalTime: 5 * 60,
-      // message: "인증메일을 확인해주세요.",
     };
   },
   props: {
@@ -31,7 +30,6 @@ export default {
       clearInterval(this.timer);
       this.timer = null;
       this.timer = setInterval(() => this.countdown(), 1000);
-      // this.message = "인증메일을 확인해주세요.";
     },
     resetTimer() {
       this.totalTime = 5 * 60;
