@@ -5,9 +5,9 @@ name: deploy
 
 on:
   push:
-    branches: [ "heroku-server" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "heroku-server" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
