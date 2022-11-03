@@ -140,7 +140,7 @@
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
-      @leftBtn="deleteContent()"
+      @leftBtn="deleteCollection()"
       @rightBtn="isDeleteModalActive = false"
     ></ConfirmModalComponent>
 
