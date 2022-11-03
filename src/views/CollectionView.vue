@@ -135,9 +135,6 @@ export default {
     this.collectionId = parseInt(this.$route.params.id);
   },
   watch: {
-    collectionData() {
-      this.fetchCollectionsList();
-    },
     isCollectionModalActive() {
       this.fetchCollectionsList();
     },
