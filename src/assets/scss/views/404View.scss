@@ -1,0 +1,28 @@
+@import '../mixin';
+
+.error-page {
+  @include layout(column, center, flex-start);
+  margin-top: 150px;
+  // top: 30%;
+  // position: relative;
+  height: 100vh;
+
+  .error-container {
+    @include layout(column, center, center);
+    gap: 0px;
+    padding: 80px;
+    img {
+      width: 100px;
+    }
+    h1 {
+      @include font(60px, 600, #a4b3ca);
+      margin-bottom: 10px;
+    }
+    h2 {
+      margin: 10px;
+    }
+    // CE879C
+    text-align: center;
+    @include font(16px, 400, $color-gray-6);
+  }
+}
