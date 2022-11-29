@@ -1,4 +1,4 @@
-@import "../mixin";
+@import '../mixin';
 
 .modal {
   width: 100%;
@@ -230,6 +230,37 @@
       top: 11px;
       right: 20px;
       width: auto;
+    }
+  }
+}
+
+// 공지 모달
+.notice-modal {
+  @extend .confirm-modal;
+}
+
+.notice-modal-card {
+  @extend .confirm-modal-card;
+  width: 300px;
+  top: 25%;
+
+  .modal-card__header {
+    padding-bottom: 40px;
+    img {
+      width: 80px;
+    }
+    p {
+      width: 300px;
+      line-height: 26px;
+      margin: 0;
+      @include font(16px, 300, $color-gray-6);
+    }
+    h3 {
+      margin: 35px 0 10px 0;
+      font-size: 20px;
+    }
+    .button-wrapper {
+      margin-bottom: 30px;
     }
   }
 }
