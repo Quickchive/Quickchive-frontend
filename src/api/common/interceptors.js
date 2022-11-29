@@ -1,7 +1,10 @@
 import axios from 'axios';
 import store from '@/store/index.js';
 import { reissueToken } from '@/api/auth';
-import { getAccessTokenFromCookie } from '@/utils/cookies.js';
+import {
+  getAccessTokenFromCookie,
+  getRefreshTokenFromCookie,
+} from '@/utils/cookies.js';
 
 export function setInterceptors(instance) {
   // Add a request interceptor
@@ -31,7 +34,7 @@ export function setInterceptors(instance) {
       if (error.response.status == 401) {
         errorAPI.retry = true;
         const tokenData = {
-          refresh_token: localStorage.getItem('refreshToken'),
+          refresh_token: getRefreshTokenFromCookie(),
         };
         try {
           const response = await reissueToken(tokenData);

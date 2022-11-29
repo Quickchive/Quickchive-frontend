@@ -1,6 +1,8 @@
 import {
   getAccessTokenFromCookie,
   saveAccessTokenToCookie,
+  getRefreshTokenFromCookie,
+  saveRefreshTokenToCookie,
   deleteCookie,
 } from '@/utils/cookies';
 import { loginUser } from '@/api/auth';
@@ -9,14 +11,13 @@ import { logoutUser } from '@/api/auth';
 import { googleLogin, kakaoLogin } from '@/api/oauth';
 
 const authStore = {
-  // namespaced: true,
   state: {
     nickname: '',
     email: '',
     loginState: false || getAccessTokenFromCookie(),
     oauthLoginState: false,
     accessToken: '' || getAccessTokenFromCookie(),
-    refreshToken: '' || localStorage.getItem('refreshToken'),
+    refreshToken: '' || getRefreshTokenFromCookie(),
     oauthInfo: false || localStorage.getItem('oauthInfo'),
     oauthName: '' || localStorage.getItem('oauthInfo'),
     stayLoginState: false || localStorage.getItem('stayLogin'),
@@ -54,14 +55,13 @@ const authStore = {
     setEmail(state, email) {
       state.email = email;
     },
-    // 로그아웃 (닉네임, 토큰 삭제)
     logoutUser(state) {
       state.nickname = '';
       state.email = '';
       state.accessToken = '';
       state.refreshToken = '';
       deleteCookie('accessToken');
-      localStorage.removeItem('refreshToken');
+      deleteCookie('refreshToken');
       localStorage.removeItem('oauthInfo');
       state.loginState = false;
       state.oauthLoginState = false;
@@ -82,14 +82,13 @@ const authStore = {
       const { data } = await loginUser(userData);
       commit('setRefreshToken', data.refresh_token);
       saveAccessTokenToCookie(data.access_token);
-      localStorage.setItem('refreshToken', data.refresh_token);
+      saveRefreshTokenToCookie(data.refresh_token);
       const response = await fetchProfile();
       commit('setNickname', response.data.name);
       commit('setEmail', response.data.email);
       commit('setLoginState', true);
       commit('setOauthLoginState', false);
     },
-    // 프로필 조회이자 로그인 여부 확인
     async FETCH_PROFILE({ commit }) {
       try {
         const { data } = await fetchProfile();
@@ -110,7 +109,7 @@ const authStore = {
     async LOGOUT({ commit }) {
       try {
         const refreshToken = {
-          refresh_token: localStorage.getItem('refreshToken'),
+          refresh_token: getRefreshTokenFromCookie(),
         };
         await logoutUser(refreshToken);
         commit('logoutUser');
@@ -123,7 +122,7 @@ const authStore = {
       try {
         const response = await googleLogin(code);
         if (response.data.statusCode == 200) {
-          localStorage.setItem('refreshToken', response.data.refresh_token);
+          saveRefreshTokenToCookie(response.data.refresh_token);
           saveAccessTokenToCookie(response.data.access_token);
           commit('setNickname', response.data.name);
           commit('setEmail', response.data.email);
@@ -141,7 +140,7 @@ const authStore = {
       try {
         const response = await kakaoLogin(code);
         if (response.data.statusCode == 200) {
-          localStorage.setItem('refreshToken', response.data.refresh_token);
+          saveRefreshTokenToCookie(response.data.refresh_token);
           saveAccessTokenToCookie(response.data.access_token);
           commit('setNickname', response.data.name);
           commit('setEmail', response.data.email);
@@ -162,7 +161,7 @@ const authStore = {
     // 리프레시 토큰 갱신
     RENEW_REFRESH_TOKEN({ commit }, refreshToken) {
       commit('setRefreshToken', refreshToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      saveRefreshTokenToCookie(refreshToken);
     },
     // 로그인 유지
     STAY_LOGIN({ commit }, stayLoginState) {
