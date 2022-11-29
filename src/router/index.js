@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { getAuthFromCookie } from '@/utils/cookies';
+import { getAccessTokenFromCookie } from '@/utils/cookies';
 
 Vue.use(VueRouter);
 
@@ -10,7 +10,7 @@ const routes = [
     path: '/',
     component: () => import('@/views/OnBoardingView.vue'),
     beforeEnter: (to, from, next) => {
-      if (getAuthFromCookie('accessToken')) {
+      if (getAccessTokenFromCookie()) {
         next('/main');
       } else {
         next();
@@ -31,7 +31,7 @@ const routes = [
         path: '/main',
         component: () => import('@/components/MainComponent.vue'),
         beforeEnter: (to, from, next) => {
-          if (!getAuthFromCookie('accessToken')) {
+          if (!getAccessTokenFromCookie()) {
             next('/');
           } else {
             next();
@@ -88,7 +88,7 @@ const routes = [
     path: '/mypage',
     component: () => import('@/views/MypageView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
@@ -112,7 +112,7 @@ const routes = [
     path: '/category',
     component: () => import('@/views/CategoryView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
@@ -141,7 +141,7 @@ const routes = [
     path: '/collection/:id',
     component: () => import('@/views/CollectionView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
@@ -154,7 +154,7 @@ const routes = [
     path: '/search',
     component: () => import('@/views/SearchView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
