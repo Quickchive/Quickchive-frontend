@@ -3,17 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-<<<<<<< HEAD
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "start": "node server.js"
-=======
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
     "test-build": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint"
->>>>>>> 439fce939ac142c8a058c7c327a0a5f1f96d0c70
   },
   "dependencies": {
     "axios": "^0.27.2",
