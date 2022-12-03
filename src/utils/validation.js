@@ -15,7 +15,7 @@ function validateLink(link) {
 
 // 링크 개수 확인
 function linkCounter(text) {
-  let url = "http";
+  let url = 'http';
   let pos = text.indexOf(url);
   let count = 0;
   while (pos !== -1) {
@@ -27,18 +27,23 @@ function linkCounter(text) {
 
 // 링크 추출
 function filterLink(text) {
-  let linkList = text.split(" ");
+  let linkList = text.split(' ');
   return linkList;
 }
 
 // 기한 계산
 function countDday(deadline) {
+  const expiryDay = new Date(deadline);
   const today = new Date();
-  const expiryDate = new Date(deadline);
-
-  const diff = today.getTime() - expiryDate.getTime();
-  // 양수로 변환 후 밀리초로 나눔
-  return parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)) + 1);
+  if (expiryDay.toLocaleDateString() === today.toLocaleDateString()) {
+    return 'D-Day';
+  }
+  const diff = today.getTime() - expiryDay.getTime();
+  const days = parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)) + 1);
+  if (diff > 0) {
+    return `D+${days - 1}`;
+  }
+  return `D-${days}`;
 }
 
 export { validatePw, validateLink, linkCounter, countDday, filterLink };

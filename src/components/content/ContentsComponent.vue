@@ -54,7 +54,7 @@
         />
         <img :src="defaultImg" v-else />
         <div v-if="contents.deadline" class="contents__expiryDate">
-          D-{{ countDday }}
+          {{ countDday }}
         </div>
       </div>
       <button
@@ -94,20 +94,20 @@
 </template>
 
 <script>
-import memo from "@/assets/icon/memo.svg";
-import star from "@/assets/icon/star.svg";
-import star_border from "@/assets/icon/star_border.svg";
-import edit from "@/assets/icon/edit.svg";
-import category_line from "@/assets/icon/category_line.svg";
-import { countDday } from "@/utils/validation";
-import { validateLink, linkCounter } from "@/utils/validation";
-import ContentsEditModalComponent from "@/components/modal/ContentsEditModalComponent.vue";
-import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { addFavorite, postReadFlag, summarizeContents } from "@/api/contents";
-import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
-import { eventBus } from "../../main";
-import SummaryModalComponent from "@/components/modal/SummaryModalComponent.vue";
-import defaultImg from "@/assets/img/categoryDefaultImg.svg";
+import memo from '@/assets/icon/memo.svg';
+import star from '@/assets/icon/star.svg';
+import star_border from '@/assets/icon/star_border.svg';
+import edit from '@/assets/icon/edit.svg';
+import category_line from '@/assets/icon/category_line.svg';
+import { countDday } from '@/utils/validation';
+import { validateLink, linkCounter } from '@/utils/validation';
+import ContentsEditModalComponent from '@/components/modal/ContentsEditModalComponent.vue';
+import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
+import { addFavorite, postReadFlag, summarizeContents } from '@/api/contents';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
+import { eventBus } from '../../main';
+import SummaryModalComponent from '@/components/modal/SummaryModalComponent.vue';
+import defaultImg from '@/assets/img/categoryDefaultImg.svg';
 
 export default {
   components: {
@@ -127,20 +127,20 @@ export default {
       isModalActive: false,
       // 전달할 메모
       isMemoModalActive: false,
-      memoContents: "",
+      memoContents: '',
       contetnsId: 0,
       // 문서 요약 메모
       isSummarizeModalActive: false,
-      summaryContents: "",
+      summaryContents: '',
       // 경고 모달
       isAlertModalActive: false,
-      btnMessage: "네",
+      btnMessage: '네',
       // 폼 항목
-      link: "",
-      title: "",
-      deadline: "",
-      comment: "",
-      categoryName: "미분류",
+      link: '',
+      title: '',
+      deadline: '',
+      comment: '',
+      categoryName: '미분류',
       readFlag: null,
     };
   },
@@ -159,7 +159,7 @@ export default {
     },
     isModalActive: {
       handler() {
-        eventBus.$emit("contentsModalActive", 1);
+        eventBus.$emit('contentsModalActive', 1);
       },
       deep: true,
     },
@@ -175,7 +175,7 @@ export default {
     },
     // 링크 여부 확인
     isTextLink() {
-      if (this.contents.link != "") {
+      if (this.contents.link != '') {
         return validateLink(this.contents.link);
       } else {
         return null;
@@ -183,7 +183,7 @@ export default {
     },
     // 링크 개수 확인
     countLink() {
-      if (this.link != "") {
+      if (this.link != '') {
         return linkCounter(this.contents.link);
       } else {
         return null;
@@ -193,7 +193,7 @@ export default {
   methods: {
     async toLink(link) {
       // 해당 링크로 이동
-      window.open(link, "_blank");
+      window.open(link, '_blank');
       // 읽었음 표시
       this.readFlag = true;
       if (this.contents.readFlag == false) {
@@ -215,7 +215,7 @@ export default {
     // 제목 글자수 30자 이상
     filterTitle(title) {
       if (title.length >= 30) {
-        return title.substr(0, 30) + "...";
+        return title.substr(0, 30) + '...';
       } else {
         return title;
       }
@@ -223,7 +223,7 @@ export default {
     // 설명 글자수 30자 이상
     filterDescript(description) {
       if (description.length >= 90) {
-        return description.substr(0, 90) + "...";
+        return description.substr(0, 90) + '...';
       } else {
         return description;
       }
@@ -231,14 +231,14 @@ export default {
     // 도메인 추출
     filterDomain(link) {
       let domain;
-      if (link.includes("www") == true) {
-        let domain1 = link.split(".");
+      if (link.includes('www') == true) {
+        let domain1 = link.split('.');
         domain1 = domain1[1];
         domain = domain1;
       } else {
-        let pos1 = link.indexOf("//");
+        let pos1 = link.indexOf('//');
         let pos2 = link.substring(pos1 + 2);
-        domain = pos2.split(".");
+        domain = pos2.split('.');
         domain = domain[0];
       }
       return domain;

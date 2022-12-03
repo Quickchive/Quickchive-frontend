@@ -128,15 +128,15 @@
 </template>
 
 <script>
-import closeBtn from "@/assets/icon/closeBtn.svg";
-import star_border from "@/assets/icon/star_border.svg";
-import star from "@/assets/icon/star.svg";
-import alert_circle from "@/assets/icon/alert-circle.svg";
-import { updateContents } from "@/api/contents";
-import { validateLink, linkCounter } from "@/utils/validation";
-import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
-import { deleteContents } from "@/api/contents";
-import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
+import closeBtn from '@/assets/icon/closeBtn.svg';
+import star_border from '@/assets/icon/star_border.svg';
+import star from '@/assets/icon/star.svg';
+import alert_circle from '@/assets/icon/alert-circle.svg';
+import { updateContents } from '@/api/contents';
+import { validateLink, linkCounter, formatDate } from '@/utils/validation';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
+import { deleteContents } from '@/api/contents';
+import ConfirmModalComponent from '@/components/modal/ConfirmModalComponent.vue';
 
 export default {
   components: { AlertModalComponent, ConfirmModalComponent },
@@ -151,14 +151,14 @@ export default {
       data: {},
       // 경고 모달
       isAlertModalActive: false,
-      AlertModalContent: "",
-      btnMessage: "네",
+      AlertModalContent: '',
+      btnMessage: '네',
       // 삭제 모달
-      leftBtnMessage: "네",
-      rightBtnMessage: "아니요",
-      confirmModalContent: "해당 콘텐츠를 삭제할까요?",
+      leftBtnMessage: '네',
+      rightBtnMessage: '아니요',
+      confirmModalContent: '해당 콘텐츠를 삭제할까요?',
       isDeleteModalActive: false,
-      categoryName: "",
+      categoryName: '',
       contentsData: {},
     };
   },
@@ -166,19 +166,19 @@ export default {
     contentsId: Number,
   },
   async created() {
-    await this.$store.dispatch("GET_CATEGORIES");
+    await this.$store.dispatch('GET_CATEGORIES');
     this.myCategories = this.$store.getters.getCategories;
-    await this.$store.dispatch("GET_CONTENTS");
+    await this.$store.dispatch('GET_CONTENTS');
     this.contentsData = this.$store.getters.getContents.filter(
       (data) => data.id == this.contentsId
     );
     this.contentsData = this.contentsData[0];
 
     if (this.contentsData.deadline !== null) {
-      this.contentsData.deadline = this.contentsData.deadline.substring(0, 10);
+      this.contentsData.deadline = formatDate(this.contentsData.deadline);
     }
     if (this.contentsData.category == null) {
-      this.categoryName = "";
+      this.categoryName = '';
     } else if (this.contentsData.category !== null) {
       this.categoryName = this.contentsData.category.name;
     }
@@ -186,7 +186,7 @@ export default {
   computed: {
     // 링크 여부 확인
     isTextLink() {
-      if (this.contentsData.link != "") {
+      if (this.contentsData.link != '') {
         return validateLink(this.contentsData.link);
       } else {
         return null;
@@ -194,7 +194,7 @@ export default {
     },
     // 링크 개수 확인
     countLink() {
-      if (this.contentsData.link != "") {
+      if (this.contentsData.link != '') {
         return linkCounter(this.contentsData.link);
       } else {
         return null;
@@ -220,12 +220,12 @@ export default {
             title: this.contentsData.title,
           };
           Object.keys(contentsData).some((key) => {
-            if (key !== "favorite")
-              (contentsData[key] == "" || contentsData[key] == undefined) &&
+            if (key !== 'favorite')
+              (contentsData[key] == '' || contentsData[key] == undefined) &&
                 delete contentsData[key];
           });
           await updateContents(contentsData);
-          this.$emit("close-modal");
+          this.$emit('close-modal');
         }
       } catch (error) {
         this.alertModalContent = error.response.data.message;
@@ -238,7 +238,7 @@ export default {
       try {
         const contentId = this.contentsData.id;
         await deleteContents(contentId);
-        this.$emit("close-modal");
+        this.$emit('close-modal');
       } catch (error) {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
