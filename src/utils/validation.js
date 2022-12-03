@@ -31,39 +31,4 @@ function filterLink(text) {
   return linkList;
 }
 
-// 기한 계산
-function countDday(deadline) {
-  const expiryDay = new Date(deadline);
-  const today = new Date();
-  if (expiryDay.toLocaleDateString() === today.toLocaleDateString()) {
-    return 'D-Day';
-  }
-  const diff = today.getTime() - expiryDay.getTime();
-  const days = parseInt(Math.abs(diff / (1000 * 60 * 60 * 24)) + 1);
-  if (diff > 0) {
-    return `D+${days - 1}`;
-  }
-  return `D-${days}`;
-}
-
-function formatDate(deadline) {
-  const date = new Date(deadline);
-  const formattedDate =
-    date.getFullYear() +
-    '-' +
-    (date.getMonth() + 1 < 9
-      ? '0' + (date.getMonth() + 1)
-      : date.getMonth() + 1) +
-    '-' +
-    (date.getDate() < 9 ? '0' + date.getDate() : date.getDate());
-  return formattedDate;
-}
-
-export {
-  validatePw,
-  validateLink,
-  linkCounter,
-  countDday,
-  filterLink,
-  formatDate,
-};
+export { validatePw, validateLink, linkCounter, filterLink };

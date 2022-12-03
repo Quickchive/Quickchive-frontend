@@ -135,7 +135,7 @@ import star from '@/assets/icon/star.svg';
 import star_gray from '@/assets/icon/star_gray.svg';
 import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
 import { addFavorite } from '@/api/contents';
-import { countDday } from '@/utils/validation';
+import { calculateDeadline } from '@/utils/date';
 import defaultImg from '@/assets/img/favoriteDefault.svg';
 
 export default {
@@ -224,7 +224,7 @@ export default {
       return domain;
     },
     countDday(deadline) {
-      return countDday(deadline);
+      return calculateDeadline(deadline);
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {

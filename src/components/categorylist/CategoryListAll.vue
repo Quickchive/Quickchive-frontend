@@ -79,7 +79,7 @@ import web from '@/assets/icon/web.svg';
 import { addFavoriteCollection } from '@/api/collection';
 
 import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
-import { countDday } from '@/utils/validation';
+import { calculateDeadline } from '@/utils/date';
 import { addFavorite } from '@/api/contents';
 import { eventBus } from '@/main.js';
 
@@ -169,7 +169,7 @@ export default {
       this.$router.push(`/collection/${id}`);
     },
     countDday(deadline) {
-      return countDday(deadline);
+      return calculateDeadline(deadline);
     },
     toLink(link) {
       window.open(link, '_blank');

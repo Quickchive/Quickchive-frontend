@@ -99,7 +99,7 @@ import star from '@/assets/icon/star.svg';
 import star_border from '@/assets/icon/star_border.svg';
 import edit from '@/assets/icon/edit.svg';
 import category_line from '@/assets/icon/category_line.svg';
-import { countDday } from '@/utils/validation';
+import { calculateDeadline } from '@/utils/date';
 import { validateLink, linkCounter } from '@/utils/validation';
 import ContentsEditModalComponent from '@/components/modal/ContentsEditModalComponent.vue';
 import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
@@ -171,7 +171,7 @@ export default {
   },
   computed: {
     countDday() {
-      return countDday(this.contents.deadline);
+      return calculateDeadline(this.contents.deadline);
     },
     // 링크 여부 확인
     isTextLink() {

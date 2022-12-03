@@ -79,7 +79,7 @@ import star_gray from '@/assets/icon/star_gray.svg';
 import web from '@/assets/icon/web.svg';
 import { addFavoriteCollection } from '@/api/collection';
 
-import { countDday } from '@/utils/validation';
+import { calculateDeadline } from '@/utils/date';
 import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
 import { addFavorite } from '@/api/contents';
 import { eventBus } from '@/main.js';
@@ -159,7 +159,7 @@ export default {
       }
     },
     countDday(deadline) {
-      return countDday(deadline);
+      return calculateDeadline(deadline);
     },
     toLink(link) {
       window.open(link, '_blank');
