@@ -30,9 +30,9 @@
                 />
                 <img :src="defaultImg" v-else class="defaultImg" />
 
-                <span v-if="favorite.deadline" class="favorite-list__expiry"
-                  >D-{{ countDday(favorite.deadline) }}</span
-                >
+                <span v-if="favorite.deadline" class="favorite-list__expiry">{{
+                  countDday(favorite.deadline)
+                }}</span>
               </div>
               <div class="favorite-list__btn-wrapper">
                 <button class="btn--transparent" @click="openMemoModal(index)">
@@ -126,17 +126,17 @@
 </template>
 
 <script>
-import plus from "@/assets/icon/plus.svg";
-import minus from "@/assets/icon/minus.svg";
-import line from "@/assets/icon/line.svg";
-import line_white from "@/assets/icon/line_white.svg";
-import memo from "@/assets/icon/memo.svg";
-import star from "@/assets/icon/star.svg";
-import star_gray from "@/assets/icon/star_gray.svg";
-import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { addFavorite } from "@/api/contents";
-import { countDday } from "@/utils/validation";
-import defaultImg from "@/assets/img/favoriteDefault.svg";
+import plus from '@/assets/icon/plus.svg';
+import minus from '@/assets/icon/minus.svg';
+import line from '@/assets/icon/line.svg';
+import line_white from '@/assets/icon/line_white.svg';
+import memo from '@/assets/icon/memo.svg';
+import star from '@/assets/icon/star.svg';
+import star_gray from '@/assets/icon/star_gray.svg';
+import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
+import { addFavorite } from '@/api/contents';
+import { calculateDeadline } from '@/utils/date';
+import defaultImg from '@/assets/img/favoriteDefault.svg';
 
 export default {
   components: { MemoModalComponent },
@@ -158,19 +158,19 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch("GET_FAVORITES");
+    await this.$store.dispatch('GET_FAVORITES');
     this.newArr = this.$store.getters.getLatestSortedFavorite;
   },
   watch: {
     isFavoriteListUpdated: function() {
-      this.$store.dispatch("GET_FAVORITES");
+      this.$store.dispatch('GET_FAVORITES');
       this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
   },
   methods: {
     async showContent() {
       this.contentState = !this.contentState;
-      await this.$store.dispatch("GET_FAVORITES");
+      await this.$store.dispatch('GET_FAVORITES');
       this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
     // 즐겨찾기 생성
@@ -180,7 +180,7 @@ export default {
         const contentId = this.newArr[index].id;
         await addFavorite(contentId);
         // 즐겨찾기 리스트 갱신
-        this.$store.dispatch("GET_FAVORITES");
+        this.$store.dispatch('GET_FAVORITES');
         this.newArr = this.$store.getters.getLatestSortedFavorite;
       } catch (error) {
         console.log(error);
@@ -188,7 +188,7 @@ export default {
     },
     // 메모 모달 열기
     async openMemoModal(index) {
-      await this.$store.dispatch("GET_FAVORITES");
+      await this.$store.dispatch('GET_FAVORITES');
       this.newArr = this.$store.getters.getLatestSortedFavorite;
       this.memoContents = this.newArr[index].comment;
       this.contentsId = this.newArr[index].id;
@@ -197,13 +197,13 @@ export default {
     // 제목 글자수 30자 이상
     filterTitle(title) {
       if (title.length >= 20) {
-        return title.substr(0, 20) + "...";
+        return title.substr(0, 20) + '...';
       } else {
         return title;
       }
     },
     toLink(link) {
-      window.open(link, "_blank");
+      window.open(link, '_blank');
     },
     toDetail(id) {
       this.$router.push(`/collection/${id}`);
@@ -211,24 +211,24 @@ export default {
     // 도메인 추출
     filterDomain(link) {
       let domain;
-      if (link.includes("www") == true) {
-        let domain1 = link.split(".");
+      if (link.includes('www') == true) {
+        let domain1 = link.split('.');
         domain1 = domain1[1];
         domain = domain1;
       } else {
-        let pos1 = link.indexOf("//");
+        let pos1 = link.indexOf('//');
         let pos2 = link.substring(pos1 + 2);
-        domain = pos2.split(".");
+        domain = pos2.split('.');
         domain = domain[0];
       }
       return domain;
     },
     countDday(deadline) {
-      return countDday(deadline);
+      return calculateDeadline(deadline);
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
-      this.$emit("toCategoryPage");
+      this.$emit('toCategoryPage');
     },
   },
 };
