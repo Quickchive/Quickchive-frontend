@@ -46,4 +46,24 @@ function countDday(deadline) {
   return `D-${days}`;
 }
 
-export { validatePw, validateLink, linkCounter, countDday, filterLink };
+function formatDate(deadline) {
+  const date = new Date(deadline);
+  const formattedDate =
+    date.getFullYear() +
+    '-' +
+    (date.getMonth() + 1 < 9
+      ? '0' + (date.getMonth() + 1)
+      : date.getMonth() + 1) +
+    '-' +
+    (date.getDate() < 9 ? '0' + date.getDate() : date.getDate());
+  return formattedDate;
+}
+
+export {
+  validatePw,
+  validateLink,
+  linkCounter,
+  countDday,
+  filterLink,
+  formatDate,
+};
