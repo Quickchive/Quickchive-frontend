@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { getAccessTokenFromCookie } from '@/utils/cookies';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
@@ -9,17 +10,27 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/OnBoardingView.vue'),
-    beforeEnter: (to, from, next) => {
-      if (getAccessTokenFromCookie()) {
-        next('/main');
-      } else {
+
+    beforeEnter: async (to, from, next) => {
+      await store.dispatch('FETCH_PROFILE');
+      if (!store.getters.isLogin) {
         next();
+      } else {
+        next('/main');
       }
     },
   },
   {
     path: '/login',
     component: () => import('@/views/LoginView.vue'),
+    beforeEnter: async (to, from, next) => {
+      await store.dispatch('FETCH_PROFILE');
+      if (store.getters.isLogin) {
+        next('/main');
+      } else {
+        next();
+      }
+    },
   },
   // 메인
   {
@@ -30,8 +41,9 @@ const routes = [
       {
         path: '/main',
         component: () => import('@/components/MainComponent.vue'),
-        beforeEnter: (to, from, next) => {
-          if (!getAccessTokenFromCookie()) {
+        beforeEnter: async (to, from, next) => {
+          await store.dispatch('FETCH_PROFILE');
+          if (!store.getters.isLogin) {
             next('/');
           } else {
             next();

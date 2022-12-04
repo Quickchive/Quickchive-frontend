@@ -14,7 +14,7 @@ const authStore = {
   state: {
     nickname: '',
     email: '',
-    loginState: false || getAccessTokenFromCookie(),
+    loginState: false,
     oauthLoginState: false,
     accessToken: '' || getAccessTokenFromCookie(),
     refreshToken: '' || getRefreshTokenFromCookie(),
