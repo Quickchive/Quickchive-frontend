@@ -63,22 +63,22 @@ const routes = [
     ],
   },
   // 회원가입
-  // {
-  //   path: "/register",
-  //   component: () => import("@/views/RegisterView.vue"),
-  //   children: [
-  //     // step1: 이메일 인증
-  //     {
-  //       path: "/register/email",
-  //       component: () => import("@/components/auth/EmailForm.vue"),
-  //     },
-  //     // step2: 회원정보 입력
-  //     {
-  //       path: "/register/info",
-  //       component: () => import("@/components/auth/RegisterForm.vue"),
-  //     },
-  //   ],
-  // },
+  {
+    path: '/register',
+    component: () => import('@/views/RegisterView.vue'),
+    children: [
+      // step1: 이메일 인증
+      {
+        path: '/register/email',
+        component: () => import('@/components/auth/EmailForm.vue'),
+      },
+      // step2: 회원정보 입력
+      {
+        path: '/register/info',
+        component: () => import('@/components/auth/RegisterForm.vue'),
+      },
+    ],
+  },
   // 비밀번호 재설정
   {
     path: '/resetpw',

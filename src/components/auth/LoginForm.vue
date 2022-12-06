@@ -51,12 +51,12 @@
     </div>
 
     <div>
-      <!-- <router-link to="/register/email" class="login-form__link-register">
+      <router-link to="/register/email" class="login-form__link-register">
         회원가입 하기
-      </router-link> -->
-      <button @click="toRegister()" class="login-form__link-register">
+      </router-link>
+      <!-- <button @click="toRegister()" class="login-form__link-register">
         회원가입 하기
-      </button>
+      </button> -->
       &nbsp;&nbsp;
       <router-link to="/resetpw/email" class="login-form__link-register">
         비밀번호 재설정

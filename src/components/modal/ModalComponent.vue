@@ -12,15 +12,15 @@
           <img :src="closeBtn" />
         </button>
       </div>
-      <p>약관 내용</p>
+      <p>{{ modalContent }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import closeBtn from "@/assets/icon/closeBtn.svg";
+import closeBtn from '@/assets/icon/closeBtn.svg';
 export default {
-  name: "ModalComponent",
+  name: 'ModalComponent',
   data() {
     return {
       closeBtn,

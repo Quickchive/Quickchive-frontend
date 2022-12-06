@@ -96,12 +96,14 @@
       v-if="isTosModalActive"
       @close-modal="isTosModalActive = false"
       :modalTitle="tosModalTitle"
+      :modalContent="modalContent"
     ></modal-component>
     <!-- 개인정보 처리방침 모달 -->
     <modal-component
       v-if="isPolicyModalActive"
       @close-modal="isPolicyModalActive = false"
       :modalTitle="policyModalTitle"
+      :modalContent="modalContent"
     ></modal-component>
     <!-- 경고 모달 -->
     <alert-modal-component
@@ -114,29 +116,30 @@
 </template>
 
 <script>
-import { validatePw } from "@/utils/validation";
-import ModalComponent from "@/components/modal/ModalComponent.vue";
-import AlertModalComponent from "../modal/AlertModalComponent.vue";
-import { verifyEmail, registerUser } from "@/api/auth";
+import { validatePw } from '@/utils/validation';
+import ModalComponent from '@/components/modal/ModalComponent.vue';
+import AlertModalComponent from '../modal/AlertModalComponent.vue';
+import { verifyEmail, registerUser } from '@/api/auth';
 
 export default {
   components: { ModalComponent, AlertModalComponent },
   data() {
     return {
-      nickname: "",
-      pw: "",
-      pwCheck: "",
+      nickname: '',
+      pw: '',
+      pwCheck: '',
       agree: false,
-      email: "",
+      email: '',
       emailStatus: 0,
       // 모달
       isPolicyModalActive: false,
       isTosModalActive: false,
-      tosModalTitle: "이용 약관",
-      policyModalTitle: "개인정보 처리 방침",
+      tosModalTitle: '이용 약관',
+      policyModalTitle: '개인정보 처리 방침',
+      modalContent: '페이지를 표시할 수 없습니다🥲',
       // alert 모달 메시지
-      alertModalContent: "",
-      btnMessage: "확인",
+      alertModalContent: '',
+      btnMessage: '확인',
       isAlertModalActive: false,
     };
   },
@@ -146,7 +149,7 @@ export default {
   computed: {
     // 닉네임 유효성 검사: 2~8자
     validateNickname() {
-      if (this.nickname == "") {
+      if (this.nickname == '') {
         return null;
       } else {
         if (this.nickname.length < 2 || this.nickname.length > 8) {
@@ -158,7 +161,7 @@ export default {
     },
     // 비밀번호 유효성 검사
     validatePw() {
-      if (this.pw != "") {
+      if (this.pw != '') {
         return validatePw(this.pw);
       } else {
         return null;
@@ -166,7 +169,7 @@ export default {
     },
     // 비밀번호 일치 확인
     checkPw() {
-      if (this.pwCheck == "") {
+      if (this.pwCheck == '') {
         return null;
       } else {
         if (this.pw != this.pwCheck) {
@@ -192,9 +195,9 @@ export default {
   },
   methods: {
     initForm() {
-      this.nickName = "";
-      this.email = "";
-      this.pw = "";
+      this.nickName = '';
+      this.email = '';
+      this.pw = '';
     },
     // 이용약관 모달 창
     showTos() {
@@ -212,7 +215,7 @@ export default {
         this.email = response.data.email;
         this.emailStatus = response.data.statusCode;
       } catch (error) {
-        this.$router.push("/register/email");
+        this.$router.push('/register/email');
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
       }
@@ -226,9 +229,9 @@ export default {
           password: this.pw,
         };
         await registerUser(userData);
-        this.alertModalContent = "회원가입에 성공하였습니다.";
+        this.alertModalContent = '회원가입에 성공하였습니다.';
         this.isAlertModalActive = true;
-        this.$router.push("/login");
+        this.$router.push('/login');
       } catch (error) {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
