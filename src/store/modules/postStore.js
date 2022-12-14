@@ -1,12 +1,12 @@
-import { fetchMyContents, fetchMyCollections } from "@/api/user";
-import { findData } from "@/utils/search.js";
-import { fetchMyFavorites } from "@/api/user";
-import { sortLatestArr } from "@/utils/sort";
-import { fetchMyCategory } from "@/api/user";
+import { fetchMyContents, fetchMyCollections } from '@/api/user';
+import { search } from '@/utils/search.js';
+import { fetchMyFavorites } from '@/api/user';
+import { sortLatestArr } from '@/utils/sort';
+import { fetchMyCategory } from '@/api/user';
 
 const postStore = {
   state: {
-    searchWord: "",
+    searchWord: '',
     searchResult: [],
     // 콘텐츠
     contentsData: [],
@@ -92,9 +92,9 @@ const postStore = {
         const contents = contentsResponse.data.contents;
         const collectionsResponse = await fetchMyCollections();
         const collections = collectionsResponse.data.collections;
-        const resultArr = findData(word, contents, collections);
-        commit("setSearchResult", resultArr);
-        commit("setSearchWord", word);
+        const resultArr = search(word, contents, collections);
+        commit('setSearchResult', resultArr);
+        commit('setSearchWord', word);
       } catch (error) {
         console.log(error);
       }
@@ -104,7 +104,7 @@ const postStore = {
       try {
         const response = await fetchMyContents(categoryId);
         const contents = response.data.contents;
-        commit("setContents", contents);
+        commit('setContents', contents);
       } catch (error) {
         console.log(error);
       }
@@ -114,7 +114,7 @@ const postStore = {
       try {
         const response = await fetchMyCollections(categoryId);
         const collections = response.data.collections;
-        commit("setCollections", collections);
+        commit('setCollections', collections);
       } catch (error) {
         console.log(error);
       }
@@ -127,7 +127,7 @@ const postStore = {
         const collectionsResponse = await fetchMyContents(categoryId);
         const contents = collectionsResponse.data.contents;
         const newArr = sortLatestArr(contents, collections);
-        commit("setLatestOrder", newArr);
+        commit('setLatestOrder', newArr);
       } catch (error) {
         console.log(error);
       }
@@ -138,10 +138,10 @@ const postStore = {
         const response = await fetchMyFavorites();
         const favoriteContents = response.data.favorite_contents;
         const favoriteCollections = response.data.favorite_collections;
-        commit("setFavoriteContents", favoriteContents);
-        commit("setFavoriteCollections", favoriteCollections);
+        commit('setFavoriteContents', favoriteContents);
+        commit('setFavoriteCollections', favoriteCollections);
         const newArr = sortLatestArr(favoriteContents, favoriteCollections);
-        commit("setLatestFavorite", newArr);
+        commit('setLatestFavorite', newArr);
       } catch (error) {
         console.log(error);
       }
@@ -151,7 +151,7 @@ const postStore = {
       try {
         const response = await fetchMyCategory();
         const categories = response.data.categories;
-        commit("setCategories", categories);
+        commit('setCategories', categories);
       } catch (error) {
         console.log(error);
       }
