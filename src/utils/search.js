@@ -1,29 +1,32 @@
-// 검색
-
-function findData(word, contents, collection) {
-  // 검색 대상 데이터의 제목에서 word와 일치하는게 있으면 해당 배열을 반환한다.
+function makeTargetData(contents, collection) {
   const targetData = [...contents, ...collection];
+  return targetData;
+}
 
-  // 1. 제목에 검색어가 있는 배열만 반환
-  const findFromTitle = targetData.filter((data) =>
-    // 검색 기준: 제목, 콘텐츠, 메모
+function findSameTitleFromTargetData(word, targetData) {
+  const result = targetData.filter((data) =>
     data.title.toLowerCase().includes(word)
   );
+  return result;
+}
 
-  // // 2.1 메모 중 검색어가 있는 배열만 반환
-  const containMemo = targetData.filter((data) => data.comment);
+function findContentsWithMemo(targetData) {
+  const result = targetData.filter((data) => data.comment);
+  return result;
+}
 
-  // 2.2 콘텐츠 || 콜렉션 메모가 존재하는 배열만 반환 (data.comment)
-  const findFromMemo = containMemo.filter((data) =>
+function findSameMemoFromTargetData(word, targetData) {
+  const result = targetData.filter((data) =>
     data.comment.toLowerCase().includes(word)
   );
+  return result;
+}
 
-  // 3-1. 콜렉션 - 콘텐츠 목록에 검색어가 있는 배열만 반환
+function findSameContentsFromCollection(word, collection) {
   const containContents = collection.filter((data) => data.contents.length > 0);
 
-  let i = 0;
   const findFromContents = [];
-  for (i = 0; i < containContents.length; i++) {
+  for (let i = 0; i < containContents.length; i++) {
     const result = containContents[i].contents.filter((data) =>
       data.title.toLowerCase().includes(word)
     );
@@ -31,13 +34,26 @@ function findData(word, contents, collection) {
       findFromContents.push(containContents[i]);
     }
   }
+  return findFromContents;
+}
 
+function search(word, contents, collection) {
+  const targetData = makeTargetData(contents, collection);
+  const findFromTitle = findSameTitleFromTargetData(word, targetData);
+  const containMemo = findContentsWithMemo(targetData);
+  const findFromMemo = findSameMemoFromTargetData(word, containMemo);
+  const findFromContents = findSameContentsFromCollection(word, collection);
   const resultData = [...findFromTitle, ...findFromContents, ...findFromMemo];
-
   const set = new Set(resultData);
   const uniqueArr = [...set];
-
   return uniqueArr;
 }
 
-export { findData };
+export {
+  search,
+  makeTargetData,
+  findSameTitleFromTargetData,
+  findContentsWithMemo,
+  findSameMemoFromTargetData,
+  findSameContentsFromCollection,
+};

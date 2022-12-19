@@ -1,14 +1,17 @@
-import axios from "axios";
-import store from "@/store/index.js";
-import { reissueToken } from "@/api/auth";
-import { getAuthFromCookie } from "@/utils/cookies.js";
+import axios from 'axios';
+import store from '@/store/index.js';
+import { reissueToken } from '@/api/auth';
+import {
+  getAccessTokenFromCookie,
+  getRefreshTokenFromCookie,
+} from '@/utils/cookies.js';
 
 export function setInterceptors(instance) {
   // Add a request interceptor
   instance.interceptors.request.use(
     function(config) {
       // Do something before request is sent
-      config.headers.Authorization = `Bearer ${getAuthFromCookie()}`;
+      config.headers.Authorization = `Bearer ${getAccessTokenFromCookie()}`;
       return config;
     },
     function(error) {
@@ -31,13 +34,13 @@ export function setInterceptors(instance) {
       if (error.response.status == 401) {
         errorAPI.retry = true;
         const tokenData = {
-          refresh_token: localStorage.getItem("refreshToken"),
+          refresh_token: getRefreshTokenFromCookie(),
         };
         try {
           const response = await reissueToken(tokenData);
-          await store.dispatch("RENEW_TOKEN", response.data.access_token);
+          await store.dispatch('RENEW_TOKEN', response.data.access_token);
           await store.dispatch(
-            "RENEW_REFRESH_TOKEN",
+            'RENEW_REFRESH_TOKEN',
             response.data.refresh_token
           );
           errorAPI.headers.Authorization = `Bearer ${response.data.access_token}`;

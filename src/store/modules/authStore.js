@@ -1,25 +1,26 @@
 import {
-  getAuthFromCookie,
-  saveAuthToCookie,
+  getAccessTokenFromCookie,
+  saveAccessTokenToCookie,
+  getRefreshTokenFromCookie,
+  saveRefreshTokenToCookie,
   deleteCookie,
-} from "@/utils/cookies";
-import { loginUser } from "@/api/auth";
-import { fetchProfile } from "@/api/user";
-import { logoutUser } from "@/api/auth";
-import { googleLogin, kakaoLogin } from "@/api/oauth";
+} from '@/utils/cookies';
+import { loginUser } from '@/api/auth';
+import { fetchProfile } from '@/api/user';
+import { logoutUser } from '@/api/auth';
+import { googleLogin, kakaoLogin } from '@/api/oauth';
 
 const authStore = {
-  // namespaced: true,
   state: {
-    nickname: "",
-    email: "",
-    loginState: false || localStorage.getItem("accessToken"),
+    nickname: '',
+    email: '',
+    loginState: false,
     oauthLoginState: false,
-    accessToken: "" || getAuthFromCookie("accessToken"),
-    refreshToken: "" || localStorage.getItem("refreshToken"),
-    oauthInfo: false || localStorage.getItem("oauthInfo"),
-    oauthName: "" || localStorage.getItem("oauthInfo"),
-    stayLoginState: false || localStorage.getItem("stayLogin"),
+    accessToken: '' || getAccessTokenFromCookie(),
+    refreshToken: '' || getRefreshTokenFromCookie(),
+    oauthInfo: false || localStorage.getItem('oauthInfo'),
+    oauthName: '' || localStorage.getItem('oauthInfo'),
+    stayLoginState: false || localStorage.getItem('stayLogin'),
   },
   getters: {
     // 로그인 여부 확인
@@ -54,15 +55,14 @@ const authStore = {
     setEmail(state, email) {
       state.email = email;
     },
-    // 로그아웃 (닉네임, 토큰 삭제)
     logoutUser(state) {
-      state.nickname = "";
-      state.email = "";
-      state.accessToken = "";
-      state.refreshToken = "";
-      deleteCookie("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("oauthInfo");
+      state.nickname = '';
+      state.email = '';
+      state.accessToken = '';
+      state.refreshToken = '';
+      deleteCookie('accessToken');
+      deleteCookie('refreshToken');
+      localStorage.removeItem('oauthInfo');
       state.loginState = false;
       state.oauthLoginState = false;
     },
@@ -80,29 +80,28 @@ const authStore = {
     // 로그인
     async LOGIN({ commit }, userData) {
       const { data } = await loginUser(userData);
-      commit("setRefreshToken", data.refresh_token);
-      saveAuthToCookie(data.access_token);
-      localStorage.setItem("refreshToken", data.refresh_token);
+      commit('setRefreshToken', data.refresh_token);
+      saveAccessTokenToCookie(data.access_token);
+      saveRefreshTokenToCookie(data.refresh_token);
       const response = await fetchProfile();
-      commit("setNickname", response.data.name);
-      commit("setEmail", response.data.email);
-      commit("setLoginState", true);
-      commit("setOauthLoginState", false);
+      commit('setNickname', response.data.name);
+      commit('setEmail', response.data.email);
+      commit('setLoginState', true);
+      commit('setOauthLoginState', false);
     },
-    // 프로필 조회이자 로그인 여부 확인
     async FETCH_PROFILE({ commit }) {
       try {
         const { data } = await fetchProfile();
-        commit("setNickname", data.name);
-        commit("setEmail", data.email);
+        commit('setNickname', data.name);
+        commit('setEmail', data.email);
         if (data.statusCode == 201) {
-          commit("setLoginState", true);
+          commit('setLoginState', true);
         } else if (data.statusCode == 200) {
-          commit("setLoginState", true);
+          commit('setLoginState', true);
         }
       } catch (error) {
         if (error.statusCode == 401) {
-          commit("setLoginState", false);
+          commit('setLoginState', false);
         }
       }
     },
@@ -110,10 +109,10 @@ const authStore = {
     async LOGOUT({ commit }) {
       try {
         const refreshToken = {
-          refresh_token: localStorage.getItem("refreshToken"),
+          refresh_token: getRefreshTokenFromCookie(),
         };
         await logoutUser(refreshToken);
-        commit("logoutUser");
+        commit('logoutUser');
       } catch (error) {
         console.log(error);
       }
@@ -123,13 +122,13 @@ const authStore = {
       try {
         const response = await googleLogin(code);
         if (response.data.statusCode == 200) {
-          localStorage.setItem("refreshToken", response.data.refresh_token);
-          saveAuthToCookie(response.data.access_token);
-          commit("setNickname", response.data.name);
-          commit("setEmail", response.data.email);
-          commit("setOauthLoginState", true);
-          commit("setLoginState", false);
-          commit("setRefreshToken", response.data.refresh_token);
+          saveRefreshTokenToCookie(response.data.refresh_token);
+          saveAccessTokenToCookie(response.data.access_token);
+          commit('setNickname', response.data.name);
+          commit('setEmail', response.data.email);
+          commit('setOauthLoginState', true);
+          commit('setLoginState', false);
+          commit('setRefreshToken', response.data.refresh_token);
         }
       } catch (error) {
         this.alertModalContent = error.response.data.message;
@@ -141,13 +140,13 @@ const authStore = {
       try {
         const response = await kakaoLogin(code);
         if (response.data.statusCode == 200) {
-          localStorage.setItem("refreshToken", response.data.refresh_token);
-          saveAuthToCookie(response.data.access_token);
-          commit("setNickname", response.data.name);
-          commit("setEmail", response.data.email);
-          commit("setOauthLoginState", true);
-          commit("setLoginState", false);
-          commit("setRefreshToken", response.data.refresh_token);
+          saveRefreshTokenToCookie(response.data.refresh_token);
+          saveAccessTokenToCookie(response.data.access_token);
+          commit('setNickname', response.data.name);
+          commit('setEmail', response.data.email);
+          commit('setOauthLoginState', true);
+          commit('setLoginState', false);
+          commit('setRefreshToken', response.data.refresh_token);
         }
       } catch (error) {
         this.alertModalContent = error.response.data.message;
@@ -156,18 +155,18 @@ const authStore = {
     },
     // 액세스 토큰 갱신
     RENEW_TOKEN({ commit }, accessToken) {
-      commit("setAccessToken", accessToken);
-      saveAuthToCookie(accessToken);
+      commit('setAccessToken', accessToken);
+      saveAccessTokenToCookie(accessToken);
     },
     // 리프레시 토큰 갱신
     RENEW_REFRESH_TOKEN({ commit }, refreshToken) {
-      commit("setRefreshToken", refreshToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      commit('setRefreshToken', refreshToken);
+      saveRefreshTokenToCookie(refreshToken);
     },
     // 로그인 유지
     STAY_LOGIN({ commit }, stayLoginState) {
-      commit("setStayLoginState", stayLoginState);
-      localStorage.setItem("stayLogin", stayLoginState);
+      commit('setStayLoginState', stayLoginState);
+      localStorage.setItem('stayLogin', stayLoginState);
     },
   },
 };

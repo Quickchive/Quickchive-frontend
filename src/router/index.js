@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { getAuthFromCookie } from '@/utils/cookies';
+import { getAccessTokenFromCookie } from '@/utils/cookies';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
@@ -9,17 +10,27 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/OnBoardingView.vue'),
-    beforeEnter: (to, from, next) => {
-      if (getAuthFromCookie('accessToken')) {
-        next('/main');
-      } else {
+
+    beforeEnter: async (to, from, next) => {
+      await store.dispatch('FETCH_PROFILE');
+      if (!store.getters.isLogin) {
         next();
+      } else {
+        next('/main');
       }
     },
   },
   {
     path: '/login',
     component: () => import('@/views/LoginView.vue'),
+    beforeEnter: async (to, from, next) => {
+      await store.dispatch('FETCH_PROFILE');
+      if (store.getters.isLogin) {
+        next('/main');
+      } else {
+        next();
+      }
+    },
   },
   // 메인
   {
@@ -30,8 +41,9 @@ const routes = [
       {
         path: '/main',
         component: () => import('@/components/MainComponent.vue'),
-        beforeEnter: (to, from, next) => {
-          if (!getAuthFromCookie('accessToken')) {
+        beforeEnter: async (to, from, next) => {
+          await store.dispatch('FETCH_PROFILE');
+          if (!store.getters.isLogin) {
             next('/');
           } else {
             next();
@@ -51,22 +63,22 @@ const routes = [
     ],
   },
   // 회원가입
-  // {
-  //   path: "/register",
-  //   component: () => import("@/views/RegisterView.vue"),
-  //   children: [
-  //     // step1: 이메일 인증
-  //     {
-  //       path: "/register/email",
-  //       component: () => import("@/components/auth/EmailForm.vue"),
-  //     },
-  //     // step2: 회원정보 입력
-  //     {
-  //       path: "/register/info",
-  //       component: () => import("@/components/auth/RegisterForm.vue"),
-  //     },
-  //   ],
-  // },
+  {
+    path: '/register',
+    component: () => import('@/views/RegisterView.vue'),
+    children: [
+      // step1: 이메일 인증
+      {
+        path: '/register/email',
+        component: () => import('@/components/auth/EmailForm.vue'),
+      },
+      // step2: 회원정보 입력
+      {
+        path: '/register/info',
+        component: () => import('@/components/auth/RegisterForm.vue'),
+      },
+    ],
+  },
   // 비밀번호 재설정
   {
     path: '/resetpw',
@@ -88,7 +100,7 @@ const routes = [
     path: '/mypage',
     component: () => import('@/views/MypageView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
@@ -112,7 +124,7 @@ const routes = [
     path: '/category',
     component: () => import('@/views/CategoryView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
@@ -141,7 +153,7 @@ const routes = [
     path: '/collection/:id',
     component: () => import('@/views/CollectionView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {
@@ -154,7 +166,7 @@ const routes = [
     path: '/search',
     component: () => import('@/views/SearchView.vue'),
     beforeEnter: (to, from, next) => {
-      if (!getAuthFromCookie('accessToken')) {
+      if (!getAccessTokenFromCookie()) {
         alert('로그인이 필요한 페이지입니다.');
         next('/');
       } else {

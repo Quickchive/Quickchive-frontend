@@ -23,9 +23,9 @@
           </div>
           <div class="contents-list__wrapper">
             <img :src="line" />
-            <span v-if="data.deadline" class="contents-list__expiry"
-              >D-{{ countDday(data.deadline) }}</span
-            >
+            <span v-if="data.deadline" class="contents-list__expiry">{{
+              countDday(data.deadline)
+            }}</span>
             <button class="btn--transparent" @click="openMemoModal(index)">
               <img :src="memo" />
             </button>
@@ -69,19 +69,19 @@
 </template>
 
 <script>
-import plus from "@/assets/icon/plus.svg";
-import minus from "@/assets/icon/minus.svg";
-import line from "@/assets/icon/line.svg";
-import memo from "@/assets/icon/memo.svg";
-import star from "@/assets/icon/star.svg";
-import star_gray from "@/assets/icon/star_gray.svg";
-import web from "@/assets/icon/web.svg";
-import { addFavoriteCollection } from "@/api/collection";
+import plus from '@/assets/icon/plus.svg';
+import minus from '@/assets/icon/minus.svg';
+import line from '@/assets/icon/line.svg';
+import memo from '@/assets/icon/memo.svg';
+import star from '@/assets/icon/star.svg';
+import star_gray from '@/assets/icon/star_gray.svg';
+import web from '@/assets/icon/web.svg';
+import { addFavoriteCollection } from '@/api/collection';
 
-import MemoModalComponent from "@/components/modal/MemoModalComponent.vue";
-import { countDday } from "@/utils/validation";
-import { addFavorite } from "@/api/contents";
-import { eventBus } from "@/main.js";
+import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
+import { calculateDeadline } from '@/utils/date';
+import { addFavorite } from '@/api/contents';
+import { eventBus } from '@/main.js';
 
 export default {
   components: { MemoModalComponent },
@@ -108,19 +108,19 @@ export default {
     categoryId: Number,
   },
   async created() {
-    eventBus.$on("fetchFavoritesList", (data) => {
+    eventBus.$on('fetchFavoritesList', (data) => {
       this.isFavoriteListUpdated += data;
     });
   },
   watch: {
     isFavoriteListUpdated() {
-      this.$store.dispatch("GET_CONTENTS");
-      this.$store.dispatch("GET_COLLECTIONS");
+      this.$store.dispatch('GET_CONTENTS');
+      this.$store.dispatch('GET_COLLECTIONS');
     },
   },
   methods: {
     async showContent() {
-      await this.$store.dispatch("SORT_DATA");
+      await this.$store.dispatch('SORT_DATA');
       this.newArr = this.$store.getters.getLatestSortedData;
       this.contentState = !this.contentState;
     },
@@ -146,11 +146,11 @@ export default {
     },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
-      this.$router.push("/category/all");
+      this.$router.push('/category/all');
     },
     // 메모 모달 열기
     async openMemoModal(index) {
-      await this.$store.dispatch("SORT_DATA");
+      await this.$store.dispatch('SORT_DATA');
       this.newArr = this.$store.getters.getLatestSortedData;
       this.memoContents = this.newArr[index].comment;
       this.contentsId = this.newArr[index].id;
@@ -159,7 +159,7 @@ export default {
     // 제목 글자수 30자 이상
     filterTitle(title) {
       if (title.length >= 30) {
-        return title.substr(0, 30) + "...";
+        return title.substr(0, 30) + '...';
       } else {
         return title;
       }
@@ -169,10 +169,10 @@ export default {
       this.$router.push(`/collection/${id}`);
     },
     countDday(deadline) {
-      return countDday(deadline);
+      return calculateDeadline(deadline);
     },
     toLink(link) {
-      window.open(link, "_blank");
+      window.open(link, '_blank');
     },
   },
 };
