@@ -1,7 +1,7 @@
 import { fetchMyContents, fetchMyCollections } from '@/api/user';
 import { search } from '@/utils/search.js';
 import { fetchMyFavorites } from '@/api/user';
-import { sortLatestArr } from '@/utils/sort';
+import { sortDataByRecentlySaved } from '@/utils/sort';
 import { fetchMyCategory } from '@/api/user';
 
 const postStore = {
@@ -126,7 +126,7 @@ const postStore = {
         const collections = contentsResponse.data.collections;
         const collectionsResponse = await fetchMyContents(categoryId);
         const contents = collectionsResponse.data.contents;
-        const newArr = sortLatestArr(contents, collections);
+        const newArr = sortDataByRecentlySaved(contents, collections);
         commit('setLatestOrder', newArr);
       } catch (error) {
         console.log(error);
@@ -140,7 +140,10 @@ const postStore = {
         const favoriteCollections = response.data.favorite_collections;
         commit('setFavoriteContents', favoriteContents);
         commit('setFavoriteCollections', favoriteCollections);
-        const newArr = sortLatestArr(favoriteContents, favoriteCollections);
+        const newArr = sortDataByRecentlySaved(
+          favoriteContents,
+          favoriteCollections
+        );
         commit('setLatestFavorite', newArr);
       } catch (error) {
         console.log(error);

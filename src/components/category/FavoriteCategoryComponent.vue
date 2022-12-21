@@ -28,10 +28,10 @@
 </template>
 
 <script>
-import ContentsComponent from "@/components/content/ContentsComponent.vue";
-import CollectionComponent from "@/components/collection/CollectionComponent.vue";
-import { sortDeadlineArr } from "@/utils/sort";
-import { eventBus } from "@/main";
+import ContentsComponent from '@/components/content/ContentsComponent.vue';
+import CollectionComponent from '@/components/collection/CollectionComponent.vue';
+import { sortDataByImmientDeadline } from '@/utils/sort';
+import { eventBus } from '@/main';
 
 export default {
   components: {
@@ -42,8 +42,8 @@ export default {
     return {
       isCollectionActive: false,
       isCategoryModalActive: false,
-      categoryFilter: "latest",
-      categoryId: "",
+      categoryFilter: 'latest',
+      categoryId: '',
       contentsData: [],
       collectionData: [],
       newArr: [],
@@ -53,43 +53,43 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch("GET_FAVORITES");
+    await this.$store.dispatch('GET_FAVORITES');
     this.newArr = this.$store.getters.getLatestSortedFavorite;
-    eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
-      "contentsModalActive",
+      'contentsModalActive',
       (data) => (this.contentsModalEvent += data)
     );
     eventBus.$on(
-      "collectionModalActive",
+      'collectionModalActive',
       (data) => (this.collectionModalEvent += data)
     );
   },
 
   watch: {
     async memoEvent() {
-      await this.$store.dispatch("GET_FAVORITES");
+      await this.$store.dispatch('GET_FAVORITES');
       this.newArr = this.$store.getters.getLatestSortedFavorite;
-      eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+      eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     },
     async contentsModalEvent() {
-      await this.$store.dispatch("GET_FAVORITES");
+      await this.$store.dispatch('GET_FAVORITES');
       this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
     async collectionModalEvent() {
-      await this.$store.dispatch("GET_FAVORITES");
+      await this.$store.dispatch('GET_FAVORITES');
       this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
   },
   methods: {
     // 정렬
     async sortData(filter) {
-      if (filter == "latest") {
-        await this.$store.dispatch("GET_FAVORITES");
+      if (filter == 'latest') {
+        await this.$store.dispatch('GET_FAVORITES');
 
         this.newArr = this.$store.getters.getLatestSortedFavorite;
-      } else if (filter == "expiry") {
-        this.newArr = sortDeadlineArr(
+      } else if (filter == 'expiry') {
+        this.newArr = sortDataByImmientDeadline(
           this.$store.getters.getFavoriteContents,
           this.$store.getters.getFavoriteCollections
         );
