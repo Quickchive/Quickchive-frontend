@@ -61,7 +61,7 @@ import { fetchMyCategory } from '@/api/user';
 import {
   sortDataByRecentlySaved,
   sortDataByFavorite,
-  sortDataByImmientDeadline,
+  sortDataByImminentDeadline,
 } from '@/utils/sort';
 import { eventBus } from '@/main';
 
@@ -185,7 +185,7 @@ export default {
           this.$store.getters.getCollections
         );
       } else if (filter == 'expiry') {
-        this.newArr = sortDataByImmientDeadline(
+        this.newArr = sortDataByImminentDeadline(
           this.$store.getters.getContents,
           this.$store.getters.getCollections
         );

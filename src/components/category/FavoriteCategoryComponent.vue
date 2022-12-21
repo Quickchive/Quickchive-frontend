@@ -30,7 +30,7 @@
 <script>
 import ContentsComponent from '@/components/content/ContentsComponent.vue';
 import CollectionComponent from '@/components/collection/CollectionComponent.vue';
-import { sortDataByImmientDeadline } from '@/utils/sort';
+import { sortDataByImminentDeadline } from '@/utils/sort';
 import { eventBus } from '@/main';
 
 export default {
@@ -89,7 +89,7 @@ export default {
 
         this.newArr = this.$store.getters.getLatestSortedFavorite;
       } else if (filter == 'expiry') {
-        this.newArr = sortDataByImmientDeadline(
+        this.newArr = sortDataByImminentDeadline(
           this.$store.getters.getFavoriteContents,
           this.$store.getters.getFavoriteCollections
         );
