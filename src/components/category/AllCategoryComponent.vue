@@ -54,14 +54,18 @@
 </template>
 
 <script>
-import setting from "@/assets/icon/settings.svg";
-import ContentsComponent from "@/components/content/ContentsComponent.vue";
-import CollectionComponent from "@/components/collection/CollectionComponent.vue";
-import CategoryModalComponent from "@/components/modal/CategoryModalComponent.vue";
-import { updateCategory, deleteCategory } from "@/api/category";
-import { sortLatestArr, sortFavoritesArr, sortDeadlineArr } from "@/utils/sort";
-import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
-import { eventBus } from "@/main";
+import setting from '@/assets/icon/settings.svg';
+import ContentsComponent from '@/components/content/ContentsComponent.vue';
+import CollectionComponent from '@/components/collection/CollectionComponent.vue';
+import CategoryModalComponent from '@/components/modal/CategoryModalComponent.vue';
+import { updateCategory, deleteCategory } from '@/api/category';
+import {
+  sortDataByRecentlySaved,
+  sortDataByFavorite,
+  sortDataByImminentDeadline,
+} from '@/utils/sort';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
+import { eventBus } from '@/main';
 
 export default {
   components: {
@@ -73,17 +77,17 @@ export default {
   data() {
     return {
       isCategoryModalActive: false,
-      categoryModalTitle: "카테고리 수정",
-      categoryFilter: "latest",
+      categoryModalTitle: '카테고리 수정',
+      categoryFilter: 'latest',
       setting,
       categoryId: 0,
-      categoryName: "",
-      newCategoryName: "",
-      deleteBtn: "카테고리 삭제",
+      categoryName: '',
+      newCategoryName: '',
+      deleteBtn: '카테고리 삭제',
       newArr: [],
       isAlertModalActive: false,
-      AlertModalContent: "",
-      btnMessage: "네",
+      AlertModalContent: '',
+      btnMessage: '네',
       memoEvent: 0,
       contentsModalEvent: 0,
       collectionModalEvent: 0,
@@ -91,48 +95,48 @@ export default {
   },
   watch: {
     async memoEvent() {
-      await this.$store.dispatch("GET_CONTENTS");
-      await this.$store.dispatch("GET_COLLECTIONS");
+      await this.$store.dispatch('GET_CONTENTS');
+      await this.$store.dispatch('GET_COLLECTIONS');
       // 콘텐츠 컴포넌트 최신순 정렬
-      this.newArr = sortLatestArr(
+      this.newArr = sortDataByRecentlySaved(
         this.$store.getters.getContents,
         this.$store.getters.getCollections
       );
     },
     async contentsModalEvent() {
-      await this.$store.dispatch("GET_CONTENTS");
-      await this.$store.dispatch("GET_COLLECTIONS");
+      await this.$store.dispatch('GET_CONTENTS');
+      await this.$store.dispatch('GET_COLLECTIONS');
       // 콘텐츠 컴포넌트 최신순 정렬
-      this.newArr = sortLatestArr(
+      this.newArr = sortDataByRecentlySaved(
         this.$store.getters.getContents,
         this.$store.getters.getCollections
       );
     },
     async collectionModalEvent() {
-      await this.$store.dispatch("GET_CONTENTS");
-      await this.$store.dispatch("GET_COLLECTIONS");
+      await this.$store.dispatch('GET_CONTENTS');
+      await this.$store.dispatch('GET_COLLECTIONS');
       // 콘텐츠 컴포넌트 최신순 정렬
-      this.newArr = sortLatestArr(
+      this.newArr = sortDataByRecentlySaved(
         this.$store.getters.getContents,
         this.$store.getters.getCollections
       );
     },
   },
   async created() {
-    await this.$store.dispatch("GET_CONTENTS");
-    await this.$store.dispatch("GET_COLLECTIONS");
+    await this.$store.dispatch('GET_CONTENTS');
+    await this.$store.dispatch('GET_COLLECTIONS');
     // 콘텐츠 컴포넌트 최신순 정렬
-    this.newArr = sortLatestArr(
+    this.newArr = sortDataByRecentlySaved(
       this.$store.getters.getContents,
       this.$store.getters.getCollections
     );
-    eventBus.$on("memoEvent", (data) => (this.memoEvent += data));
+    eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
-      "contentsModalActive",
+      'contentsModalActive',
       (data) => (this.contentsModalEvent += data)
     );
     eventBus.$on(
-      "collectionModalActive",
+      'collectionModalActive',
       (data) => (this.collectionModalEvent += data)
     );
   },
@@ -167,18 +171,18 @@ export default {
     // 정렬
     sortData(filter) {
       // 최신순
-      if (filter == "favorites") {
-        this.newArr = sortFavoritesArr(
+      if (filter == 'favorites') {
+        this.newArr = sortDataByFavorite(
           this.$store.getters.getContents,
           this.$store.getters.getCollections
         );
-      } else if (filter == "latest") {
-        this.newArr = sortLatestArr(
+      } else if (filter == 'latest') {
+        this.newArr = sortDataByRecentlySaved(
           this.$store.getters.getContents,
           this.$store.getters.getCollections
         );
-      } else if (filter == "expiry") {
-        this.newArr = sortDeadlineArr(
+      } else if (filter == 'expiry') {
+        this.newArr = sortDataByImminentDeadline(
           this.$store.getters.getContents,
           this.$store.getters.getCollections
         );
