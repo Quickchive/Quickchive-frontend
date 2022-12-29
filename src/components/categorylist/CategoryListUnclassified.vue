@@ -35,29 +35,7 @@
             </button>
           </div>
         </div>
-        <div>
-          <!-- 콜렉션 목록 -->
-          <div v-if="data.contents" class="contents-list">
-            <div class="contents-list__wrapper">
-              <button class="btn--transparent--img" @click="toDetail(data.id)">
-                <span class="contents-list__icon"><img :src="web"/></span>
-                <span class="contents-list__title">
-                  {{ filterTitle(data.title) }}
-                </span>
-              </button>
-            </div>
-            <div class="contents-list__wrapper">
-              <img :src="line" />
-              <button
-                class="btn--transparent"
-                @click="createFavoriteCollection(index)"
-              >
-                <img v-if="data.favorite" :src="star" />
-                <img v-if="!data.favorite" :src="star_gray" />
-              </button>
-            </div>
-          </div>
-        </div>
+        <div></div>
       </div>
     </div>
     <memo-modal-component
@@ -77,8 +55,6 @@ import memo from '@/assets/icon/memo.svg';
 import star from '@/assets/icon/star.svg';
 import star_gray from '@/assets/icon/star_gray.svg';
 import web from '@/assets/icon/web.svg';
-import { addFavoriteCollection } from '@/api/collection';
-
 import { calculateDeadline } from '@/utils/date';
 import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
 import { addFavorite } from '@/api/contents';
@@ -100,7 +76,6 @@ export default {
       data: 1,
       isFavoriteListUpdated: 0,
       contentsData: [],
-      collectionsData: [],
       newArr: [],
     };
   },
@@ -122,17 +97,6 @@ export default {
       try {
         const contentId = this.newArr[index].id;
         await addFavorite(contentId);
-        eventBus.$emit('fetchFavoritesList', this.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // 즐겨찾기 생성
-    async createFavoriteCollection(index) {
-      this.newArr[index].favorite = !this.newArr[index].favorite;
-      try {
-        const collectionId = this.newArr[index].id;
-        await addFavoriteCollection(collectionId);
         eventBus.$emit('fetchFavoritesList', this.data);
       } catch (error) {
         console.log(error);
@@ -163,10 +127,6 @@ export default {
     },
     toLink(link) {
       window.open(link, '_blank');
-    },
-    // 콜렉션 상세 페이지로 이동
-    toDetail(id) {
-      this.$router.push(`/collection/${id}`);
     },
   },
 };

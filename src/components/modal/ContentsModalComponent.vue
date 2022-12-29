@@ -73,19 +73,6 @@
         </div>
       </div>
 
-      <!-- 콜렉션 안내 문구 및 버튼 -->
-      <div class="modal-card__collection__wrapper">
-        <span class="modal-card__text"
-          ><img :src="alert_circle" />여러 링크들을 묶어서 저장하고
-          싶다면?</span
-        >
-        <button
-          @click="openCollectionModal()"
-          class="btn--transparent btn__collection"
-        >
-          콜렉션으로 저장하기 >>
-        </button>
-      </div>
       <div class="flex-container-col">
         <button
           :disabled="!link"
@@ -106,13 +93,13 @@
 </template>
 
 <script>
-import closeBtn from "@/assets/icon/closeBtn.svg";
-import star_border from "@/assets/icon/star_border.svg";
-import star from "@/assets/icon/star.svg";
-import alert_circle from "@/assets/icon/alert-circle.svg";
-import { addContents } from "@/api/contents";
-import { validateLink, linkCounter, filterLink } from "@/utils/validation";
-import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import closeBtn from '@/assets/icon/closeBtn.svg';
+import star_border from '@/assets/icon/star_border.svg';
+import star from '@/assets/icon/star.svg';
+import alert_circle from '@/assets/icon/alert-circle.svg';
+import { addContents } from '@/api/contents';
+import { validateLink, linkCounter, filterLink } from '@/utils/validation';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
 
 export default {
   components: { AlertModalComponent },
@@ -126,22 +113,22 @@ export default {
       // 내 카테고리 목록
       myCategories: {},
       // 폼 항목
-      link: "",
-      title: "",
-      deadline: "",
-      comment: "",
-      categoryName: "",
+      link: '',
+      title: '',
+      deadline: '',
+      comment: '',
+      categoryName: '',
       favorite: false,
       data: {},
       linkList: [],
       // 경고 모달
       isAlertModalActive: false,
-      AlertModalContent: "",
-      btnMessage: "네",
+      AlertModalContent: '',
+      btnMessage: '네',
     };
   },
   async created() {
-    await this.$store.dispatch("GET_CATEGORIES");
+    await this.$store.dispatch('GET_CATEGORIES');
     this.myCategories = this.$store.getters.getCategories;
   },
   props: {
@@ -155,7 +142,7 @@ export default {
   computed: {
     // 링크 여부 확인
     isTextLink() {
-      if (this.link != "") {
+      if (this.link != '') {
         return validateLink(this.link);
       } else {
         return null;
@@ -163,7 +150,7 @@ export default {
     },
     // 링크 개수 확인
     countLink() {
-      if (this.link != "") {
+      if (this.link != '') {
         return linkCounter(this.link);
       } else {
         return null;
@@ -192,13 +179,13 @@ export default {
         };
         Object.keys(contentsData).forEach(
           (key) =>
-            (contentsData[key] == "" || contentsData[key] == undefined) &&
+            (contentsData[key] == '' || contentsData[key] == undefined) &&
             delete contentsData[key]
         );
         {
           try {
             await addContents(contentsData);
-            this.$emit("close-modal");
+            this.$emit('close-modal');
           } catch (error) {
             this.alertModalContent = error.response.data.message;
             this.isAlertModalActive = true;
@@ -208,12 +195,8 @@ export default {
       // 링크가 2개 이상인 경우
       else if (this.countLink >= 2) {
         const linkList = this.linkList;
-        this.$emit("isLinkNotSingle", linkList);
+        this.$emit('isLinkNotSingle', linkList);
       }
-    },
-    openCollectionModal() {
-      const linkList = this.linkList;
-      this.$emit("openCollectionModal", linkList);
     },
   },
 };

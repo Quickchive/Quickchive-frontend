@@ -20,7 +20,7 @@
       </div>
       <div class="alert" v-if="this.newArr.length == 0">
         <h2>
-          해당 카테고리에 속하는 콘텐츠&콜렉션이 없습니다😯
+          해당 카테고리에 속하는 콘텐츠가 없습니다😯
         </h2>
       </div>
       <div v-else>
@@ -30,11 +30,6 @@
             :contents="data"
             v-if="!newArr[index].contents"
           ></contents-component>
-          <!-- 콜렉션 컴포넌트 -->
-          <collection-component
-            v-if="newArr[index].contents"
-            :collection="data"
-          ></collection-component>
         </div>
       </div>
     </div>
@@ -54,7 +49,6 @@
 <script>
 import setting from '@/assets/icon/settings.svg';
 import ContentsComponent from '@/components/content/ContentsComponent.vue';
-import CollectionComponent from '@/components/collection/CollectionComponent.vue';
 import CategoryModalComponent from '@/components/modal/CategoryModalComponent.vue';
 import { updateCategory, deleteCategory } from '@/api/category';
 import { fetchMyCategory } from '@/api/user';
@@ -68,12 +62,10 @@ import { eventBus } from '@/main';
 export default {
   components: {
     ContentsComponent,
-    CollectionComponent,
     CategoryModalComponent,
   },
   data() {
     return {
-      isCollectionActive: false,
       isCategoryModalActive: false,
       categoryModalTitle: '카테고리 수정',
       categoryFilter: 'latest',
@@ -85,13 +77,11 @@ export default {
       newArr: [],
       memoEvent: 0,
       contentsModalEvent: 0,
-      collectionModalEvent: 0,
     };
   },
   watch: {
     async $route() {
       await this.fetchCategoryName();
-
       await this.$store.dispatch('SORT_DATA', this.$route.params.id);
       this.newArr = this.$store.getters.getLatestSortedData;
     },
@@ -100,10 +90,6 @@ export default {
       this.newArr = this.$store.getters.getLatestSortedData;
     },
     async contentsModalEvent() {
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
-    },
-    async collectionModalEvent() {
       await this.$store.dispatch('SORT_DATA', this.$route.params.id);
       this.newArr = this.$store.getters.getLatestSortedData;
     },
@@ -117,10 +103,6 @@ export default {
     eventBus.$on(
       'contentsModalActive',
       (data) => (this.contentsModalEvent += data)
-    );
-    eventBus.$on(
-      'collectionModalActive',
-      (data) => (this.collectionModalEvent += data)
     );
   },
   methods: {
@@ -175,19 +157,12 @@ export default {
     async sortData(filter) {
       // 최신순
       if (filter == 'favorites') {
-        this.newArr = sortDataByFavorite(
-          this.$store.getters.getContents,
-          this.$store.getters.getCollections
-        );
+        this.newArr = sortDataByFavorite(this.$store.getters.getContents);
       } else if (filter == 'latest') {
-        this.newArr = sortDataByRecentlySaved(
-          this.$store.getters.getContents,
-          this.$store.getters.getCollections
-        );
+        this.newArr = sortDataByRecentlySaved(this.$store.getters.getContents);
       } else if (filter == 'expiry') {
         this.newArr = sortDataByImminentDeadline(
-          this.$store.getters.getContents,
-          this.$store.getters.getCollections
+          this.$store.getters.getContents
         );
       }
     },

@@ -49,16 +49,14 @@
       @close-modal="isModalActive = false"
       @isLinkNotSingle="isLinkNotSingle"
       :linkList="linkList"
-      @openCollectionModal="openCollectionModal"
     ></contents-modal-component>
 
     <!-- 링크 2개 이상일 경우 모달 컴포넌트 -->
 
     <confirm-modal-component
       v-if="isConfirmModalActive"
-      @rightBtn="addMultipleContents()"
-      @leftBtn="openCollectionModal(linkList)"
-      @close-modal="isConfirmModalActive = false"
+      @leftBtn="addMultipleContents()"
+      @rightBtn="isConfirmModalActive = false"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
@@ -75,30 +73,21 @@
       :btnMessage="btnMessage"
     >
     </alert-modal-component>
-
-    <!-- 콜렉션으로 저장 모달 -->
-
-    <collection-modal-component
-      v-if="isCollectionModalActive"
-      @close-modal="isCollectionModalActive = false"
-      :collectionData="collectionData"
-    ></collection-modal-component>
   </div>
 </template>
 
 <script>
-import CategoryListFavorite from "@/components/categorylist/CategoryListFavorite.vue";
-import CategoryListAll from "@/components/categorylist/CategoryListAll.vue";
-import CategoryList from "@/components/categorylist/CategoryList.vue";
-import CategoryModalComponent from "./modal/CategoryModalComponent.vue";
-import plusBtn from "@/assets/icon/plusBtn.svg";
-import topBtn from "@/assets/icon/topBtn.svg";
-import ContentsModalComponent from "./modal/ContentsModalComponent.vue";
-import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
-import AlertModalComponent from "./modal/AlertModalComponent.vue";
-import { addMultipleContents } from "@/api/contents";
-import { addCategory } from "@/api/category";
-import CollectionModalComponent from "@/components/modal/CollectionModalComponent.vue";
+import CategoryListFavorite from '@/components/categorylist/CategoryListFavorite.vue';
+import CategoryListAll from '@/components/categorylist/CategoryListAll.vue';
+import CategoryList from '@/components/categorylist/CategoryList.vue';
+import CategoryModalComponent from './modal/CategoryModalComponent.vue';
+import plusBtn from '@/assets/icon/plusBtn.svg';
+import topBtn from '@/assets/icon/topBtn.svg';
+import ContentsModalComponent from './modal/ContentsModalComponent.vue';
+import ConfirmModalComponent from '@/components/modal/ConfirmModalComponent.vue';
+import AlertModalComponent from './modal/AlertModalComponent.vue';
+import { addMultipleContents } from '@/api/contents';
+import { addCategory } from '@/api/category';
 
 export default {
   components: {
@@ -109,7 +98,6 @@ export default {
     CategoryModalComponent,
     ConfirmModalComponent,
     AlertModalComponent,
-    CollectionModalComponent,
   },
   data() {
     return {
@@ -118,33 +106,28 @@ export default {
       isModalActive: false,
       isConfirmModalActive: false,
       isAlertModalActive: false,
-      isCollectionModalActive: false,
       topBtn,
       // confirm 모달 메시지
-      confirmModalContent: "URL이 2개 이상이네요! \n 저장방식을 선택해주세요",
-      leftBtnMessage: "콜렉션으로 저장",
-      rightBtnMessage: "각각 콘텐츠로 저장",
-      isClosBtnShow: true,
+      confirmModalContent:
+        'URL이 2개 이상이네요! \n 각각 콘텐츠로 저장하시겠습니까?',
+      leftBtnMessage: '네',
+      rightBtnMessage: '아니오',
+      isClosBtnShow: false,
       // alert 모달 메시지
-      alertModalContent: "같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.",
-      btnMessage: "네",
+      alertModalContent: '같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.',
+      btnMessage: '네',
       contentsLinks: [],
       // 카테고리 모달 제목
-      categoryModalTitle: "카테고리 추가",
-      categoryName: "",
+      categoryModalTitle: '카테고리 추가',
+      categoryName: '',
       // 내 카테고리 목록
       myCategories: {},
-      categoryAll: "전체",
+      categoryAll: '전체',
       linkList: [],
-      collectionData: {
-        contentLinkList: [],
-        favorite: false,
-      },
-      collectionModalTitle: "콜렉션 추가",
     };
   },
   async created() {
-    await this.$store.dispatch("GET_CATEGORIES");
+    await this.$store.dispatch('GET_CATEGORIES');
     this.myCategories = this.$store.getters.getCategories;
   },
   computed: {
@@ -166,7 +149,7 @@ export default {
           categoryName: this.categoryName,
         };
         await addCategory(data);
-        await this.$store.dispatch("GET_CATEGORIES");
+        await this.$store.dispatch('GET_CATEGORIES');
         this.myCategories = this.$store.getters.getCategories;
       } catch (error) {
         this.alertModalContent = error.response.data.message;
@@ -207,13 +190,6 @@ export default {
     // 즐겨찾기 상세 페이지로 이동
     toFavoriteCategoryPage() {
       this.$router.push(`/category/favorite`);
-    },
-    // 콜렉션 추가 모달 열기
-    openCollectionModal(linkList) {
-      this.collectionData.contentLinkList = linkList;
-      this.isConfirmModalActive = false;
-      this.isModalActive = false;
-      this.isCollectionModalActive = true;
     },
   },
 };

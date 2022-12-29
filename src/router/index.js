@@ -148,19 +148,6 @@ const routes = [
       },
     ],
   },
-  // 콜렉션 상세 페이지
-  {
-    path: '/collection/:id',
-    component: () => import('@/views/CollectionView.vue'),
-    beforeEnter: (to, from, next) => {
-      if (!getAccessTokenFromCookie()) {
-        alert('로그인이 필요한 페이지입니다.');
-        next('/');
-      } else {
-        next();
-      }
-    },
-  },
   // 검색 결과 페이지
   {
     path: '/search',

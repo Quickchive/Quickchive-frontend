@@ -9,14 +9,8 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <div
-        class="alert"
-        v-if="
-          !this.$store.getters.getContents &&
-            !this.$store.getters.getCollections
-        "
-      >
-        <h2 class="page-message">아직 콘텐츠&콜렉션이 없습니다😯</h2>
+      <div class="alert" v-if="!this.$store.getters.getContents">
+        <h2 class="page-message">아직 콘텐츠가 없습니다😯</h2>
       </div>
       <div v-else>
         <div v-for="(data, index) in newArr" :key="index">
@@ -24,11 +18,6 @@
             :contents="data"
             v-if="!newArr[index].contents"
           ></contents-component>
-          <!-- 콜렉션 컴포넌트 -->
-          <collection-component
-            v-if="newArr[index].contents"
-            :collection="data"
-          ></collection-component>
         </div>
       </div>
       <!-- 콘텐츠 컴포넌트 -->
@@ -56,7 +45,6 @@
 <script>
 import setting from '@/assets/icon/settings.svg';
 import ContentsComponent from '@/components/content/ContentsComponent.vue';
-import CollectionComponent from '@/components/collection/CollectionComponent.vue';
 import CategoryModalComponent from '@/components/modal/CategoryModalComponent.vue';
 import { updateCategory, deleteCategory } from '@/api/category';
 import {
@@ -70,7 +58,6 @@ import { eventBus } from '@/main';
 export default {
   components: {
     ContentsComponent,
-    CollectionComponent,
     CategoryModalComponent,
     AlertModalComponent,
   },
@@ -90,54 +77,28 @@ export default {
       btnMessage: '네',
       memoEvent: 0,
       contentsModalEvent: 0,
-      collectionModalEvent: 0,
     };
   },
   watch: {
     async memoEvent() {
       await this.$store.dispatch('GET_CONTENTS');
-      await this.$store.dispatch('GET_COLLECTIONS');
       // 콘텐츠 컴포넌트 최신순 정렬
-      this.newArr = sortDataByRecentlySaved(
-        this.$store.getters.getContents,
-        this.$store.getters.getCollections
-      );
+      this.newArr = sortDataByRecentlySaved(this.$store.getters.getContents);
     },
     async contentsModalEvent() {
       await this.$store.dispatch('GET_CONTENTS');
-      await this.$store.dispatch('GET_COLLECTIONS');
       // 콘텐츠 컴포넌트 최신순 정렬
-      this.newArr = sortDataByRecentlySaved(
-        this.$store.getters.getContents,
-        this.$store.getters.getCollections
-      );
-    },
-    async collectionModalEvent() {
-      await this.$store.dispatch('GET_CONTENTS');
-      await this.$store.dispatch('GET_COLLECTIONS');
-      // 콘텐츠 컴포넌트 최신순 정렬
-      this.newArr = sortDataByRecentlySaved(
-        this.$store.getters.getContents,
-        this.$store.getters.getCollections
-      );
+      this.newArr = sortDataByRecentlySaved(this.$store.getters.getContents);
     },
   },
   async created() {
     await this.$store.dispatch('GET_CONTENTS');
-    await this.$store.dispatch('GET_COLLECTIONS');
     // 콘텐츠 컴포넌트 최신순 정렬
-    this.newArr = sortDataByRecentlySaved(
-      this.$store.getters.getContents,
-      this.$store.getters.getCollections
-    );
+    this.newArr = sortDataByRecentlySaved(this.$store.getters.getContents);
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
       'contentsModalActive',
       (data) => (this.contentsModalEvent += data)
-    );
-    eventBus.$on(
-      'collectionModalActive',
-      (data) => (this.collectionModalEvent += data)
     );
   },
   methods: {
@@ -172,19 +133,12 @@ export default {
     sortData(filter) {
       // 최신순
       if (filter == 'favorites') {
-        this.newArr = sortDataByFavorite(
-          this.$store.getters.getContents,
-          this.$store.getters.getCollections
-        );
+        this.newArr = sortDataByFavorite(this.$store.getters.getContents);
       } else if (filter == 'latest') {
-        this.newArr = sortDataByRecentlySaved(
-          this.$store.getters.getContents,
-          this.$store.getters.getCollections
-        );
+        this.newArr = sortDataByRecentlySaved(this.$store.getters.getContents);
       } else if (filter == 'expiry') {
         this.newArr = sortDataByImminentDeadline(
-          this.$store.getters.getContents,
-          this.$store.getters.getCollections
+          this.$store.getters.getContents
         );
       }
     },
