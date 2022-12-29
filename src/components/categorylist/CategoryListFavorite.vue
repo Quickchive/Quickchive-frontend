@@ -70,49 +70,6 @@
             </div>
           </div>
         </div>
-
-        <!-- 콜렉션 -->
-        <div class="favorite-list" v-if="favorite.contents">
-          <div class="favorite-list__wrapper" v-if="favorite.contents">
-            <div class="favorite-list__img-wrapper">
-              <!-- 이미지 -->
-              <div class="favorite-list__img" v-if="newArr[index].contents">
-                <img
-                  :src="favorite.contents[0].coverImg"
-                  onerror="this.style.display='none'"
-                  v-if="favorite.contents[0].coverImg.length > 0"
-                />
-                <img :src="defaultImg" v-else />
-              </div>
-              <div class="favorite-list__btn-wrapper">
-                <img :src="line_white" />
-                <!-- 즐겨찾기 -->
-                <button
-                  class="btn--transparent"
-                  @click="createFavorites(index)"
-                >
-                  <img v-if="favorite.favorite" :src="star" />
-                  <img v-if="!favorite.favorite" :src="star_gray" />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="favorite-list__wrapper-text">
-            <!-- 제목 -->
-            <p @click="toDetail(favorite.id)" class="favorite-list__title">
-              {{ filterTitle(favorite.title) }}
-            </p>
-            <div class="favorite-list__inner">
-              <!-- 도메인 -->
-              <span class="favorite-list__domain">Collection</span>
-              <img :src="line" />
-              <!-- 날짜 -->
-              <span class="favorite-list__date">{{
-                favorite.createdAt.substr(0, 10)
-              }}</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -204,9 +161,6 @@ export default {
     },
     toLink(link) {
       window.open(link, '_blank');
-    },
-    toDetail(id) {
-      this.$router.push(`/collection/${id}`);
     },
     // 도메인 추출
     filterDomain(link) {

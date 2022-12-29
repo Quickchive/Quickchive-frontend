@@ -35,36 +35,14 @@
             </button>
           </div>
         </div>
-        <!-- 콜렉션 목록 -->
-        <div v-if="data.contents" class="contents-list">
-          <div class="contents-list__wrapper">
-            <button class="btn--transparent--img" @click="toDetail(data.id)">
-              <span class="contents-list__icon"><img :src="web"/></span>
-              <span class="contents-list__title">
-                {{ filterTitle(data.title) }}
-              </span>
-            </button>
-          </div>
-          <div class="contents-list__wrapper">
-            <img :src="line" />
-
-            <button
-              class="btn--transparent"
-              @click="createFavoriteCollection(index)"
-            >
-              <img v-if="data.favorite" :src="star" />
-              <img v-if="!data.favorite" :src="star_gray" />
-            </button>
-          </div>
-        </div>
+        <memo-modal-component
+          v-if="isMemoModalActive"
+          @close-modal="isMemoModalActive = false"
+          :contentsId="contentsId"
+          :memoContents="memoContents"
+        ></memo-modal-component>
       </div>
     </div>
-    <memo-modal-component
-      v-if="isMemoModalActive"
-      @close-modal="isMemoModalActive = false"
-      :contentsId="contentsId"
-      :memoContents="memoContents"
-    ></memo-modal-component>
   </div>
 </template>
 
@@ -76,7 +54,6 @@ import memo from '@/assets/icon/memo.svg';
 import star from '@/assets/icon/star.svg';
 import star_gray from '@/assets/icon/star_gray.svg';
 import web from '@/assets/icon/web.svg';
-import { addFavoriteCollection } from '@/api/collection';
 import MemoModalComponent from '@/components/modal/MemoModalComponent.vue';
 import { calculateDeadline } from '@/utils/date';
 import { addFavorite } from '@/api/contents';
@@ -121,22 +98,10 @@ export default {
         console.log(error);
       }
     },
-    // 즐겨찾기 생성 - 콜렉션
-    async createFavoriteCollection(index) {
-      this.newArr[index].favorite = !this.$store.getters.getCollections[index]
-        .favorite;
-      try {
-        const collectionId = this.newArr[index].id;
-        await addFavoriteCollection(collectionId);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 카테고리 상세 페이지로 이동
     toCategoryPage() {
       this.$router.push(`/category/${this.categoryId}`);
     },
-
     // 메모 모달 열기
     async openMemoModal(index) {
       await this.$store.dispatch('SORT_DATA', this.categoryId);
@@ -158,11 +123,6 @@ export default {
     },
     toLink(link) {
       window.open(link, '_blank');
-    },
-    // 콜렉션 상세 페이지로 이동
-    toDetail(id) {
-      console.log('ididididi', id);
-      this.$router.push(`/collection/${id}`);
     },
     // 제목 글자수 10자 이상
     filterCategoryTitle(title) {

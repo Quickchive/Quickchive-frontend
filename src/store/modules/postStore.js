@@ -1,4 +1,4 @@
-import { fetchMyContents, fetchMyCollections } from '@/api/user';
+import { fetchMyContents } from '@/api/user';
 import { search } from '@/utils/search.js';
 import { fetchMyFavorites } from '@/api/user';
 import { sortDataByRecentlySaved } from '@/utils/sort';
@@ -8,19 +8,10 @@ const postStore = {
   state: {
     searchWord: '',
     searchResult: [],
-    // 콘텐츠
     contentsData: [],
-    // 콜렉션
-    collectionsData: [],
-    // 최신순으로 정렬된 콘텐츠와 콜렉션
     latestSortedData: [],
-    // // 최신순으로 정렬된 콘텐츠와 콜렉션
     latestSortedFavorite: [],
-    // 즐겨찾기 콘텐츠
     favoriteContents: [],
-    // 즐겨찾기 콜렉션
-    favoriteCollections: [],
-    // 카테고리
     categories: {},
   },
   getters: {
@@ -33,14 +24,8 @@ const postStore = {
     getContents(state) {
       return state.contentsData;
     },
-    getCollections(state) {
-      return state.collectionsData;
-    },
     getFavoriteContents(state) {
       return state.favoriteContents;
-    },
-    getFavoriteCollections(state) {
-      return state.favoriteCollections;
     },
     getLatestSortedData(state) {
       return state.latestSortedData;
@@ -62,14 +47,8 @@ const postStore = {
     setContents(state, contents) {
       state.contentsData = contents;
     },
-    setCollections(state, collections) {
-      state.collectionsData = collections;
-    },
     setFavoriteContents(state, favoriteContents) {
       state.favoriteContents = favoriteContents;
-    },
-    setFavoriteCollections(state, favoriteCollections) {
-      state.favoriteCollections = favoriteCollections;
     },
     setLatestOrder(state, newArr) {
       state.latestSortedData = newArr;
@@ -90,9 +69,7 @@ const postStore = {
       try {
         const contentsResponse = await fetchMyContents();
         const contents = contentsResponse.data.contents;
-        const collectionsResponse = await fetchMyCollections();
-        const collections = collectionsResponse.data.collections;
-        const resultArr = search(word, contents, collections);
+        const resultArr = search(word, contents);
         commit('setSearchResult', resultArr);
         commit('setSearchWord', word);
       } catch (error) {
@@ -109,24 +86,12 @@ const postStore = {
         console.log(error);
       }
     },
-    // 콜렉션 데이터 조회
-    async GET_COLLECTIONS({ commit }, categoryId) {
-      try {
-        const response = await fetchMyCollections(categoryId);
-        const collections = response.data.collections;
-        commit('setCollections', collections);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     // 최신순으로 정렬된 콘텐츠 & 콜렉션 목록을 반환
     async SORT_DATA({ commit }, categoryId) {
       try {
-        const contentsResponse = await fetchMyCollections(categoryId);
-        const collections = contentsResponse.data.collections;
-        const collectionsResponse = await fetchMyContents(categoryId);
-        const contents = collectionsResponse.data.contents;
-        const newArr = sortDataByRecentlySaved(contents, collections);
+        const contentsResponse = await fetchMyContents(categoryId);
+        const contents = contentsResponse.data.contents;
+        const newArr = sortDataByRecentlySaved(contents);
         commit('setLatestOrder', newArr);
       } catch (error) {
         console.log(error);
@@ -137,13 +102,8 @@ const postStore = {
       try {
         const response = await fetchMyFavorites();
         const favoriteContents = response.data.favorite_contents;
-        const favoriteCollections = response.data.favorite_collections;
         commit('setFavoriteContents', favoriteContents);
-        commit('setFavoriteCollections', favoriteCollections);
-        const newArr = sortDataByRecentlySaved(
-          favoriteContents,
-          favoriteCollections
-        );
+        const newArr = sortDataByRecentlySaved(favoriteContents);
         commit('setLatestFavorite', newArr);
       } catch (error) {
         console.log(error);
