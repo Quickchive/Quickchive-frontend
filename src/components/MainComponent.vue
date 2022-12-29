@@ -55,8 +55,8 @@
 
     <confirm-modal-component
       v-if="isConfirmModalActive"
-      @rightBtn="addMultipleContents()"
-      @close-modal="isConfirmModalActive = false"
+      @leftBtn="addMultipleContents()"
+      @rightBtn="isConfirmModalActive = false"
       :confirmModalContent="confirmModalContent"
       :leftBtnMessage="leftBtnMessage"
       :rightBtnMessage="rightBtnMessage"
@@ -108,10 +108,11 @@ export default {
       isAlertModalActive: false,
       topBtn,
       // confirm 모달 메시지
-      confirmModalContent: 'URL이 2개 이상이네요! \n 저장방식을 선택해주세요',
-      leftBtnMessage: '콜렉션으로 저장',
-      rightBtnMessage: '각각 콘텐츠로 저장',
-      isClosBtnShow: true,
+      confirmModalContent:
+        'URL이 2개 이상이네요! \n 각각 콘텐츠로 저장하시겠습니까?',
+      leftBtnMessage: '네',
+      rightBtnMessage: '아니오',
+      isClosBtnShow: false,
       // alert 모달 메시지
       alertModalContent: '같은 카테고리에 동일 링크가 \n 이미 저장되었습니다.',
       btnMessage: '네',
