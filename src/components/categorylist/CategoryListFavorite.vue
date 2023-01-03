@@ -116,7 +116,7 @@ export default {
   },
   computed: {
     favoriteContent() {
-      return this.$store.getters.getLatestSortedFavorite;
+      return this.$store.getters.getFavoriteContents;
     },
   },
   methods: {
@@ -133,7 +133,7 @@ export default {
         await addFavorite(contentId);
         // 즐겨찾기 리스트 갱신
         this.$store.dispatch('GET_FAVORITES');
-        this.$store.dispatch('SORT_DATA');
+        this.$store.dispatch('GET_CONTENTS');
       } catch (error) {
         console.log(error);
       }
@@ -141,7 +141,7 @@ export default {
     // 메모 모달 열기
     async openMemoModal(index) {
       await this.$store.dispatch('GET_FAVORITES');
-      this.favoriteContent = this.$store.getters.getLatestSortedFavorite;
+      this.favoriteContent = this.$store.getters.getFavoriteContents;
       this.memoContents = this.favoriteContent[index].comment;
       this.contentsId = this.favoriteContent[index].id;
       this.isMemoModalActive = true;

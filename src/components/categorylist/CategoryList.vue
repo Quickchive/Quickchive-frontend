@@ -81,13 +81,13 @@ export default {
   },
   computed: {
     contents() {
-      return this.$store.getters.getLatestSortedData;
+      return this.$store.getters.getContents;
     },
   },
   methods: {
     async showContent() {
-      await this.$store.dispatch('SORT_DATA', this.categoryId);
-      this.contents = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.categoryId);
+      this.contents = this.$store.getters.getContents;
       this.contentState = !this.contentState;
     },
     // 즐겨찾기 생성 - 콘텐츠
@@ -106,8 +106,8 @@ export default {
     },
     // 메모 모달 열기
     async openMemoModal(index) {
-      await this.$store.dispatch('SORT_DATA', this.categoryId);
-      this.contents = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.categoryId);
+      this.contents = this.$store.getters.getContents;
       this.memoContents = this.contents[index].comment;
       this.contentsId = this.contents[index].id;
       this.isMemoModalActive = true;

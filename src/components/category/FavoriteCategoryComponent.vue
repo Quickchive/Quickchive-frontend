@@ -44,7 +44,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch('GET_FAVORITES');
-    this.newArr = this.$store.getters.getLatestSortedFavorite;
+    this.newArr = this.$store.getters.getFavoriteContents;
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
       'contentsModalActive',
@@ -55,12 +55,12 @@ export default {
   watch: {
     async memoEvent() {
       await this.$store.dispatch('GET_FAVORITES');
-      this.newArr = this.$store.getters.getLatestSortedFavorite;
+      this.newArr = this.$store.getters.getFavoriteContents;
       eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     },
     async contentsModalEvent() {
       await this.$store.dispatch('GET_FAVORITES');
-      this.newArr = this.$store.getters.getLatestSortedFavorite;
+      this.newArr = this.$store.getters.getFavoriteContents;
     },
   },
   methods: {
@@ -68,7 +68,7 @@ export default {
     async sortData(filter) {
       if (filter == 'latest') {
         await this.$store.dispatch('GET_FAVORITES');
-        this.newArr = this.$store.getters.getLatestSortedFavorite;
+        this.newArr = this.$store.getters.getFavoriteContents;
       } else if (filter == 'expiry') {
         this.newArr = sortDataByImminentDeadline(
           this.$store.getters.getFavoriteContents

@@ -82,22 +82,22 @@ export default {
   watch: {
     async $route() {
       await this.fetchCategoryName();
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+      this.newArr = this.$store.getters.getContents;
     },
     async memoEvent() {
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+      this.newArr = this.$store.getters.getContents;
     },
     async contentsModalEvent() {
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+      this.newArr = this.$store.getters.getContents;
     },
   },
   async created() {
     this.categoryId = this.$route.params.id;
-    await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-    this.newArr = this.$store.getters.getLatestSortedData;
+    await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+    this.newArr = this.$store.getters.getContents;
     await this.fetchCategoryName();
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
