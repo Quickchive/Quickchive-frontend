@@ -10,8 +10,8 @@
       </button>
     </header>
     <!-- 콘텐츠 목록 -->
-    <div class="contents-lists" v-if="contentState && newArr.length > 0">
-      <div v-for="(data, index) in newArr" :key="index">
+    <div class="contents-lists" v-if="contentState && contents.length > 0">
+      <div v-for="(data, index) in contents" :key="index">
         <div class="contents-list" v-if="!data.contents">
           <div class="contents-list__wrapper">
             <button class="btn--transparent--img" @click="toLink(data.link)">
@@ -71,9 +71,6 @@ export default {
       web,
       contentState: false,
       isMemoModalActive: false,
-      data: 1,
-      isFavoriteListUpdated: 0,
-      newArr: [],
       memoContents: '',
       contentsId: 0,
     };
@@ -82,17 +79,22 @@ export default {
     categoryTitle: String,
     categoryId: Number,
   },
+  computed: {
+    contents() {
+      return this.$store.getters.getLatestSortedData;
+    },
+  },
   methods: {
     async showContent() {
       await this.$store.dispatch('SORT_DATA', this.categoryId);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      this.contents = this.$store.getters.getLatestSortedData;
       this.contentState = !this.contentState;
     },
     // 즐겨찾기 생성 - 콘텐츠
     async createFavorites(index) {
-      this.newArr[index].favorite = !this.newArr[index].favorite;
+      this.contents[index].favorite = !this.contents[index].favorite;
       try {
-        const contentId = this.newArr[index].id;
+        const contentId = this.contents[index].id;
         await addFavorite(contentId);
       } catch (error) {
         console.log(error);
@@ -105,9 +107,9 @@ export default {
     // 메모 모달 열기
     async openMemoModal(index) {
       await this.$store.dispatch('SORT_DATA', this.categoryId);
-      this.newArr = this.$store.getters.getLatestSortedData;
-      this.memoContents = this.newArr[index].comment;
-      this.contentsId = this.newArr[index].id;
+      this.contents = this.$store.getters.getLatestSortedData;
+      this.memoContents = this.contents[index].comment;
+      this.contentsId = this.contents[index].id;
       this.isMemoModalActive = true;
     },
     // 제목 글자수 30자 이상

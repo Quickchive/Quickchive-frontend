@@ -12,11 +12,11 @@
     </header>
     <!-- 즐겨찾기 콘텐츠 목록 -->
     <div
-      v-if="newArr.length > 0"
+      v-if="favoriteContent.length > 0"
       class="favorite-lists"
       :class="[contentState ? 'favoriteExtend' : 'favoriteDefault']"
     >
-      <div v-for="(favorite, index) in newArr" :key="index">
+      <div v-for="(favorite, index) in favoriteContent" :key="index">
         <div class="favorite-list" v-if="!favorite.contents">
           <!-- 1. wrapper -->
           <div class="favorite-list__wrapper">
@@ -109,36 +109,31 @@ export default {
       star_gray,
       contentState: false,
       isMemoModalActive: false,
-      isFavoriteListUpdated: 0,
-      data: 1,
-      newArr: [],
     };
   },
   async created() {
     await this.$store.dispatch('GET_FAVORITES');
-    this.newArr = this.$store.getters.getLatestSortedFavorite;
   },
-  watch: {
-    isFavoriteListUpdated: function() {
-      this.$store.dispatch('GET_FAVORITES');
-      this.newArr = this.$store.getters.getLatestSortedFavorite;
+  computed: {
+    favoriteContent() {
+      return this.$store.getters.getLatestSortedFavorite;
     },
   },
   methods: {
     async showContent() {
       this.contentState = !this.contentState;
       await this.$store.dispatch('GET_FAVORITES');
-      this.newArr = this.$store.getters.getLatestSortedFavorite;
     },
     // 즐겨찾기 생성
     async createFavorites(index) {
-      this.newArr[index].favorite = !this.newArr[index].favorite;
+      this.favoriteContent[index].favorite = !this.favoriteContent[index]
+        .favorite;
       try {
-        const contentId = this.newArr[index].id;
+        const contentId = this.favoriteContent[index].id;
         await addFavorite(contentId);
         // 즐겨찾기 리스트 갱신
         this.$store.dispatch('GET_FAVORITES');
-        this.newArr = this.$store.getters.getLatestSortedFavorite;
+        this.$store.dispatch('SORT_DATA');
       } catch (error) {
         console.log(error);
       }
@@ -146,9 +141,9 @@ export default {
     // 메모 모달 열기
     async openMemoModal(index) {
       await this.$store.dispatch('GET_FAVORITES');
-      this.newArr = this.$store.getters.getLatestSortedFavorite;
-      this.memoContents = this.newArr[index].comment;
-      this.contentsId = this.newArr[index].id;
+      this.favoriteContent = this.$store.getters.getLatestSortedFavorite;
+      this.memoContents = this.favoriteContent[index].comment;
+      this.contentsId = this.favoriteContent[index].id;
       this.isMemoModalActive = true;
     },
     // 제목 글자수 30자 이상
