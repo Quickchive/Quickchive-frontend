@@ -1,16 +1,14 @@
-import { fetchMyContents } from '@/api/user';
+import { getMyContents } from '@/api/user';
 import { search } from '@/utils/search.js';
-import { fetchMyFavorites } from '@/api/user';
+import { getMyFavorites } from '@/api/user';
 import { sortDataByRecentlySaved } from '@/utils/sort';
-import { fetchMyCategory } from '@/api/user';
+import { getMyCategory } from '@/api/user';
 
 const postStore = {
   state: {
     searchWord: '',
     searchResult: [],
-    contentsData: [],
-    latestSortedData: [],
-    latestSortedFavorite: [],
+    contents: [],
     favoriteContents: [],
     categories: {},
   },
@@ -22,16 +20,10 @@ const postStore = {
       return state.searchResult;
     },
     getContents(state) {
-      return state.contentsData;
+      return state.contents;
     },
     getFavoriteContents(state) {
       return state.favoriteContents;
-    },
-    getLatestSortedData(state) {
-      return state.latestSortedData;
-    },
-    getLatestSortedFavorite(state) {
-      return state.latestSortedFavorite;
     },
     getCategories(state) {
       return state.categories;
@@ -45,18 +37,11 @@ const postStore = {
       state.searchResult = searchResult;
     },
     setContents(state, contents) {
-      state.contentsData = contents;
+      state.contents = contents;
     },
     setFavoriteContents(state, favoriteContents) {
       state.favoriteContents = favoriteContents;
     },
-    setLatestOrder(state, newArr) {
-      state.latestSortedData = newArr;
-    },
-    setLatestFavorite(state, newArr) {
-      state.latestSortedFavorite = newArr;
-    },
-    // 카테고리
     setCategories(state, categories) {
       state.categories = categories;
     },
@@ -64,11 +49,10 @@ const postStore = {
   actions: {
     // 검색
     async SEARCH({ commit }, word) {
-      // 콘텐츠 조회
       word = word.toLowerCase();
       try {
-        const contentsResponse = await fetchMyContents();
-        const contents = contentsResponse.data.contents;
+        const response = await getMyContents();
+        const contents = response.data.contents;
         const resultArr = search(word, contents);
         commit('setSearchResult', resultArr);
         commit('setSearchWord', word);
@@ -76,23 +60,12 @@ const postStore = {
         console.log(error);
       }
     },
-    // 콘텐츠 데이터 조회
     async GET_CONTENTS({ commit }, categoryId) {
       try {
-        const response = await fetchMyContents(categoryId);
+        const response = await getMyContents(categoryId);
         const contents = response.data.contents;
-        commit('setContents', contents);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // 최신순으로 정렬된 콘텐츠 & 콜렉션 목록을 반환
-    async SORT_DATA({ commit }, categoryId) {
-      try {
-        const contentsResponse = await fetchMyContents(categoryId);
-        const contents = contentsResponse.data.contents;
-        const newArr = sortDataByRecentlySaved(contents);
-        commit('setLatestOrder', newArr);
+        const orderedContents = sortDataByRecentlySaved(contents);
+        commit('setContents', orderedContents);
       } catch (error) {
         console.log(error);
       }
@@ -100,11 +73,12 @@ const postStore = {
     // 즐겨찾기 데이터 조회
     async GET_FAVORITES({ commit }) {
       try {
-        const response = await fetchMyFavorites();
+        const response = await getMyFavorites();
         const favoriteContents = response.data.favorite_contents;
-        commit('setFavoriteContents', favoriteContents);
-        const newArr = sortDataByRecentlySaved(favoriteContents);
-        commit('setLatestFavorite', newArr);
+        const orderedFavoriteContents = sortDataByRecentlySaved(
+          favoriteContents
+        );
+        commit('setFavoriteContents', orderedFavoriteContents);
       } catch (error) {
         console.log(error);
       }
@@ -112,7 +86,7 @@ const postStore = {
     // 카테고리 조회
     async GET_CATEGORIES({ commit }) {
       try {
-        const response = await fetchMyCategory();
+        const response = await getMyCategory();
         const categories = response.data.categories;
         commit('setCategories', categories);
       } catch (error) {

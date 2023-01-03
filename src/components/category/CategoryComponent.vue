@@ -51,7 +51,7 @@ import setting from '@/assets/icon/settings.svg';
 import ContentsComponent from '@/components/content/ContentsComponent.vue';
 import CategoryModalComponent from '@/components/modal/CategoryModalComponent.vue';
 import { updateCategory, deleteCategory } from '@/api/category';
-import { fetchMyCategory } from '@/api/user';
+import { getMyCategory } from '@/api/user';
 import {
   sortDataByRecentlySaved,
   sortDataByFavorite,
@@ -82,22 +82,22 @@ export default {
   watch: {
     async $route() {
       await this.fetchCategoryName();
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+      this.newArr = this.$store.getters.getContents;
     },
     async memoEvent() {
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+      this.newArr = this.$store.getters.getContents;
     },
     async contentsModalEvent() {
-      await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-      this.newArr = this.$store.getters.getLatestSortedData;
+      await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+      this.newArr = this.$store.getters.getContents;
     },
   },
   async created() {
     this.categoryId = this.$route.params.id;
-    await this.$store.dispatch('SORT_DATA', this.$route.params.id);
-    this.newArr = this.$store.getters.getLatestSortedData;
+    await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
+    this.newArr = this.$store.getters.getContents;
     await this.fetchCategoryName();
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
@@ -138,7 +138,7 @@ export default {
     // 카테고리 이름 조회
     async fetchCategoryName() {
       try {
-        const response = await fetchMyCategory();
+        const response = await getMyCategory();
         const categoryId = this.$route.params.id;
         const categories = response.data.categories;
         if (categoryId == -1) {

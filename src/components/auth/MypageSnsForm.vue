@@ -63,37 +63,37 @@
 </template>
 
 <script>
-import { editProfile } from "@/api/user";
-import { deleteUser } from "@/api/auth";
-import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
-import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { editProfile } from '@/api/user';
+import { deleteUser } from '@/api/auth';
+import ConfirmModalComponent from '@/components/modal/ConfirmModalComponent.vue';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
 
 export default {
   components: { ConfirmModalComponent, AlertModalComponent },
   data() {
     return {
-      nickname: "",
+      nickname: '',
       isModalActive: false,
       confirmModalContent:
-        "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
-      leftBtnMessage: "네",
-      rightBtnMessage: "아니오",
+        '회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?',
+      leftBtnMessage: '네',
+      rightBtnMessage: '아니오',
       isAlertModalActive: false,
-      AlertModalContent: "",
-      btnMessage: "네",
-      oauthName: "",
+      AlertModalContent: '',
+      btnMessage: '네',
+      oauthName: '',
     };
   },
   async created() {
     // 프로필 조회
-    await this.$store.dispatch("FETCH_PROFILE");
+    await this.$store.dispatch('GET_PROFILE');
     this.nickname = this.$store.getters.getNickname;
-    this.oauthName = localStorage.getItem("oauthInfo");
+    this.oauthName = localStorage.getItem('oauthInfo');
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
     validateNickname() {
-      if (this.nickname == "") {
+      if (this.nickname == '') {
         return null;
       } else {
         if (this.nickname.length < 2 || this.nickname.length > 8) {
@@ -114,11 +114,11 @@ export default {
   },
   methods: {
     initForm() {
-      this.nickname = "";
-      this.email = "";
-      this.pw = "";
-      this.oldPw = "";
-      this.pwCheck = "";
+      this.nickname = '';
+      this.email = '';
+      this.pw = '';
+      this.oldPw = '';
+      this.pwCheck = '';
     },
     async submitForm() {
       try {
@@ -128,7 +128,7 @@ export default {
           oldPassword: this.oldPw,
         };
         await editProfile(userData);
-        this.$router.push("/login");
+        this.$router.push('/login');
       } catch (error) {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
@@ -139,8 +139,8 @@ export default {
       try {
         this.isModalActive = false;
         await deleteUser();
-        this.$store.commit("logoutUser");
-        this.$router.push("/");
+        this.$store.commit('logoutUser');
+        this.$router.push('/');
       } catch (error) {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;

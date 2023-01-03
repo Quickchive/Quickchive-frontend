@@ -11,30 +11,30 @@ function resetPw(pwData) {
 }
 
 // 프로필 조회
-function fetchProfile() {
+function getProfile() {
   return authInstance.get('users/me');
 }
 
 // 자신의 콘텐츠 조회
-function fetchMyContents(categoryId) {
+function getMyContents(categoryId) {
   return authInstance.get(`users/load-contents?categoryId=${categoryId}`);
 }
 
 // 자신의 카테고리 목록 조회
-function fetchMyCategory() {
+function getMyCategory() {
   return authInstance.get('users/load-categories');
 }
 
 // 자신의 즐겨찾기 조회
-function fetchMyFavorites() {
+function getMyFavorites() {
   return authInstance.get('users/load-favorites');
 }
 
 export {
   editProfile,
   resetPw,
-  fetchProfile,
-  fetchMyContents,
-  fetchMyCategory,
-  fetchMyFavorites,
+  getProfile,
+  getMyContents,
+  getMyCategory,
+  getMyFavorites,
 };
