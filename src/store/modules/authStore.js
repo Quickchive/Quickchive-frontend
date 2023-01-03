@@ -23,7 +23,6 @@ const authStore = {
     stayLoginState: false || localStorage.getItem('stayLogin'),
   },
   getters: {
-    // 로그인 여부 확인
     isLogin(state) {
       return state.loginState;
     },
@@ -34,7 +33,6 @@ const authStore = {
     isUserStayLogin(state) {
       return state.stayLoginState;
     },
-    // 소셜 정보 가져옴
     getOauthName(state) {
       return state.oauthName;
     },
@@ -49,10 +47,8 @@ const authStore = {
     setRefreshToken(state, token) {
       state.refreshToken = token;
     },
-    setNickname(state, nickname) {
+    setUserInfo(state, { nickname, email }) {
       state.nickname = nickname;
-    },
-    setEmail(state, email) {
       state.email = email;
     },
     logoutUser(state) {
@@ -84,23 +80,27 @@ const authStore = {
       saveAccessTokenToCookie(data.access_token);
       saveRefreshTokenToCookie(data.refresh_token);
       const response = await fetchProfile();
-      commit('setNickname', response.data.name);
-      commit('setEmail', response.data.email);
+      commit('setUserInfo', {
+        nickname: response.data.name,
+        email: response.data.email,
+      });
       commit('setLoginState', true);
       commit('setOauthLoginState', false);
     },
     async FETCH_PROFILE({ commit }) {
       try {
-        const { data } = await fetchProfile();
-        commit('setNickname', data.name);
-        commit('setEmail', data.email);
-        if (data.statusCode == 201) {
+        const response = await fetchProfile();
+        commit('setUserInfo', {
+          nickname: response.data.name,
+          email: response.data.email,
+        });
+        if (response.status === 201) {
           commit('setLoginState', true);
-        } else if (data.statusCode == 200) {
+        } else if (response.status === 200) {
           commit('setLoginState', true);
         }
       } catch (error) {
-        if (error.statusCode == 401) {
+        if (error.status === 401) {
           commit('setLoginState', false);
         }
       }
@@ -124,8 +124,10 @@ const authStore = {
         if (response.data.statusCode == 200) {
           saveRefreshTokenToCookie(response.data.refresh_token);
           saveAccessTokenToCookie(response.data.access_token);
-          commit('setNickname', response.data.name);
-          commit('setEmail', response.data.email);
+          commit('setUserInfo', {
+            nickname: response.data.name,
+            email: response.data.email,
+          });
           commit('setOauthLoginState', true);
           commit('setLoginState', false);
           commit('setRefreshToken', response.data.refresh_token);
@@ -142,8 +144,10 @@ const authStore = {
         if (response.data.statusCode == 200) {
           saveRefreshTokenToCookie(response.data.refresh_token);
           saveAccessTokenToCookie(response.data.access_token);
-          commit('setNickname', response.data.name);
-          commit('setEmail', response.data.email);
+          commit('setUserInfo', {
+            nickname: response.data.name,
+            email: response.data.email,
+          });
           commit('setOauthLoginState', true);
           commit('setLoginState', false);
           commit('setRefreshToken', response.data.refresh_token);
