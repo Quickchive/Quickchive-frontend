@@ -28,7 +28,6 @@
 
 <script>
 import ContentsComponent from '@/components/content/ContentsComponent.vue';
-import { eventBus } from '@/main.js';
 
 export default {
   components: {
@@ -45,14 +44,6 @@ export default {
   },
   created() {
     this.resultArr = this.$store.getters.getSearchResult;
-    eventBus.$on('search', (word) => {
-      this.word = word;
-    });
-  },
-  watch: {
-    word() {
-      this.resultArr = this.$store.getters.getSearchResult;
-    },
   },
 };
 </script>

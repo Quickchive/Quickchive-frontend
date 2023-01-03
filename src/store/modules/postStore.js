@@ -64,11 +64,10 @@ const postStore = {
   actions: {
     // 검색
     async SEARCH({ commit }, word) {
-      // 콘텐츠 조회
       word = word.toLowerCase();
       try {
-        const contentsResponse = await fetchMyContents();
-        const contents = contentsResponse.data.contents;
+        const response = await fetchMyContents();
+        const contents = response.data.contents;
         const resultArr = search(word, contents);
         commit('setSearchResult', resultArr);
         commit('setSearchWord', word);
