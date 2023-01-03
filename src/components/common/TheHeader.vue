@@ -80,14 +80,14 @@ import Burger from '@/components/common/Burger.vue';
 import profile from '@/assets/icon/profile.svg';
 import search from '@/assets/icon/search.svg';
 import category from '@/assets/icon/category.svg';
-import { fetchMyCategory } from '@/api/user';
+import { getMyCategory } from '@/api/user';
 export default {
   components: {
     'burger-menu': Burger,
   },
   created() {
     // 닉네임 조회
-    this.$store.dispatch('FETCH_PROFILE');
+    this.$store.dispatch('GET_PROFILE');
   },
   data() {
     return {
@@ -103,12 +103,12 @@ export default {
     // 로그인 여부 조회
     isUserLogin() {
       if (this.$store.getters.isLogin == true) {
-        this.$store.dispatch('FETCH_PROFILE');
+        this.$store.dispatch('GET_PROFILE');
         // 카테고리 조회
         this.fetchCategoryList();
         return true;
       } else if (this.$store.getters.isOauthLogin == true) {
-        this.$store.dispatch('FETCH_PROFILE');
+        this.$store.dispatch('GET_PROFILE');
         return true;
       } else {
         return false;
@@ -152,7 +152,7 @@ export default {
     // 카테고리 목록 조회
     async fetchCategoryList() {
       try {
-        const response = await fetchMyCategory();
+        const response = await getMyCategory();
         this.categories = response.data.categories;
       } catch (error) {
         console.log(error);

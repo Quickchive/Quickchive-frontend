@@ -12,7 +12,7 @@ const routes = [
     component: () => import('@/views/OnBoardingView.vue'),
 
     beforeEnter: async (to, from, next) => {
-      await store.dispatch('FETCH_PROFILE');
+      await store.dispatch('GET_PROFILE');
       if (!store.getters.isLogin) {
         next();
       } else {
@@ -24,7 +24,7 @@ const routes = [
     path: '/login',
     component: () => import('@/views/LoginView.vue'),
     beforeEnter: async (to, from, next) => {
-      await store.dispatch('FETCH_PROFILE');
+      await store.dispatch('GET_PROFILE');
       if (store.getters.isLogin) {
         next('/main');
       } else {
@@ -42,7 +42,7 @@ const routes = [
         path: '/main',
         component: () => import('@/components/MainComponent.vue'),
         beforeEnter: async (to, from, next) => {
-          await store.dispatch('FETCH_PROFILE');
+          await store.dispatch('GET_PROFILE');
           if (!store.getters.isLogin) {
             next('/');
           } else {

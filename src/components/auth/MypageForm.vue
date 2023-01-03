@@ -114,39 +114,39 @@
 </template>
 
 <script>
-import { validatePw } from "@/utils/validation";
-import { editProfile } from "@/api/user";
-import { deleteUser } from "@/api/auth";
-import ConfirmModalComponent from "@/components/modal/ConfirmModalComponent.vue";
-import AlertModalComponent from "@/components/modal/AlertModalComponent.vue";
+import { validatePw } from '@/utils/validation';
+import { editProfile } from '@/api/user';
+import { deleteUser } from '@/api/auth';
+import ConfirmModalComponent from '@/components/modal/ConfirmModalComponent.vue';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
 
 export default {
   components: { ConfirmModalComponent, AlertModalComponent },
   data() {
     return {
       nickname: this.$store.state.authStore.nickname,
-      oldPw: "",
-      pw: "",
-      pwCheck: "",
+      oldPw: '',
+      pw: '',
+      pwCheck: '',
       isModalActive: false,
       confirmModalContent:
-        "회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?",
-      leftBtnMessage: "네",
-      rightBtnMessage: "아니오",
+        '회원탈퇴 시, 저장한 콘텐츠 및 콜렉션을 불러올 수 없습니다. 회원을 탈퇴하시겠습니까?',
+      leftBtnMessage: '네',
+      rightBtnMessage: '아니오',
       isAlertModalActive: false,
-      AlertModalContent: "",
-      btnMessage: "네",
+      AlertModalContent: '',
+      btnMessage: '네',
     };
   },
   created() {
     // 프로필 조회
-    this.$store.dispatch("FETCH_PROFILE");
+    this.$store.dispatch('GET_PROFILE');
     this.nickname = this.$store.state.authStore.nickname;
   },
   computed: {
     // 닉네임 유효성 검사: 2~8자
     validateNickname() {
-      if (this.nickname == "") {
+      if (this.nickname == '') {
         return null;
       } else {
         if (this.nickname.length < 2 || this.nickname.length > 8) {
@@ -158,7 +158,7 @@ export default {
     },
     // 기존 비밀번호 유효성 검사
     validateOldPw() {
-      if (this.oldPw != "") {
+      if (this.oldPw != '') {
         return validatePw(this.oldPw);
       } else {
         return null;
@@ -166,7 +166,7 @@ export default {
     },
     // 비밀번호 유효성 검사
     validatePw() {
-      if (this.pw != "") {
+      if (this.pw != '') {
         return validatePw(this.pw);
       } else {
         return null;
@@ -174,7 +174,7 @@ export default {
     },
     // 비밀번호 일치 확인
     checkPw() {
-      if (this.pwCheck == "") {
+      if (this.pwCheck == '') {
         return null;
       } else {
         if (this.pw != this.pwCheck) {
@@ -200,11 +200,11 @@ export default {
   },
   methods: {
     initForm() {
-      this.nickname = "";
-      this.email = "";
-      this.pw = "";
-      this.oldPw = "";
-      this.pwCheck = "";
+      this.nickname = '';
+      this.email = '';
+      this.pw = '';
+      this.oldPw = '';
+      this.pwCheck = '';
     },
     // 회원정보 수정
     async submitForm() {
@@ -215,7 +215,7 @@ export default {
           oldPassword: this.oldPw,
         };
         await editProfile(userData);
-        this.$router.push("/main");
+        this.$router.push('/main');
       } catch (error) {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;
@@ -226,8 +226,8 @@ export default {
       try {
         this.isModalActive = false;
         await deleteUser();
-        this.$store.commit("logoutUser");
-        this.$router.push("/");
+        this.$store.commit('logoutUser');
+        this.$router.push('/');
       } catch (error) {
         this.alertModalContent = error.response.data.message;
         this.isAlertModalActive = true;

@@ -1,8 +1,8 @@
-import { fetchMyContents } from '@/api/user';
+import { getMyContents } from '@/api/user';
 import { search } from '@/utils/search.js';
-import { fetchMyFavorites } from '@/api/user';
+import { getMyFavorites } from '@/api/user';
 import { sortDataByRecentlySaved } from '@/utils/sort';
-import { fetchMyCategory } from '@/api/user';
+import { getMyCategory } from '@/api/user';
 
 const postStore = {
   state: {
@@ -51,7 +51,7 @@ const postStore = {
     async SEARCH({ commit }, word) {
       word = word.toLowerCase();
       try {
-        const response = await fetchMyContents();
+        const response = await getMyContents();
         const contents = response.data.contents;
         const resultArr = search(word, contents);
         commit('setSearchResult', resultArr);
@@ -62,7 +62,7 @@ const postStore = {
     },
     async GET_CONTENTS({ commit }, categoryId) {
       try {
-        const response = await fetchMyContents(categoryId);
+        const response = await getMyContents(categoryId);
         const contents = response.data.contents;
         const orderedContents = sortDataByRecentlySaved(contents);
         commit('setContents', orderedContents);
@@ -73,7 +73,7 @@ const postStore = {
     // 즐겨찾기 데이터 조회
     async GET_FAVORITES({ commit }) {
       try {
-        const response = await fetchMyFavorites();
+        const response = await getMyFavorites();
         const favoriteContents = response.data.favorite_contents;
         const orderedFavoriteContents = sortDataByRecentlySaved(
           favoriteContents
@@ -86,7 +86,7 @@ const postStore = {
     // 카테고리 조회
     async GET_CATEGORIES({ commit }) {
       try {
-        const response = await fetchMyCategory();
+        const response = await getMyCategory();
         const categories = response.data.categories;
         commit('setCategories', categories);
       } catch (error) {

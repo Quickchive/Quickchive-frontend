@@ -6,7 +6,7 @@ import {
   deleteCookie,
 } from '@/utils/cookies';
 import { loginUser } from '@/api/auth';
-import { fetchProfile } from '@/api/user';
+import { getProfile } from '@/api/user';
 import { logoutUser } from '@/api/auth';
 import { googleLogin, kakaoLogin } from '@/api/oauth';
 
@@ -79,7 +79,7 @@ const authStore = {
       commit('setRefreshToken', data.refresh_token);
       saveAccessTokenToCookie(data.access_token);
       saveRefreshTokenToCookie(data.refresh_token);
-      const response = await fetchProfile();
+      const response = await getProfile();
       commit('setUserInfo', {
         nickname: response.data.name,
         email: response.data.email,
@@ -87,9 +87,9 @@ const authStore = {
       commit('setLoginState', true);
       commit('setOauthLoginState', false);
     },
-    async FETCH_PROFILE({ commit }) {
+    async GET_PROFILE({ commit }) {
       try {
-        const response = await fetchProfile();
+        const response = await getProfile();
         commit('setUserInfo', {
           nickname: response.data.name,
           email: response.data.email,
