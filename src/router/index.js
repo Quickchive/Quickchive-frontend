@@ -134,8 +134,7 @@ const routes = [
     children: [
       {
         path: '/category/all',
-        component: () =>
-          import('@/components/category/AllCategoryComponent.vue'),
+        component: () => import('@/components/category/CategoryComponent.vue'),
       },
       {
         path: '/category/favorite',

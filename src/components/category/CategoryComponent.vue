@@ -1,12 +1,9 @@
 <template>
   <div class="category-view">
-    <h1 class="page-header">
+    <h1 class="page-header" v-if="this.categoryName == ''">전체</h1>
+    <h1 class="page-header" v-else>
       {{ categoryName
-      }}<button
-        v-if="this.categoryName !== '미분류'"
-        class="btn--transparent--img"
-        @click="openCategoryModal()"
-      >
+      }}<button class="btn--transparent--img" @click="openCategoryModal()">
         <img :src="setting" />
       </button>
     </h1>
@@ -18,17 +15,17 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <div class="alert" v-if="this.newArr.length == 0">
+      <div class="alert" v-if="!this.$store.getters.getContents">
         <h2>
-          해당 카테고리에 속하는 콘텐츠가 없습니다😯
+          아직 콘텐츠가 없습니다😯
         </h2>
       </div>
       <div v-else>
         <!-- 콘텐츠 컴포넌트 -->
-        <div v-for="(data, index) in newArr" :key="index">
+        <div v-for="(data, index) in contents" :key="index">
           <contents-component
             :contents="data"
-            v-if="!newArr[index].contents"
+            v-if="!contents[index].contents"
           ></contents-component>
         </div>
       </div>
@@ -43,6 +40,13 @@
       @deleteCategory="deleteCategory"
       :deleteBtn="deleteBtn"
     ></category-modal-component>
+    <!-- 에러 모달 -->
+    <AlertModalComponent
+      v-if="isAlertModalActive == true"
+      :alertModalContent="alertModalContent"
+      :btnMessage="btnMessage"
+      @confirmBtn="isAlertModalActive = false"
+    ></AlertModalComponent>
   </div>
 </template>
 
@@ -74,7 +78,7 @@ export default {
       categoryName: '',
       newCategoryName: '',
       deleteBtn: '카테고리 삭제',
-      newArr: [],
+      contents: [],
       memoEvent: 0,
       contentsModalEvent: 0,
     };
@@ -83,21 +87,22 @@ export default {
     async $route() {
       await this.fetchCategoryName();
       await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
-      this.newArr = this.$store.getters.getContents;
+      this.contents = this.$store.getters.getContents;
     },
     async memoEvent() {
       await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
-      this.newArr = this.$store.getters.getContents;
+      this.contents = this.$store.getters.getContents;
     },
     async contentsModalEvent() {
       await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
-      this.newArr = this.$store.getters.getContents;
+      this.contents = this.$store.getters.getContents;
     },
   },
   async created() {
     this.categoryId = this.$route.params.id;
     await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
-    this.newArr = this.$store.getters.getContents;
+
+    this.contents = this.$store.getters.getContents;
     await this.fetchCategoryName();
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
@@ -157,11 +162,13 @@ export default {
     async sortData(filter) {
       // 최신순
       if (filter == 'favorites') {
-        this.newArr = sortDataByFavorite(this.$store.getters.getContents);
+        this.contents = sortDataByFavorite(this.$store.getters.getContents);
       } else if (filter == 'latest') {
-        this.newArr = sortDataByRecentlySaved(this.$store.getters.getContents);
+        this.contents = sortDataByRecentlySaved(
+          this.$store.getters.getContents
+        );
       } else if (filter == 'expiry') {
-        this.newArr = sortDataByImminentDeadline(
+        this.contents = sortDataByImminentDeadline(
           this.$store.getters.getContents
         );
       }
