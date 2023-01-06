@@ -1,6 +1,6 @@
 <template>
   <div class="category-view">
-    <h1 class="page-header" v-if="this.categoryName == ''">전체</h1>
+    <h1 class="page-header" v-if="this.categoryName === ''">전체</h1>
     <h1 class="page-header" v-else>
       {{ categoryName
       }}<button class="btn--transparent--img" @click="openCategoryModal()">
@@ -101,7 +101,6 @@ export default {
   async created() {
     this.categoryId = this.$route.params.id;
     await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
-
     this.contents = this.$store.getters.getContents;
     await this.fetchCategoryName();
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
@@ -146,9 +145,7 @@ export default {
         const response = await getMyCategory();
         const categoryId = this.$route.params.id;
         const categories = response.data.categories;
-        if (categoryId == -1) {
-          this.categoryName = '미분류';
-        } else {
+        {
           const categoryFilter = categories.filter(function(cate) {
             return cate.id == categoryId;
           });
@@ -160,14 +157,15 @@ export default {
     },
     // 정렬
     async sortData(filter) {
-      // 최신순
-      if (filter == 'favorites') {
+      if (filter === 'favorites') {
         this.contents = sortDataByFavorite(this.$store.getters.getContents);
-      } else if (filter == 'latest') {
+      }
+      if (filter === 'latest') {
         this.contents = sortDataByRecentlySaved(
           this.$store.getters.getContents
         );
-      } else if (filter == 'expiry') {
+      }
+      if (filter === 'expiry') {
         this.contents = sortDataByImminentDeadline(
           this.$store.getters.getContents
         );
