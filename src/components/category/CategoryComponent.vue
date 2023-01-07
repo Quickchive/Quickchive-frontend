@@ -1,12 +1,13 @@
 <template>
   <div class="category-view">
-    <h1 class="page-header" v-if="this.categoryName === ''">전체</h1>
-    <h1 class="page-header" v-else>
+    <h1 class="page-header" v-if="this.categoryName !== ''">
       {{ categoryName
       }}<button class="btn--transparent--img" @click="openCategoryModal()">
         <img :src="setting" />
       </button>
     </h1>
+    <h1 class="page-header" v-else>전체</h1>
+
     <div>
       <div class="category__select-wrapper">
         <select v-model="categoryFilter" @change="sortData(categoryFilter)">
@@ -15,12 +16,12 @@
           <option value="expiry">읽을기한순</option>
         </select>
       </div>
-      <div class="alert" v-if="!this.$store.getters.getContents">
-        <h2>
+      <div class="alert">
+        <h2 v-if="this.$store.getters.getContents.length === 0">
           아직 콘텐츠가 없습니다😯
         </h2>
       </div>
-      <div v-else>
+      <div>
         <!-- 콘텐츠 컴포넌트 -->
         <div v-for="(data, index) in contents" :key="index">
           <contents-component
@@ -107,7 +108,7 @@ export default {
     this.categoryId = this.$route.params.id;
     await this.$store.dispatch('GET_CONTENTS', this.$route.params.id);
     this.contents = this.$store.getters.getContents;
-    await this.fetchCategoryName();
+    if (this.categoryId !== undefined) await this.fetchCategoryName();
     eventBus.$on('memoEvent', (data) => (this.memoEvent += data));
     eventBus.$on(
       'contentsModalActive',
