@@ -125,7 +125,7 @@ export default {
       try {
         const categoryData = {
           name: this.newCategoryName,
-          originalName: this.categoryName,
+          categoryId: parseInt(this.categoryId),
         };
         await updateCategory(categoryData);
         this.categoryName = this.newCategoryName;
