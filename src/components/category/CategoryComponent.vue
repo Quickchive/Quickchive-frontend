@@ -62,11 +62,13 @@ import {
   sortDataByImminentDeadline,
 } from '@/utils/sort';
 import { eventBus } from '@/main';
+import AlertModalComponent from '@/components/modal/AlertModalComponent.vue';
 
 export default {
   components: {
     ContentsComponent,
     CategoryModalComponent,
+    AlertModalComponent,
   },
   data() {
     return {
@@ -81,6 +83,9 @@ export default {
       contents: [],
       memoEvent: 0,
       contentsModalEvent: 0,
+      isAlertModalActive: false,
+      alertModalContent: '',
+      btnMessage: '확인',
     };
   },
   watch: {
@@ -136,7 +141,8 @@ export default {
         this.isCategoryModalActive = false;
         this.$router.push('/category/all');
       } catch (error) {
-        console.log(error);
+        this.alertModalContent = error.message;
+        this.isAlertModalActive = true;
       }
     },
     // 카테고리 이름 조회
