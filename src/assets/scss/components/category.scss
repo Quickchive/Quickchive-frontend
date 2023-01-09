@@ -1,4 +1,4 @@
-@import "../mixin";
+@import '../mixin';
 
 .category-view {
   box-sizing: border-box;
@@ -113,85 +113,6 @@
         top: 0;
         right: 0;
         background-color: $color-components-2;
-      }
-    }
-  }
-}
-
-// 콜렉션 컴포넌트
-.collection-component {
-  @extend .contents-component;
-  padding-bottom: 13px;
-  @include layout(row, flex-end, space-between);
-  .collection__wrapper-col {
-    @extend .contents__wrapper-col;
-    width: 100%;
-    // 콜렉션 - 태그
-    .collection-tag {
-      @include font(12px, 400, $color-primary);
-    }
-    // 콜렉션 제목
-    .collection__title {
-      @extend .contents__title;
-      margin: 0;
-    }
-    .collection__lists-wrapper {
-      display: flex;
-      align-items: flex-end;
-
-      // 콜렉션 - 목록
-      .collection__lists {
-        @include font(14px, 400, $color-gray-10);
-        margin: 0;
-        padding: 0;
-        list-style-position: inside;
-        line-height: 19px;
-        height: 77px;
-      }
-      .collection__list-num {
-        @include font(14px, 400, $color-gray-4);
-      }
-    }
-    .collection__inner {
-      @include layout(row, center, space-between);
-      width: 100%;
-      .collection__createdAt {
-        @include font(12px, 400, $color-primary);
-        width: 100%;
-      }
-    }
-    .collection__btn-wrapper {
-      @include layout(row, flex-end, flex-end);
-      gap: 4px;
-      box-sizing: border-box;
-      padding-right: 8.3px;
-      width: 100%;
-      button {
-        img {
-          width: 16px;
-        }
-      }
-    }
-  }
-  // 하단부
-  .collection__wrapper {
-    @extend .contents__wrapper;
-    // 콜렉션 - 이미지
-    .collection__img {
-      @extend .contents__img;
-      // 콜렉션 내 콘텐츠 갯수
-      .collection__num {
-        position: absolute;
-        z-index: 120;
-        top: -8px;
-        right: -8px;
-        width: 22px;
-        height: 22px;
-        border-radius: 50px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.13);
-        @include font(13px, 400, $color-black-text);
-        background-color: $color-components-1;
-        text-align: center;
       }
     }
   }
