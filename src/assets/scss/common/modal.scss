@@ -132,8 +132,7 @@
     height: 56px;
     border-top: 1px solid $color-gray-4;
     button {
-      width: 100%;
-      height: 100%;
+      @include btn-size(100%, 100%);
       background-color: transparent;
       @include font(16px, 300, $color-gray-5);
     }
