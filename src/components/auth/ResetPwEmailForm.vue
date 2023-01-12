@@ -28,7 +28,7 @@
             <option value="etc">직접입력</option>
           </select>
           <button
-            :class="['btn--sm', isEmailValid ? 'btnPrimary' : 'btnGray']"
+            :class="['btn--sm', isEmailValid ? 'btnPrimary' : 'btnInvalid']"
             type="button"
             @click="sendEmail()"
             :disabled="!isEmailValid"
@@ -46,36 +46,36 @@
 </template>
 
 <script>
-import { resetPw } from "@/api/auth";
-import TimerComponent from "@/components/common/TimerComponent.vue";
+import { resetPw } from '@/api/auth';
+import TimerComponent from '@/components/common/TimerComponent.vue';
 export default {
   component: { TimerComponent },
   data() {
     return {
-      email: "",
-      emailDomain: "",
-      emailSelfInput: "",
+      email: '',
+      emailDomain: '',
+      emailSelfInput: '',
       codeInputActive: false,
       btnMessage: {
-        email: "인증",
+        email: '인증',
       },
-      errorMessage: "",
+      errorMessage: '',
       message: {
-        message: "",
-        btn: "인증",
+        message: '',
+        btn: '인증',
       },
       errorEvent: false,
-      timerComponent: "",
+      timerComponent: '',
       isTimerActive: false,
-      timerMessage: "",
+      timerMessage: '',
     };
   },
   computed: {
     // 메일 전송 버튼 활성화 조건
     isEmailValid() {
-      if (this.email && this.emailDomain != "" && this.emailDomain != "etc") {
+      if (this.email && this.emailDomain != '' && this.emailDomain != 'etc') {
         return true;
-      } else if (this.emailDomain == "etc" && this.emailSelfInput) {
+      } else if (this.emailDomain == 'etc' && this.emailSelfInput) {
         return true;
       } else {
         return false;
@@ -88,23 +88,23 @@ export default {
       this.errorEvent = false;
       this.isTimerActive = true;
       try {
-        if (this.emailDomain != "etc") {
+        if (this.emailDomain != 'etc') {
           const email = `${this.email}@${this.emailDomain}`;
           const response = await resetPw(email);
           if (response.data.statusCode == 200) {
             this.errorEvent = false;
             this.codeInputActive = true;
-            this.btnMessage.email = "재전송";
+            this.btnMessage.email = '재전송';
             this.$refs.timer.resetTimer();
           }
-        } else if (this.emailDomain == "etc") {
+        } else if (this.emailDomain == 'etc') {
           const email = `${this.email}@${this.emailSelfInput}`;
           const response = await resetPw(email);
           if (response.data.statusCode == 200) {
             this.errorEvent = false;
             this.isTimerActive = true;
             this.codeInputActive = true;
-            this.btnMessage.email = "재전송";
+            this.btnMessage.email = '재전송';
             this.$refs.timer.resetTimer();
           }
         }
@@ -115,9 +115,9 @@ export default {
       }
     },
     initForm() {
-      this.nickName = "";
-      this.email = "";
-      this.pw = "";
+      this.nickName = '';
+      this.email = '';
+      this.pw = '';
     },
   },
   components: { TimerComponent },
