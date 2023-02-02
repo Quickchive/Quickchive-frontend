@@ -80,7 +80,7 @@ import Burger from '@/components/common/Burger.vue';
 import profile from '@/assets/icon/profile.svg';
 import search from '@/assets/icon/search.svg';
 import category from '@/assets/icon/category.svg';
-import { getMyCategory } from '@/api/user';
+import { getCategory } from '@/api/category';
 export default {
   components: {
     'burger-menu': Burger,
@@ -152,8 +152,8 @@ export default {
     // 카테고리 목록 조회
     async fetchCategoryList() {
       try {
-        const response = await getMyCategory();
-        this.categories = response.data.categories;
+        const response = await getCategory();
+        this.categories = response.data.categoriesTree;
       } catch (error) {
         console.log(error);
       }

@@ -20,21 +20,9 @@ function getMyContents(categoryId) {
   return authInstance.get(`users/load-contents?categoryId=${categoryId}`);
 }
 
-// 자신의 카테고리 목록 조회
-function getMyCategory() {
-  return authInstance.get('users/load-categories');
-}
-
 // 자신의 즐겨찾기 조회
 function getMyFavorites() {
   return authInstance.get('users/load-favorites');
 }
 
-export {
-  editProfile,
-  resetPw,
-  getProfile,
-  getMyContents,
-  getMyCategory,
-  getMyFavorites,
-};
+export { editProfile, resetPw, getProfile, getMyContents, getMyFavorites };

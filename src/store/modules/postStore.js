@@ -2,7 +2,7 @@ import { getMyContents } from '@/api/user';
 import { search } from '@/utils/search.js';
 import { getMyFavorites } from '@/api/user';
 import { sortDataByRecentlySaved } from '@/utils/sort';
-import { getMyCategory } from '@/api/user';
+import { getCategory } from '@/api/category';
 
 const postStore = {
   state: {
@@ -86,8 +86,8 @@ const postStore = {
     // 카테고리 조회
     async GET_CATEGORIES({ commit }) {
       try {
-        const response = await getMyCategory();
-        const categories = response.data.categories;
+        const response = await getCategory();
+        const categories = response.data.categoriesTree;
         commit('setCategories', categories);
       } catch (error) {
         console.log(error);
