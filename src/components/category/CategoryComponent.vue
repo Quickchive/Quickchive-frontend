@@ -56,7 +56,7 @@ import setting from '@/assets/icon/settings.svg';
 import ContentsComponent from '@/components/content/ContentsComponent.vue';
 import CategoryModalComponent from '@/components/modal/CategoryModalComponent.vue';
 import { updateCategory, deleteCategory } from '@/api/category';
-import { getMyCategory } from '@/api/user';
+import { getCategory } from '@/api/category';
 import {
   sortDataByRecentlySaved,
   sortDataByFavorite,
@@ -149,9 +149,9 @@ export default {
     // 카테고리 이름 조회
     async fetchCategoryName() {
       try {
-        const response = await getMyCategory();
+        const response = await getCategory();
         const categoryId = this.$route.params.id;
-        const categories = response.data.categories;
+        const categories = response.data.categoriesTree;
         {
           const categoryFilter = categories.filter(function(cate) {
             return cate.id == categoryId;
