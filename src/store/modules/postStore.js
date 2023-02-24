@@ -1,6 +1,6 @@
-import { getMyContents } from '@/api/user';
+import { getMyContents } from '@/api/contents';
 import { search } from '@/utils/search.js';
-import { getMyFavorites } from '@/api/user';
+import { getMyFavorites } from '@/api/contents';
 import { sortDataByRecentlySaved } from '@/utils/sort';
 import { getCategory } from '@/api/category';
 
